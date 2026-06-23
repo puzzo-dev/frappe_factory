@@ -98,20 +98,40 @@ def get_commits_since_last_version(current: str) -> list[str]:
         return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
 
-def classify_bump(commits: list[str]) -> str:
-    """Return the highest bump level required by the commits."""
+def classify_bump(commits: list[str], strict: bool = False) -> str:
+    """Return the highest bump level required by the commits.
+
+    If strict=True, every commit must match a recognized conventional-commit prefix.
+    """
+    if not commits:
+        return "patch"
+
     level = None
+    invalid = []
     for commit in commits:
         lower = commit.lower()
+        matched = False
         for rule in COMMIT_RULES["major"]:
             if re.search(rule, lower):
                 return "major"
         for rule in COMMIT_RULES["minor"]:
             if re.search(rule, lower) and level in (None, "patch"):
                 level = "minor"
+                matched = True
         for rule in COMMIT_RULES["patch"]:
             if re.search(rule, lower) and level is None:
                 level = "patch"
+                matched = True
+        if not matched:
+            invalid.append(commit)
+
+    if strict and invalid:
+        print("ERROR: The following commits do not use a recognized conventional-commit prefix:")
+        for commit in invalid:
+            print(f"  - {commit}")
+        print("Allowed prefixes: feat, feature, fix, bugfix, hotfix, security, docs, chore, style, refactor, test, tests, perf, ci, build")
+        raise SystemExit(1)
+
     return level or "patch"
 
 
@@ -154,11 +174,12 @@ def main():
     parser = argparse.ArgumentParser(description="Auto-version Frappe Factory")
     parser.add_argument("--dry-run", action="store_true", help="Print changes without applying them")
     parser.add_argument("--level", choices=["major", "minor", "patch"], help="Force bump level")
+    parser.add_argument("--strict", action="store_true", help="Require every commit to use a recognized conventional-commit prefix")
     args = parser.parse_args()
 
     current = get_current_version()
     commits = get_commits_since_last_version(current)
-    level = args.level or classify_bump(commits)
+    level = args.level or classify_bump(commits, strict=args.strict)
     new_version = bump_version(current, level)
 
     print(f"Current version: {current}")

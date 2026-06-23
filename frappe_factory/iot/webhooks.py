@@ -346,9 +346,11 @@ def check_production_lag():
     is below (100 - threshold) to avoid spamming one event per hour.
     """
     settings = frappe.get_single("Factory Configuration")
-    threshold = flt(settings.production_lag_threshold_pct or 20)
+    threshold = flt(settings.production_lag_threshold_pct)
     if threshold <= 0:
         return
+    if threshold is None:
+        threshold = 20
 
     target_completion = 100 - threshold
 

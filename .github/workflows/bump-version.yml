@@ -26,7 +26,7 @@ jobs:
       - name: Bump version
         id: bump
         run: |
-          python scripts/bump_version.py --level patch
+          python scripts/bump_version.py --strict
           echo "version=$(grep -oP '__version__\s*=\s*"\K[^"]+' frappe_factory/__init__.py)" >> "$GITHUB_OUTPUT"
 
       - name: Commit and tag

@@ -1,0 +1,29 @@
+repos:
+  - repo: local
+    hooks:
+      - id: auto-prefix-commit-message
+        name: Auto-prefix commit message
+        entry: scripts/suggest_commit_prefix.py
+        args: ["--rewrite"]
+        language: script
+        stages: [prepare-commit-msg]
+        pass_filenames: true
+
+      - id: conventional-commit-message
+        name: Conventional commit message
+        entry: scripts/commit-msg-hook.sh
+        language: script
+        stages: [commit-msg]
+        pass_filenames: true
+
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        args: ["--line-length", "120"]
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--line-length", "120"]

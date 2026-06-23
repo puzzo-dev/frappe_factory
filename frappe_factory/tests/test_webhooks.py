@@ -1,108 +1,111 @@
 import unittest
+from contextlib import contextmanager
 from unittest.mock import MagicMock, patch
 
 
 class TestWebhookHelpers(unittest.TestCase):
+    @contextmanager
     def _make_api(self):
         with patch("frappe_factory.iot.webhooks._get_webhook_token", return_value="secret"), \
              patch("frappe_factory.iot.webhooks._check_rate_limit"), \
              patch("frappe_factory.iot.webhooks._get_config") as mock_config, \
-             patch("frappe_factory.iot.webhooks.frappe.request") as mock_request, \
-             patch("frappe_factory.iot.webhooks.frappe.db") as mock_db, \
+             patch("frappe_factory.iot.webhooks._get_request_json", return_value={}), \
+             patch("frappe_factory.iot.webhooks._get_request_header", return_value="secret"), \
+             patch("frappe_factory.iot.webhooks._db_get_value") as mock_db_get, \
+             patch("frappe_factory.iot.webhooks._db_set_value") as mock_db_set, \
+             patch("frappe_factory.iot.webhooks._db_exists") as mock_db_exists, \
+             patch("frappe_factory.iot.webhooks._db_sql") as mock_db_sql, \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.frappe.as_json", lambda x: str(x)), \
+             patch("frappe_factory.iot.webhooks.frappe.enqueue") as mock_enqueue, \
              patch("frappe_factory.iot.webhooks.now", return_value="2026-06-23 12:00:00"):
-            mock_request.headers = {"X-OpsEdge-Token": "secret"}
-            mock_request.get_json.return_value = {}
             mock_config.return_value = MagicMock(
                 enable_async_telemetry=0,
                 production_lag_threshold_pct=20,
                 telemetry_retention_days=90,
             )
             from frappe_factory.iot import webhooks
-            return webhooks, mock_request, mock_db, mock_get_doc
+            yield webhooks
 
     def test_telemetry_requires_device_id(self):
-        api, request, db, get_doc = self._make_api()
-        request.get_json.return_value = {}
-        with self.assertRaises(Exception):
-            api.telemetry()
+        with self._make_api() as api:
+            with self.assertRaises(Exception):
+                api.telemetry()
 
     def test_telemetry_rejects_unknown_device(self):
-        api, request, db, get_doc = self._make_api()
-        request.get_json.return_value = {"device_id": "unknown"}
-        db.get_value.return_value = None
-        with self.assertRaises(Exception):
-            api.telemetry()
+        with self._make_api() as api:
+            api._get_request_json.return_value = {"device_id": "unknown"}
+            api._db_get_value.return_value = None
+            with self.assertRaises(Exception):
+                api.telemetry()
 
     def test_telemetry_skips_inactive_device(self):
-        api, request, db, get_doc = self._make_api()
-        request.get_json.return_value = {"device_id": "dev-1", "values": {"temp": 22}}
-        db.get_value.return_value = MagicMock(name="OED-0001", linked_workstation=None, is_active=0)
-        result = api.telemetry()
-        self.assertEqual(result["reason"], "device_inactive")
+        with self._make_api() as api:
+            api._get_request_json.return_value = {"device_id": "dev-1", "values": {"temp": 22}}
+            api._db_get_value.return_value = MagicMock(name="OED-0001", linked_workstation=None, is_active=0)
+            result = api.telemetry()
+            self.assertEqual(result["reason"], "device_inactive")
 
     def test_telemetry_inserts_records(self):
-        api, request, db, get_doc = self._make_api()
-        request.get_json.return_value = {
-            "device_id": "dev-1",
-            "ts": 1719144000000,
-            "values": {"temperature": 22.5, "status": "Running"},
-        }
-        device = MagicMock(name="OED-0001", linked_workstation=None, is_active=1)
-        db.get_value.return_value = device
-        mock_doc = MagicMock()
-        get_doc.return_value = mock_doc
-        result = api.telemetry()
-        self.assertEqual(result["records"], 2)
-        self.assertEqual(mock_doc.insert.call_count, 2)
+        with self._make_api() as api:
+            api._get_request_json.return_value = {
+                "device_id": "dev-1",
+                "ts": 1719144000000,
+                "values": {"temperature": 22.5, "status": "Running"},
+            }
+            device = MagicMock(name="OED-0001", linked_workstation=None, is_active=1)
+            api._db_get_value.return_value = device
+            mock_doc = MagicMock()
+            api.frappe.get_doc.return_value = mock_doc
+            result = api.telemetry()
+            self.assertEqual(result["records"], 2)
+            self.assertEqual(mock_doc.insert.call_count, 2)
 
     def test_telemetry_async_returns_queued(self):
-        api, request, db, get_doc = self._make_api()
-        request.get_json.return_value = {"device_id": "dev-1", "values": {"temp": 22}}
-        device = MagicMock(name="OED-0001", linked_workstation=None, is_active=1)
-        db.get_value.return_value = device
-        api._get_config.return_value = MagicMock(enable_async_telemetry=1)
-        with patch("frappe_factory.iot.webhooks.frappe.enqueue") as mock_enqueue:
+        with self._make_api() as api:
+            api._get_request_json.return_value = {"device_id": "dev-1", "values": {"temp": 22}}
+            device = MagicMock(name="OED-0001", linked_workstation=None, is_active=1)
+            api._db_get_value.return_value = device
+            api._get_config.return_value = MagicMock(enable_async_telemetry=1)
             result = api.telemetry()
             self.assertEqual(result["status"], "queued")
-            mock_enqueue.assert_called_once()
+            api.frappe.enqueue.assert_called_once()
 
     def test_parse_timestamp_handles_invalid(self):
-        api, _, _, _ = self._make_api()
-        with self.assertRaises(Exception):
-            api._parse_timestamp("not-a-number")
+        with self._make_api() as api:
+            with self.assertRaises(Exception):
+                api._parse_timestamp("not-a-number")
 
     def test_parse_metric_value_coerces_invalid(self):
-        api, _, _, _ = self._make_api()
-        self.assertEqual(api._parse_metric_value("abc"), 0.0)
-        self.assertEqual(api._parse_metric_value(42), 42.0)
-        self.assertEqual(api._parse_metric_value(True), 1.0)
+        with self._make_api() as api:
+            self.assertEqual(api._parse_metric_value("abc"), 0.0)
+            self.assertEqual(api._parse_metric_value(42), 42.0)
+            self.assertEqual(api._parse_metric_value(True), 1.0)
 
     def test_alarm_rejects_invalid_event_type(self):
-        api, request, db, get_doc = self._make_api()
-        request.get_json.return_value = {"device_id": "dev-1", "event_type": "Bad"}
-        db.get_value.return_value = MagicMock(name="OED-0001", linked_workstation=None)
-        with self.assertRaises(Exception):
-            api.alarm()
+        with self._make_api() as api:
+            api._get_request_json.return_value = {"device_id": "dev-1", "event_type": "Bad"}
+            api._db_get_value.return_value = MagicMock(name="OED-0001", linked_workstation=None)
+            with self.assertRaises(Exception):
+                api.alarm()
 
     def test_device_connected_updates_last_seen(self):
-        api, request, db, get_doc = self._make_api()
-        request.get_json.return_value = {"device_id": "dev-1", "connected": True}
-        db.get_value.return_value = MagicMock(name="OED-0001")
-        result = api.device_connected()
-        self.assertEqual(result["status"], "ok")
-        db.set_value.assert_called_once()
+        with self._make_api() as api:
+            api._get_request_json.return_value = {"device_id": "dev-1", "connected": True}
+            api._db_get_value.return_value = MagicMock(name="OED-0001")
+            result = api.device_connected()
+            self.assertEqual(result["status"], "ok")
+            api._db_set_value.assert_called_once()
 
     def test_health_check(self):
-        api, _, _, _ = self._make_api()
-        result = api.health_check()
-        self.assertEqual(result["status"], "ok")
+        with self._make_api() as api:
+            result = api.health_check()
+            self.assertEqual(result["status"], "ok")
 
 
 class TestDocEventHooks(unittest.TestCase):
     def test_on_attendance_submit_updates_correct_fields(self):
-        with patch("frappe_factory.iot.webhooks.frappe.db.get_value", return_value="SAS-2026-06-23-001"), \
+        with patch("frappe_factory.iot.webhooks._db_get_value", return_value="SAS-2026-06-23-001"), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.logger"):
             summary = MagicMock()
@@ -121,7 +124,7 @@ class TestDocEventHooks(unittest.TestCase):
             summary.save.assert_called_once()
 
     def test_on_attendance_submit_no_summary_logs_and_returns(self):
-        with patch("frappe_factory.iot.webhooks.frappe.db.get_value", return_value=None), \
+        with patch("frappe_factory.iot.webhooks._db_get_value", return_value=None), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.logger"):
             from frappe_factory.iot.webhooks import on_attendance_submit
@@ -135,7 +138,8 @@ class TestDocEventHooks(unittest.TestCase):
             mock_get_doc.assert_not_called()
 
     def test_on_quality_submit_creates_event(self):
-        with patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
+        with patch("frappe_factory.iot.webhooks._db_get_value", return_value=None), \
+             patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.logger"):
             from frappe_factory.iot.webhooks import on_quality_submit
 
@@ -149,9 +153,24 @@ class TestDocEventHooks(unittest.TestCase):
             call_kwargs = mock_get_doc.call_args[1]
             self.assertEqual(call_kwargs["work_order"], "WO-001")
 
+    def test_on_quality_submit_fetches_workstation_from_work_order(self):
+        with patch("frappe_factory.iot.webhooks._db_get_value", return_value="WS-002"), \
+             patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
+             patch("frappe_factory.iot.webhooks.logger"):
+            from frappe_factory.iot.webhooks import on_quality_submit
+
+            doc = MagicMock()
+            doc.status = "Rejected"
+            doc.name = "QI-001"
+            doc.workstation = None
+            doc.reference_name = "WO-001"
+            on_quality_submit(doc, "on_submit")
+            call_kwargs = mock_get_doc.call_args[1]
+            self.assertEqual(call_kwargs["linked_workstation"], "WS-002")
+
     def test_on_work_order_update_links_devices(self):
         with patch("frappe_factory.iot.webhooks.frappe.get_all", return_value=["OED-0001", "OED-0002"]), \
-             patch("frappe_factory.iot.webhooks.frappe.db.set_value") as mock_set, \
+             patch("frappe_factory.iot.webhooks._db_set_value") as mock_set, \
              patch("frappe_factory.iot.webhooks.logger"):
             from frappe_factory.iot.webhooks import on_work_order_update
 
@@ -179,7 +198,7 @@ class TestCheckProductionLag(unittest.TestCase):
     def test_check_production_lag_creates_event(self):
         with patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
              patch("frappe_factory.iot.webhooks.frappe.get_all") as mock_get_all, \
-             patch("frappe_factory.iot.webhooks.frappe.db.exists", return_value=False), \
+             patch("frappe_factory.iot.webhooks._db_exists", return_value=False), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.frappe.db.commit"), \
              patch("frappe_factory.iot.webhooks.now", return_value="2026-06-23 12:00:00"), \
@@ -209,7 +228,7 @@ class TestCheckProductionLag(unittest.TestCase):
 class TestCleanupOldTelemetry(unittest.TestCase):
     def test_cleanup_old_telemetry_deletes_rows(self):
         with patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
-             patch("frappe_factory.iot.webhooks.frappe.db.sql") as mock_sql, \
+             patch("frappe_factory.iot.webhooks._db_sql") as mock_sql, \
              patch("frappe_factory.iot.webhooks.frappe.db.commit"), \
              patch("frappe_factory.iot.webhooks.today", return_value="2026-06-23"), \
              patch("frappe_factory.iot.webhooks.add_days", return_value="2026-05-24"):
@@ -221,7 +240,7 @@ class TestCleanupOldTelemetry(unittest.TestCase):
 
     def test_cleanup_old_telemetry_disabled_when_retention_zero(self):
         with patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
-             patch("frappe_factory.iot.webhooks.frappe.db.sql") as mock_sql, \
+             patch("frappe_factory.iot.webhooks._db_sql") as mock_sql, \
              patch("frappe_factory.iot.webhooks.today", return_value="2026-06-23"):
             mock_single.return_value = MagicMock(telemetry_retention_days=0)
             from frappe_factory.iot.webhooks import cleanup_old_telemetry

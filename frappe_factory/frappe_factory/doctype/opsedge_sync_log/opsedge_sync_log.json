@@ -90,7 +90,7 @@
  "links": [],
  "modified": "2026-06-23 00:00:00.000000",
  "modified_by": "Administrator",
- "module": "Frappe Factory",
+ "module": "frappe_factory",
  "name": "OpsEdge Sync Log",
  "naming_rule": "Expression",
  "owner": "Administrator",
