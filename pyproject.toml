@@ -1,0 +1,25 @@
+[project]
+name = "frappe_iot"
+version = "1.0.0"
+authors = [
+    { name = "I-Varse Technologies NG", email = "dev@itechnologies.ng" }
+]
+description = "IoT integration app for Frappe v15 — factory telemetry, ThingsBoard integration, and plant floor design"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dynamic = ["version"]
+dependencies = [
+    # "frappe~=15.0.0" # Installed and managed by bench.
+]
+
+[project.optional-dependencies]
+prod = []
+dev = []
+
+[build-system]
+requires = ["flit_core>=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.frappe-dependencies]
+# required_apps = ["erpnext"]

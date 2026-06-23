@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "iot_device",
+  "machine_name",
+  "machine_icon",
+  "column_break_1",
+  "pos_x_pct",
+  "pos_y_pct",
+  "primary_metric_1",
+  "metric_1_unit",
+  "primary_metric_2",
+  "metric_2_unit",
+  "thingsboard_device_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "iot_device",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "IoT Device",
+   "options": "IoT Device Registry",
+   "reqd": 1
+  },
+  {
+   "fieldname": "machine_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Display Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "machine_icon",
+   "fieldtype": "Select",
+   "label": "Machine Icon",
+   "options": "gear\nloom\npress\nconveyor\nmixer\ndryer\ncutter\nwelder\nprinter\nassembly\ncustom",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pos_x_pct",
+   "fieldtype": "Float",
+   "label": "X Position (%)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pos_y_pct",
+   "fieldtype": "Float",
+   "label": "Y Position (%)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "primary_metric_1",
+   "fieldtype": "Data",
+   "label": "Primary Metric 1 Key"
+  },
+  {
+   "fieldname": "metric_1_unit",
+   "fieldtype": "Data",
+   "label": "Metric 1 Unit"
+  },
+  {
+   "fieldname": "primary_metric_2",
+   "fieldtype": "Data",
+   "label": "Primary Metric 2 Key"
+  },
+  {
+   "fieldname": "metric_2_unit",
+   "fieldtype": "Data",
+   "label": "Metric 2 Unit"
+  },
+  {
+   "fieldname": "thingsboard_device_id",
+   "fieldtype": "Data",
+   "label": "TB Device ID"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-23 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe IOT",
+ "name": "Plant Floor Widget",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

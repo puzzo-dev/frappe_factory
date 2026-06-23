@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "autoname": "format:OSL-{####}",
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sync_direction",
+  "sync_started_at",
+  "sync_completed_at",
+  "column_break_1",
+  "status",
+  "records_attempted",
+  "records_synced",
+  "records_failed",
+  "conflict_count",
+  "triggered_by",
+  "error_log"
+ ],
+ "fields": [
+  {
+   "fieldname": "sync_direction",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Direction",
+   "options": "Local→Cloud\nCloud→Local",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sync_started_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Started At",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sync_completed_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Completed At"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Running\nSuccess\nPartial\nFailed",
+   "reqd": 1
+  },
+  {
+   "fieldname": "records_attempted",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Records Attempted"
+  },
+  {
+   "fieldname": "records_synced",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Records Synced"
+  },
+  {
+   "fieldname": "records_failed",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Records Failed"
+  },
+  {
+   "fieldname": "conflict_count",
+   "fieldtype": "Int",
+   "label": "Conflicts"
+  },
+  {
+   "fieldname": "triggered_by",
+   "fieldtype": "Select",
+   "label": "Triggered By",
+   "options": "Scheduler\nManual\nForced"
+  },
+  {
+   "fieldname": "error_log",
+   "fieldtype": "Code",
+   "label": "Error Log",
+   "options": "JSON"
+  }
+ ],
+ "links": [],
+ "modified": "2026-06-23 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe IOT",
+ "name": "OpsEdge Sync Log",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "read": 1,
+   "role": "Factory Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Floor Supervisor"
+  }
+ ],
+ "sort_field": "sync_started_at",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

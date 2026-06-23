@@ -1,0 +1,128 @@
+{
+ "actions": [],
+ "autoname": "format:PFL-{####}",
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "layout_name",
+  "zone_type",
+  "site_identifier",
+  "column_break_1",
+  "is_active",
+  "display_order",
+  "last_published",
+  "section_break_1",
+  "floor_plan_image",
+  "canvas_width",
+  "canvas_height",
+  "widgets"
+ ],
+ "fields": [
+  {
+   "fieldname": "layout_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Layout Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "zone_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Zone Type",
+   "options": "Production\nAssembly\nQuality Control\nWarehouse\nMaintenance\nOther",
+   "reqd": 1
+  },
+  {
+   "fieldname": "site_identifier",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Site Identifier"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "display_order",
+   "fieldtype": "Int",
+   "label": "Display Order"
+  },
+  {
+   "fieldname": "last_published",
+   "fieldtype": "Datetime",
+   "label": "Last Published"
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break",
+   "label": "Canvas"
+  },
+  {
+   "fieldname": "floor_plan_image",
+   "fieldtype": "Attach Image",
+   "label": "Floor Plan Image"
+  },
+  {
+   "fieldname": "canvas_width",
+   "fieldtype": "Int",
+   "label": "Canvas Width (px)"
+  },
+  {
+   "fieldname": "canvas_height",
+   "fieldtype": "Int",
+   "label": "Canvas Height (px)"
+  },
+  {
+   "fieldname": "widgets",
+   "fieldtype": "Table",
+   "label": "Machine Widgets",
+   "options": "Plant Floor Widget"
+  }
+ ],
+ "links": [],
+ "modified": "2026-06-23 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe IOT",
+ "name": "Plant Floor Layout",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Factory Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Floor Supervisor"
+  },
+  {
+   "read": 1,
+   "role": "Machine Operator"
+  },
+  {
+   "read": 1,
+   "role": "Quality Inspector"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

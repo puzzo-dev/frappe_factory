@@ -1,0 +1,158 @@
+{
+ "actions": [],
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "site_name",
+  "site_code",
+  "industry_type",
+  "number_of_shifts",
+  "column_break_1",
+  "shift_1_start",
+  "shift_2_start",
+  "shift_3_start",
+  "section_break_1",
+  "thingsboard_url",
+  "thingsboard_tenant_admin",
+  "column_break_2",
+  "cloud_sync_url",
+  "cloud_sync_interval_minutes",
+  "machine_fault_timeout_minutes",
+  "production_lag_threshold_pct",
+  "enable_ai_workflows",
+  "opsedge_device_serial"
+ ],
+ "fields": [
+  {
+   "fieldname": "site_name",
+   "fieldtype": "Data",
+   "label": "Site Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "site_code",
+   "fieldtype": "Data",
+   "label": "Site Code"
+  },
+  {
+   "fieldname": "industry_type",
+   "fieldtype": "Select",
+   "label": "Industry Type",
+   "options": "Food & Beverage\nTextile\nPlastics\nFurniture\nLight Assembly\nOther"
+  },
+  {
+   "fieldname": "number_of_shifts",
+   "fieldtype": "Select",
+   "label": "Number of Shifts",
+   "options": "1\n2\n3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "shift_1_start",
+   "fieldtype": "Time",
+   "label": "Shift 1 Start"
+  },
+  {
+   "fieldname": "shift_2_start",
+   "fieldtype": "Time",
+   "label": "Shift 2 Start"
+  },
+  {
+   "fieldname": "shift_3_start",
+   "fieldtype": "Time",
+   "label": "Shift 3 Start"
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break",
+   "label": "Integrations"
+  },
+  {
+   "default": "http://localhost:8080",
+   "fieldname": "thingsboard_url",
+   "fieldtype": "Data",
+   "label": "ThingsBoard URL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "thingsboard_tenant_admin",
+   "fieldtype": "Data",
+   "label": "TB Tenant Admin Email"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cloud_sync_url",
+   "fieldtype": "Data",
+   "label": "Cloud Sync URL"
+  },
+  {
+   "default": "60",
+   "fieldname": "cloud_sync_interval_minutes",
+   "fieldtype": "Int",
+   "label": "Cloud Sync Interval (min)",
+   "reqd": 1
+  },
+  {
+   "default": "5",
+   "fieldname": "machine_fault_timeout_minutes",
+   "fieldtype": "Int",
+   "label": "Machine Fault Timeout (min)",
+   "reqd": 1
+  },
+  {
+   "default": "20",
+   "fieldname": "production_lag_threshold_pct",
+   "fieldtype": "Float",
+   "label": "Production Lag Threshold (%)"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_ai_workflows",
+   "fieldtype": "Check",
+   "label": "Enable AI Workflows"
+  },
+  {
+   "fieldname": "opsedge_device_serial",
+   "fieldtype": "Data",
+   "label": "OpsEdge Device Serial"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-06-23 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe IOT",
+ "name": "Factory Configuration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Factory Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

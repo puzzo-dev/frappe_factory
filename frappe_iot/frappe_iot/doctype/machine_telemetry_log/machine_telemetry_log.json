@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "autoname": "format:MTL-{####}",
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "iot_device",
+  "thingsboard_device_id",
+  "column_break_1",
+  "recorded_at",
+  "metric_key",
+  "metric_value",
+  "metric_unit",
+  "machine_state",
+  "work_order",
+  "raw_payload"
+ ],
+ "fields": [
+  {
+   "fieldname": "iot_device",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "IoT Device",
+   "options": "IoT Device Registry",
+   "reqd": 1
+  },
+  {
+   "fieldname": "thingsboard_device_id",
+   "fieldtype": "Data",
+   "label": "TB Device ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "recorded_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Recorded At",
+   "reqd": 1
+  },
+  {
+   "fieldname": "metric_key",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Metric Key",
+   "reqd": 1
+  },
+  {
+   "fieldname": "metric_value",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Metric Value",
+   "reqd": 1
+  },
+  {
+   "fieldname": "metric_unit",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Unit"
+  },
+  {
+   "fieldname": "machine_state",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Machine State",
+   "options": "Running\nIdle\nWarning\nFault"
+  },
+  {
+   "fieldname": "work_order",
+   "fieldtype": "Link",
+   "label": "Work Order",
+   "options": "Work Order"
+  },
+  {
+   "fieldname": "raw_payload",
+   "fieldtype": "Code",
+   "label": "Raw Payload",
+   "options": "JSON"
+  }
+ ],
+ "links": [],
+ "modified": "2026-06-23 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe IOT",
+ "name": "Machine Telemetry Log",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "read": 1,
+   "role": "Factory Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Floor Supervisor"
+  },
+  {
+   "read": 1,
+   "role": "Quality Inspector"
+  }
+ ],
+ "sort_field": "recorded_at",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}
