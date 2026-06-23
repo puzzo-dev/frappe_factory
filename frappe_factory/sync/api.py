@@ -23,6 +23,23 @@ SYNC_API_LIMIT = 500
 SYNC_API_WINDOW = 60
 
 
+def _log_sync(action, details=None):
+    """Write an audit log for sync-agent activity."""
+    try:
+        frappe.get_doc({
+            "doctype": "OpsEdge Audit Log",
+            "timestamp": frappe.utils.now(),
+            "source": "Sync Agent",
+            "endpoint": "sync_api",
+            "ip_address": frappe.request.remote_addr if frappe.request else None,
+            "user": frappe.session.user if frappe.session else "Guest",
+            "action": action,
+            "details": frappe.as_json(details) if details else None,
+        }).insert(ignore_permissions=True)
+    except Exception:
+        logger.exception("Failed to write sync audit log")
+
+
 def _get_request_header(name, default=None):
     """Return a header from the current request."""
     return frappe.request.headers.get(name, default) if frappe.request else default
@@ -69,6 +86,25 @@ def _validate_api_key():
     if not expected or key != expected:
         frappe.throw("Invalid API key", frappe.AuthenticationError)
     _check_rate_limit("sync_api_key")
+    _check_ip_allowed()
+
+
+def _check_ip_allowed():
+    """Enforce Factory Configuration IP allowlist for sync API endpoints."""
+    try:
+        settings = frappe.get_single("Factory Configuration")
+    except Exception:
+        return
+    allowed = settings.allowed_ip_list if settings else None
+    if not allowed:
+        return
+    allowed_ips = {ip.strip() for ip in allowed.split(",") if ip.strip()}
+    if not allowed_ips:
+        return
+    client_ip = frappe.request.remote_addr if frappe.request else None
+    if client_ip not in allowed_ips:
+        logger.warning("Rejected sync request from IP %s", client_ip)
+        frappe.throw("Request origin not allowed", frappe.PermissionError)
 
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])
@@ -92,6 +128,7 @@ def get_pending_records():
         limit=limit,
         order_by="modified asc",
     )
+    _log_sync("get_pending_records", {"limit": limit, "count": len(records)})
     return {"records": records}
 
 
@@ -109,6 +146,7 @@ def mark_synced():
 
     frappe.db.set_value("OpsEdge Sync Log", name, "status", "Success")
     frappe.db.commit()
+    _log_sync("mark_synced", {"name": name})
     return {"status": "ok", "name": name}
 
 
@@ -145,6 +183,7 @@ def log_sync_result():
     })
     doc.insert(ignore_permissions=True)
     frappe.db.commit()
+    _log_sync("log_sync_result", {"name": doc.name, "status": doc.status, "records_attempted": doc.records_attempted})
     return {"status": "ok", "name": doc.name}
 
 
@@ -152,12 +191,17 @@ def cleanup_old_sync_logs():
     """Daily scheduled task: delete OpsEdge Sync Log rows older than 90 days."""
     cutoff = add_days(today(), -90)
     try:
-        rows = frappe.db.sql(
-            "DELETE FROM `tabOpsEdge Sync Log` WHERE modified < %s",
-            cutoff,
+        old_logs = frappe.get_all(
+            "OpsEdge Sync Log",
+            filters=[["modified", "<", cutoff]],
+            pluck="name",
+            limit=10000,
         )
+        for name in old_logs:
+            frappe.delete_doc("OpsEdge Sync Log", name, force=True)
         frappe.db.commit()
-        logger.info("Deleted %s old sync log rows before %s", rows, cutoff)
+        logger.info("Deleted %s old sync log rows before %s", len(old_logs), cutoff)
+        _log_sync("cleanup_old_sync_logs", {"cutoff": cutoff, "deleted": len(old_logs)})
     except Exception:
         logger.exception("Failed to clean up old sync logs")
         raise

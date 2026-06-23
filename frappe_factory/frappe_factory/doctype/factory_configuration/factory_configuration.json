@@ -167,6 +167,23 @@
    "fieldtype": "Int",
    "label": "Telemetry Retention (days)",
    "reqd": 1
+  },
+  {
+   "fieldname": "allowed_ip_list",
+   "fieldtype": "Small Text",
+   "label": "Allowed IP Addresses (comma-separated, leave blank for any)"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_bulk_telemetry",
+   "fieldtype": "Check",
+   "label": "Enable Bulk Telemetry Insert"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_telemetry_dedup",
+   "fieldtype": "Check",
+   "label": "Enable Telemetry Deduplication"
   }
  ],
  "issingle": 1,

@@ -3,6 +3,7 @@ import frappe
 
 def after_install():
     create_roles()
+    create_system_user()
     create_default_factory_configuration()
     create_workspace()
 
@@ -13,6 +14,24 @@ def create_roles():
     for role in roles:
         if not frappe.db.exists("Role", role):
             frappe.get_doc({"doctype": "Role", "role_name": role, "desk_access": 1}).insert(ignore_permissions=True)
+    frappe.db.commit()
+
+
+def create_system_user():
+    """Create a dedicated system user for scheduler tasks."""
+    user_id = "factory-system@erp.local"
+    if frappe.db.exists("User", user_id):
+        return
+    user = frappe.get_doc({
+        "doctype": "User",
+        "email": user_id,
+        "first_name": "Factory",
+        "last_name": "System",
+        "enabled": 1,
+        "user_type": "System User",
+        "roles": [{"role": "System Manager"}, {"role": "Factory Manager"}],
+    })
+    user.insert(ignore_permissions=True)
     frappe.db.commit()
 
 

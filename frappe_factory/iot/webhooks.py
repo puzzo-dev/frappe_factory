@@ -64,6 +64,31 @@ def _get_request_header(name, default=None):
     return req.headers.get(name, default) if req else default
 
 
+def _get_client_ip():
+    """Return the client IP address, respecting X-Forwarded-For."""
+    req = _get_request()
+    if not req:
+        return None
+    forwarded = req.headers.get("X-Forwarded-For")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return req.remote_addr
+
+
+def _check_ip_allowed():
+    """Enforce Factory Configuration IP allowlist for guest endpoints."""
+    allowed = _get_config().allowed_ip_list
+    if not allowed:
+        return
+    allowed_ips = {ip.strip() for ip in allowed.split(",") if ip.strip()}
+    if not allowed_ips:
+        return
+    client_ip = _get_client_ip()
+    if client_ip not in allowed_ips:
+        logger.warning("Rejected request from IP %s", client_ip)
+        frappe.throw("Request origin not allowed", frappe.PermissionError)
+
+
 def _db_get_value(*args, **kwargs):
     """Wrapper for frappe.db.get_value to ease mocking."""
     return frappe.db.get_value(*args, **kwargs)
@@ -176,6 +201,7 @@ def telemetry():
         values: dict of metric key -> value
     """
     _validate_webhook_token()
+    _check_ip_allowed()
     data = _get_request_json() or {}
     tb_device_id = data.get("device_id")
     device = _lookup_device(tb_device_id)
@@ -213,8 +239,19 @@ def _process_telemetry(device, tb_device_id, values, recorded_at, raw_payload):
 
     Designed to run synchronously inside the HTTP request or as a background job.
     """
-    for metric_key, metric_value in values.items():
-        _insert_telemetry(device, tb_device_id, metric_key, metric_value, recorded_at, raw_payload)
+    settings = _get_config()
+    dedup_key = None
+    if cint(settings.enable_telemetry_dedup):
+        dedup_key = f"{device.name}:{recorded_at}"
+        if _telemetry_exists(device.name, recorded_at):
+            logger.info("Skipping duplicate telemetry for %s at %s", device.name, recorded_at)
+            return {"status": "duplicate", "records": 0}
+
+    if cint(settings.enable_bulk_telemetry):
+        _bulk_insert_telemetry(device, tb_device_id, values, recorded_at, raw_payload)
+    else:
+        for metric_key, metric_value in values.items():
+            _insert_telemetry(device, tb_device_id, metric_key, metric_value, recorded_at, raw_payload)
 
     if device.linked_workstation:
         _update_workstation_status(device.linked_workstation, values)
@@ -233,6 +270,16 @@ def _process_telemetry(device, tb_device_id, values, recorded_at, raw_payload):
         details={"records": len(values), "tb_device_id": tb_device_id},
         endpoint="telemetry",
     )
+    return {"status": "ok", "records": len(values)}
+
+
+def _telemetry_exists(device_name, recorded_at):
+    """Check whether any telemetry already exists for this device at this timestamp."""
+    return bool(_db_get_value(
+        "Machine Telemetry Log",
+        {"iot_device": device_name, "recorded_at": recorded_at},
+        "name",
+    ))
 
 
 def _insert_telemetry(device, tb_device_id, metric_key, metric_value, recorded_at, raw_payload):
@@ -247,6 +294,25 @@ def _insert_telemetry(device, tb_device_id, metric_key, metric_value, recorded_a
         "metric_value": metric_float,
         "raw_payload": frappe.as_json(raw_payload),
     }).insert(ignore_permissions=True)
+
+
+def _bulk_insert_telemetry(device, tb_device_id, values, recorded_at, raw_payload):
+    """Insert multiple telemetry rows in a single SQL statement."""
+    payload_json = frappe.as_json(raw_payload)
+    rows = []
+    for metric_key, metric_value in values.items():
+        metric_float = _parse_metric_value(metric_value)
+        rows.append({
+            "doctype": "Machine Telemetry Log",
+            "iot_device": device.name,
+            "thingsboard_device_id": tb_device_id,
+            "recorded_at": recorded_at,
+            "metric_key": metric_key,
+            "metric_value": metric_float,
+            "raw_payload": payload_json,
+        })
+    if rows:
+        frappe.db.bulk_insert("Machine Telemetry Log", rows)
 
 
 def _update_workstation_status(workstation_name, values):
@@ -267,6 +333,7 @@ def _update_workstation_status(workstation_name, values):
 def alarm():
     """Receive alarm payload from ThingsBoard."""
     _validate_webhook_token()
+    _check_ip_allowed()
     data = _get_request_json() or {}
     tb_device_id = data.get("device_id")
     device = _lookup_device(tb_device_id)
@@ -279,7 +346,7 @@ def alarm():
     if severity not in ("Info", "Warning", "Critical"):
         frappe.throw("Invalid severity", frappe.ValidationError)
 
-    frappe.get_doc({
+    event = frappe.get_doc({
         "doctype": "Production Floor Event",
         "event_type": event_type,
         "severity": severity,
@@ -290,6 +357,13 @@ def alarm():
         "description": data.get("details", ""),
     }).insert(ignore_permissions=True)
     frappe.db.commit()
+    _log_audit(
+        "create_production_floor_event",
+        affected_doctype="Production Floor Event",
+        affected_docname=event.name,
+        details={"event_type": event_type, "severity": severity, "tb_device_id": tb_device_id},
+        endpoint="alarm",
+    )
     return {"status": "ok"}
 
 
@@ -297,6 +371,7 @@ def alarm():
 def device_connected():
     """Receive device connected/disconnected event."""
     _validate_webhook_token()
+    _check_ip_allowed()
     data = _get_request_json() or {}
     tb_device_id = data.get("device_id")
     connected = data.get("connected", True)
@@ -304,6 +379,13 @@ def device_connected():
 
     _db_set_value("IoT Device Registry", device.name, "last_seen", now())
     frappe.db.commit()
+    _log_audit(
+        "update_device_last_seen",
+        affected_doctype="IoT Device Registry",
+        affected_docname=device.name,
+        details={"connected": connected, "tb_device_id": tb_device_id},
+        endpoint="device_connected",
+    )
     return {"status": "ok", "device": device.name, "connected": connected}
 
 
@@ -311,6 +393,7 @@ def device_connected():
 def health_check():
     """Return basic health status for monitoring/load balancers."""
     _validate_webhook_token()
+    _check_ip_allowed()
     return {"status": "ok"}
 
 
@@ -319,6 +402,7 @@ def on_attendance_submit(doc, method):
     if not doc.employee or not doc.attendance_date:
         return
     try:
+        _run_as_system_user()
         summary_name = _db_get_value("Shift Attendance Summary", {"shift_date": doc.attendance_date}, "name")
         if not summary_name:
             logger.info("No Shift Attendance Summary found for %s", doc.attendance_date)
@@ -329,7 +413,15 @@ def on_attendance_submit(doc, method):
             summary.total_present = cint(summary.total_present) + 1
         elif doc.status == "Absent":
             summary.total_absent = cint(summary.total_absent) + 1
-        summary.save(ignore_permissions=True)
+        summary.save()
+        _log_audit(
+            "update_attendance_summary",
+            affected_doctype="Shift Attendance Summary",
+            affected_docname=summary.name,
+            details={"attendance": doc.name, "status": doc.status},
+            source="Doc Event",
+            endpoint="Attendance.on_submit",
+        )
     except frappe.DoesNotExistError:
         logger.info("Shift Attendance Summary not found for %s", doc.attendance_date)
     except Exception:
@@ -341,12 +433,13 @@ def on_quality_submit(doc, method):
     if doc.status != "Rejected":
         return
     try:
+        _run_as_system_user()
         workstation = doc.workstation
         if not workstation and doc.reference_name:
             # Reference may be a Work Order; fetch its workstation from the operation if possible.
             workstation = _db_get_value("Work Order", doc.reference_name, "workstation")
 
-        frappe.get_doc({
+        event = frappe.get_doc({
             "doctype": "Production Floor Event",
             "event_type": "Quality Hold",
             "severity": "Critical",
@@ -354,7 +447,15 @@ def on_quality_submit(doc, method):
             "linked_workstation": workstation,
             "work_order": doc.reference_name,
             "description": f"Quality Inspection {doc.name} rejected.",
-        }).insert(ignore_permissions=True)
+        }).insert()
+        _log_audit(
+            "create_quality_hold_event",
+            affected_doctype="Production Floor Event",
+            affected_docname=event.name,
+            details={"quality_inspection": doc.name, "work_order": doc.reference_name},
+            source="Doc Event",
+            endpoint="Quality Inspection.on_submit",
+        )
     except Exception:
         logger.exception("Failed to create quality floor event for %s", doc.name)
 
@@ -364,6 +465,7 @@ def on_work_order_update(doc, method):
     if doc.status not in ("In Process", "Completed", "Closed"):
         return
     try:
+        _run_as_system_user()
         workstations = [op.workstation for op in (doc.operations or []) if op.workstation]
         if not workstations:
             return
@@ -374,9 +476,24 @@ def on_work_order_update(doc, method):
             pluck="name",
         )
         for device in devices:
-            _db_set_value("IoT Device Registry", device, "linked_work_order", doc.name)
+            frappe.db.set_value("IoT Device Registry", device, "linked_work_order", doc.name)
+        _log_audit(
+            "sync_work_order_to_devices",
+            affected_doctype="IoT Device Registry",
+            affected_docname=doc.name,
+            details={"devices": devices},
+            source="Doc Event",
+            endpoint="Work Order.on_update",
+        )
     except Exception:
         logger.exception("Failed to sync work order %s to IoT devices", doc.name)
+
+
+def _run_as_system_user():
+    """Switch to the factory system user for scheduler tasks if available."""
+    user_id = "factory-system@erp.local"
+    if frappe.db.exists("User", user_id):
+        frappe.set_user(user_id)
 
 
 def check_production_lag():
@@ -385,6 +502,7 @@ def check_production_lag():
     Creates a Production Floor Event when a work order's completion percentage
     is below (100 - threshold) to avoid spamming one event per hour.
     """
+    _run_as_system_user()
     settings = frappe.get_single("Factory Configuration")
     threshold = flt(settings.production_lag_threshold_pct)
     if threshold <= 0:
@@ -420,7 +538,7 @@ def check_production_lag():
             if existing:
                 continue
 
-            frappe.get_doc({
+            event = frappe.get_doc({
                 "doctype": "Production Floor Event",
                 "event_type": "Line Stoppage",
                 "severity": "Warning",
@@ -428,12 +546,21 @@ def check_production_lag():
                 "work_order": wo.name,
                 "description": f"Production lag detected: {completion_pct:.1f}% completion vs planned {planned}.",
             }).insert(ignore_permissions=True)
+            _log_audit(
+                "create_lag_event",
+                affected_doctype="Production Floor Event",
+                affected_docname=event.name,
+                details={"work_order": wo.name, "completion_pct": completion_pct},
+                source="Scheduler",
+                endpoint="check_production_lag",
+            )
 
     frappe.db.commit()
 
 
 def cleanup_old_telemetry():
     """Daily scheduled task: delete Machine Telemetry Log rows older than retention days."""
+    _run_as_system_user()
     settings = frappe.get_single("Factory Configuration")
     retention_days = settings.telemetry_retention_days
     if retention_days is None:
@@ -450,6 +577,13 @@ def cleanup_old_telemetry():
         )
         frappe.db.commit()
         logger.info("Deleted %s old telemetry rows before %s", rows, cutoff)
+        _log_audit(
+            "cleanup_old_telemetry",
+            affected_doctype="Machine Telemetry Log",
+            details={"rows_deleted": rows, "cutoff": cutoff},
+            source="Scheduler",
+            endpoint="cleanup_old_telemetry",
+        )
     except Exception:
         logger.exception("Failed to clean up old telemetry rows")
         raise

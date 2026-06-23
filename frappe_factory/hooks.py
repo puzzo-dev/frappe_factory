@@ -31,6 +31,7 @@ fixtures = [
         "Machine Operator", "Quality Inspector", "Storekeeper"
     ]]]},
     {"dt": "Custom DocPerm"},
+    {"dt": "Workspace", "filters": [["name", "=", "Frappe Factory"]]},
 ]
 
 # Document Events
