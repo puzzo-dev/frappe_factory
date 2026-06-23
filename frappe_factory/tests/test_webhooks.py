@@ -8,6 +8,8 @@ class TestWebhookHelpers(unittest.TestCase):
     def _make_api(self):
         with patch("frappe_factory.iot.webhooks._get_webhook_token", return_value="secret"), \
              patch("frappe_factory.iot.webhooks._check_rate_limit"), \
+             patch("frappe_factory.iot.webhooks._check_ip_allowed"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
              patch("frappe_factory.iot.webhooks._get_config") as mock_config, \
              patch("frappe_factory.iot.webhooks._get_request_json", return_value={}), \
              patch("frappe_factory.iot.webhooks._get_request_header", return_value="secret"), \
@@ -21,6 +23,8 @@ class TestWebhookHelpers(unittest.TestCase):
              patch("frappe_factory.iot.webhooks.now", return_value="2026-06-23 12:00:00"):
             mock_config.return_value = MagicMock(
                 enable_async_telemetry=0,
+                enable_bulk_telemetry=0,
+                enable_telemetry_dedup=0,
                 production_lag_threshold_pct=20,
                 telemetry_retention_days=90,
             )
@@ -106,7 +110,9 @@ class TestWebhookHelpers(unittest.TestCase):
 
 class TestDocEventHooks(unittest.TestCase):
     def test_on_attendance_submit_updates_correct_fields(self):
-        with patch("frappe_factory.iot.webhooks._db_get_value", return_value="SAS-2026-06-23-001"), \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks._db_get_value", return_value="SAS-2026-06-23-001"), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.logger"):
             summary = MagicMock()
@@ -125,7 +131,9 @@ class TestDocEventHooks(unittest.TestCase):
             summary.save.assert_called_once()
 
     def test_on_attendance_submit_no_summary_logs_and_returns(self):
-        with patch("frappe_factory.iot.webhooks._db_get_value", return_value=None), \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks._db_get_value", return_value=None), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.logger"):
             from frappe_factory.iot.webhooks import on_attendance_submit
@@ -139,7 +147,9 @@ class TestDocEventHooks(unittest.TestCase):
             mock_get_doc.assert_not_called()
 
     def test_on_quality_submit_creates_event(self):
-        with patch("frappe_factory.iot.webhooks._db_get_value", return_value=None), \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks._db_get_value", return_value=None), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.logger"), \
              patch("frappe_factory.iot.webhooks.now", return_value="2026-06-23 12:00:00"):
@@ -159,7 +169,9 @@ class TestDocEventHooks(unittest.TestCase):
                 self.assertEqual(mock_get_doc.call_args.args[0]["work_order"], "WO-001")
 
     def test_on_quality_submit_fetches_workstation_from_work_order(self):
-        with patch("frappe_factory.iot.webhooks._db_get_value", return_value="WS-002"), \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks._db_get_value", return_value="WS-002"), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
              patch("frappe_factory.iot.webhooks.logger"), \
              patch("frappe_factory.iot.webhooks.now", return_value="2026-06-23 12:00:00"):
@@ -178,8 +190,10 @@ class TestDocEventHooks(unittest.TestCase):
                 self.assertEqual(mock_get_doc.call_args.args[0]["linked_workstation"], "WS-002")
 
     def test_on_work_order_update_links_devices(self):
-        with patch("frappe_factory.iot.webhooks.frappe.get_all", return_value=["OED-0001", "OED-0002"]), \
-             patch("frappe_factory.iot.webhooks._db_set_value") as mock_set, \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks.frappe.get_all", return_value=["OED-0001", "OED-0002"]), \
+             patch("frappe_factory.iot.webhooks.frappe.db.set_value") as mock_set, \
              patch("frappe_factory.iot.webhooks.logger"):
             from frappe_factory.iot.webhooks import on_work_order_update
 
@@ -193,7 +207,9 @@ class TestDocEventHooks(unittest.TestCase):
             self.assertEqual(mock_set.call_count, 2)
 
     def test_on_work_order_update_ignores_non_active_status(self):
-        with patch("frappe_factory.iot.webhooks.frappe.get_all") as mock_get_all, \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks.frappe.get_all") as mock_get_all, \
              patch("frappe_factory.iot.webhooks.logger"):
             from frappe_factory.iot.webhooks import on_work_order_update
 
@@ -205,7 +221,9 @@ class TestDocEventHooks(unittest.TestCase):
 
 class TestCheckProductionLag(unittest.TestCase):
     def test_check_production_lag_creates_event(self):
-        with patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
              patch("frappe_factory.iot.webhooks.frappe.get_all") as mock_get_all, \
              patch("frappe_factory.iot.webhooks._db_exists", return_value=False), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
@@ -224,7 +242,9 @@ class TestCheckProductionLag(unittest.TestCase):
             mock_doc.insert.assert_called_once()
 
     def test_check_production_lag_disabled_when_threshold_zero(self):
-        with patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
              patch("frappe_factory.iot.webhooks.frappe.get_all") as mock_get_all, \
              patch("frappe_factory.iot.webhooks.now", return_value="2026-06-23 12:00:00"):
             mock_single.return_value = MagicMock(production_lag_threshold_pct=0)
@@ -236,7 +256,9 @@ class TestCheckProductionLag(unittest.TestCase):
 
 class TestCleanupOldTelemetry(unittest.TestCase):
     def test_cleanup_old_telemetry_deletes_rows(self):
-        with patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
              patch("frappe_factory.iot.webhooks._db_sql") as mock_sql, \
              patch("frappe_factory.iot.webhooks.frappe.db.commit"), \
              patch("frappe_factory.iot.webhooks.today", return_value="2026-06-23"), \
@@ -248,7 +270,9 @@ class TestCleanupOldTelemetry(unittest.TestCase):
             mock_sql.assert_called_once()
 
     def test_cleanup_old_telemetry_disabled_when_retention_zero(self):
-        with patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
+        with patch("frappe_factory.iot.webhooks._run_as_system_user"), \
+             patch("frappe_factory.iot.webhooks._log_audit"), \
+             patch("frappe_factory.iot.webhooks.frappe.get_single") as mock_single, \
              patch("frappe_factory.iot.webhooks._db_sql") as mock_sql, \
              patch("frappe_factory.iot.webhooks.today", return_value="2026-06-23"):
             mock_single.return_value = MagicMock(telemetry_retention_days=0)

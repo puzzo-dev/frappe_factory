@@ -28,6 +28,28 @@ Versioning scheme:
 - Add async telemetry ingestion option
 - Expand unit test coverage
 
+### Security
+
+- Add audit log Doctype (`OpsEdge Audit Log`) and record all webhook/scheduler/sync actions
+- Add IP allowlisting for guest webhook and sync API endpoints
+- Create dedicated `factory-system@erp.local` system user for scheduler/doc-event operations
+- Reduce `ignore_permissions=True` usage in doc-event hooks
+- Convert raw SQL cleanup in sync API to Frappe ORM
+
+### Performance
+
+- Add optional bulk telemetry insert (`enable_bulk_telemetry`)
+- Add optional telemetry deduplication (`enable_telemetry_dedup`)
+
+### UI
+
+- Implement basic Plant Floor Designer page with live widget telemetry
+
+### Ops
+
+- Export Role/Workspace fixtures
+- Add client scripts for IoT Device Registry and Factory Configuration
+
 ## [4.0.0] - 2026-06-23
 
 ### Feature

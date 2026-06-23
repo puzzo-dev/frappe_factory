@@ -9,6 +9,8 @@ class TestSyncApi(unittest.TestCase):
         """Yield a mocked api module ready for testing."""
         with patch("frappe_factory.sync.api._get_api_key", return_value="secret"), \
              patch("frappe_factory.sync.api._check_rate_limit"), \
+             patch("frappe_factory.sync.api._check_ip_allowed"), \
+             patch("frappe_factory.sync.api._log_sync"), \
              patch("frappe_factory.sync.api._get_request_header", return_value="secret"), \
              patch("frappe_factory.sync.api._get_request_json", return_value=request_json or {}), \
              patch("frappe_factory.sync.api._get_request_args", return_value=args or {}):

@@ -6,6 +6,32 @@ IoT-powered factory management for **Frappe v15**. Provides factory telemetry in
 
 Versioning: `MAJOR.MINOR.PATCH` — major for features, minor for major fixes, patch for minor fixes.
 
+## Security & Performance
+
+- Database-stored API keys and webhook tokens
+- IP allowlisting for guest endpoints
+- Rate limiting on guest endpoints
+- Audit log (`OpsEdge Audit Log`) for all webhook/scheduler/sync actions
+- Optional bulk telemetry insert and deduplication
+- Dedicated system user for scheduler tasks
+
+## Auto-versioning
+
+Use [Conventional Commits](https://www.conventionalcommits.org/). Install the hooks:
+
+```bash
+cp scripts/prepare-commit-msg-hook.sh .git/hooks/prepare-commit-msg
+chmod +x .git/hooks/prepare-commit-msg
+cp scripts/commit-msg-hook.sh .git/hooks/commit-msg
+chmod +x .git/hooks/commit-msg
+```
+
+Bump version:
+
+```bash
+python scripts/bump_version.py --strict
+```
+
 ## Module Overview
 
 - **IOT** (`frappe_factory/iot/`) — ThingsBoard REST client, webhook receivers, and production-lag checks.
