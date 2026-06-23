@@ -23,6 +23,21 @@ SYNC_API_LIMIT = 500
 SYNC_API_WINDOW = 60
 
 
+def _get_request_header(name, default=None):
+    """Return a header from the current request."""
+    return frappe.request.headers.get(name, default) if frappe.request else default
+
+
+def _get_request_json():
+    """Return JSON body of the current request."""
+    return frappe.request.get_json() if frappe.request else {}
+
+
+def _get_request_args():
+    """Return query arguments of the current request."""
+    return frappe.request.args if frappe.request else {}
+
+
 def _get_api_key():
     """Prefer database-stored API key; fallback to frappe.conf."""
     settings = frappe.get_single("Factory Configuration")
@@ -49,7 +64,7 @@ def _check_rate_limit(key, max_requests=SYNC_API_LIMIT, window=SYNC_API_WINDOW):
 
 
 def _validate_api_key():
-    key = frappe.request.headers.get("X-OpsEdge-API-Key") if frappe.request else None
+    key = _get_request_header("X-OpsEdge-API-Key")
     expected = _get_api_key()
     if not expected or key != expected:
         frappe.throw("Invalid API key", frappe.AuthenticationError)
@@ -60,11 +75,12 @@ def _validate_api_key():
 def get_pending_records():
     """Return pending local records for the opsedge-sync agent to push to cloud."""
     _validate_api_key()
-    limit = cint(frappe.request.args.get("limit", 100))
+    args = _get_request_args()
+    limit = cint(args.get("limit", 100))
     if limit < 1 or limit > 1000:
         frappe.throw("limit must be between 1 and 1000", frappe.ValidationError)
 
-    since = frappe.request.args.get("since")
+    since = args.get("since")
     filters = [["status", "!=", "Success"]]
     if since:
         filters.append(["modified", ">", since])
@@ -83,7 +99,7 @@ def get_pending_records():
 def mark_synced():
     """Mark a sync log as successfully synced."""
     _validate_api_key()
-    data = frappe.request.get_json() or {}
+    data = _get_request_json() or {}
     name = data.get("name")
     if not name:
         frappe.throw("name is required", frappe.MandatoryError)
@@ -100,7 +116,7 @@ def mark_synced():
 def log_sync_result():
     """Create a sync log entry from the opsedge-sync agent."""
     _validate_api_key()
-    data = frappe.request.get_json() or {}
+    data = _get_request_json() or {}
 
     direction = data.get("sync_direction", "Local→Cloud")
     if direction not in ("Local→Cloud", "Cloud→Local"):

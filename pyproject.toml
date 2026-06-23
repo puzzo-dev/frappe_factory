@@ -1,6 +1,5 @@
 [project]
 name = "frappe_factory"
-version = "1.0.0"
 authors = [
     { name = "I-Varse Technologies NG", email = "dev@itechnologies.ng" }
 ]

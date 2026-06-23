@@ -16,7 +16,7 @@ class TestThingsBoardClient(unittest.TestCase):
         client = self._make_client()
         self.assertEqual(client.headers["X-Authorization"], "Bearer abc")
 
-    @patch("frappe_factory.iot.thingsboard.requests.get")
+    @patch("requests.get")
     def test_get_telemetry_calls_timeseries_endpoint(self, mock_get):
         mock_get.return_value.json.return_value = {"temperature": [{"ts": 1, "value": 22}]}
         mock_get.return_value.text = '{"temperature": []}'
@@ -26,7 +26,7 @@ class TestThingsBoardClient(unittest.TestCase):
         self.assertIn("temperature", result)
         mock_get.assert_called_once()
 
-    @patch("frappe_factory.iot.thingsboard.requests.post")
+    @patch("requests.post")
     def test_send_attributes_calls_server_scope_endpoint(self, mock_post):
         mock_post.return_value.json.return_value = {}
         mock_post.return_value.text = ""

@@ -1,6 +1,10 @@
 # Frappe Factory
 
+![Version](https://img.shields.io/badge/version-4.1.0-blue)
+
 IoT-powered factory management for **Frappe v15**. Provides factory telemetry ingestion, ThingsBoard integration, plant floor design, and edge-to-cloud sync for the OpsEdge Workstation.
+
+Versioning: `MAJOR.MINOR.PATCH` — major for features, minor for major fixes, patch for minor fixes.
 
 ## Module Overview
 

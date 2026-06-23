@@ -3,7 +3,7 @@ app_title = "Frappe Factory"
 app_publisher = "I-Varse Technologies NG"
 app_description = "IoT integration app for Frappe v15 — factory telemetry, ThingsBoard integration, and plant floor design"
 app_email = "dev@itechnologies.ng"
-app_version = "1.0.0"
+app_version = "4.1.0"
 app_license = "mit"
 required_apps = ["erpnext"]
 
