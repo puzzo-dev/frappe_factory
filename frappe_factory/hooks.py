@@ -5,7 +5,7 @@ app_description = "IoT integration app for Frappe v15 — factory telemetry, Thi
 app_email = "dev@itechnologies.ng"
 app_version = "1.0.0"
 app_license = "mit"
-required_apps = []
+required_apps = ["erpnext"]
 
 # Add to Apps Screen
 add_to_apps_screen = [
@@ -55,6 +55,7 @@ scheduler_events = {
     ],
     "daily": [
         "frappe_factory.sync.api.cleanup_old_sync_logs",
+        "frappe_factory.iot.webhooks.cleanup_old_telemetry",
     ],
 }
 

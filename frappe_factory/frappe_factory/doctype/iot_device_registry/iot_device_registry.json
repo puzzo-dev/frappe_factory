@@ -23,6 +23,7 @@
   "is_active",
   "last_seen",
   "firmware_version",
+  "linked_work_order",
   "notes"
  ],
  "fields": [
@@ -129,6 +130,12 @@
    "fieldname": "firmware_version",
    "fieldtype": "Data",
    "label": "Firmware Version"
+  },
+  {
+   "fieldname": "linked_work_order",
+   "fieldtype": "Link",
+   "label": "Linked Work Order",
+   "options": "Work Order"
   },
   {
    "fieldname": "notes",

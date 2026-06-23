@@ -21,6 +21,7 @@
    "fieldname": "iot_device",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "index": 1,
    "label": "IoT Device",
    "options": "IoT Device Registry",
    "reqd": 1
@@ -28,6 +29,7 @@
   {
    "fieldname": "thingsboard_device_id",
    "fieldtype": "Data",
+   "index": 1,
    "label": "TB Device ID",
    "reqd": 1
   },
@@ -39,6 +41,7 @@
    "fieldname": "recorded_at",
    "fieldtype": "Datetime",
    "in_list_view": 1,
+   "index": 1,
    "label": "Recorded At",
    "reqd": 1
   },

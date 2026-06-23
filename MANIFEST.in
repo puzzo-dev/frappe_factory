@@ -1,11 +1,11 @@
 include README.md
 include license.txt
 include requirements.txt
-recursive-include frappe_iot *.csv
-recursive-include frappe_iot *.html
-recursive-include frappe_iot *.json
-recursive-include frappe_iot *.md
-recursive-include frappe_iot *.py
-recursive-include frappe_iot *.txt
-recursive-include frappe_iot *.xml
-recursive-include frappe_iot/public *
+recursive-include frappe_factory *.csv
+recursive-include frappe_factory *.html
+recursive-include frappe_factory *.json
+recursive-include frappe_factory *.md
+recursive-include frappe_factory *.py
+recursive-include frappe_factory *.txt
+recursive-include frappe_factory *.xml
+recursive-include frappe_factory/public *

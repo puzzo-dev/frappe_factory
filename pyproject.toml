@@ -23,4 +23,4 @@ requires = ["flit_core>=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.bench.frappe-dependencies]
-# required_apps = ["erpnext"]
+required_apps = ["erpnext"]

@@ -3,19 +3,105 @@
 ThingsBoard HTTP Integration posts to:
     https://<site>/api/method/frappe_factory.iot.webhooks.<method_name>
 
-Auth: validate the X-OpsEdge-Token header against frappe.conf.opsedge_webhook_token.
+Auth: validate the X-OpsEdge-Token header against the token stored in
+Factory Configuration (opsedge_webhook_token), falling back to
+frappe.conf.opsedge_webhook_token for backward compatibility.
 """
 
 from __future__ import annotations
 
+import logging
+
 import frappe
+from frappe.utils import add_days, cint, flt, format_datetime, get_datetime, now, today
+
+logger = logging.getLogger(__name__)
+
+
+WEBHOOK_TOKEN_LIMIT = 1000
+WEBHOOK_TOKEN_WINDOW = 60
+
+
+def _get_config():
+    """Return Factory Configuration singleton (cached)."""
+    return frappe.get_single("Factory Configuration")
+
+
+def _get_webhook_token():
+    """Prefer database-stored token; fallback to frappe.conf."""
+    settings = _get_config()
+    token = settings.get_password("opsedge_webhook_token") or frappe.get_conf().get("opsedge_webhook_token")
+    return token
+
+
+def _check_rate_limit(key, max_requests=WEBHOOK_TOKEN_LIMIT, window=WEBHOOK_TOKEN_WINDOW):
+    """Best-effort rate limiting via Redis cache.
+
+    Falls back to allowing the request if Redis is unavailable so that
+    telemetry ingestion is not silently blocked by cache misconfiguration.
+    """
+    try:
+        cache = frappe.cache()
+        cache_key = f"frappe_factory:rate_limit:{key}"
+        current = cint(cache.get(cache_key) or 0) + 1
+        if current == 1:
+            cache.set_value(cache_key, current, expires_in_sec=window)
+        else:
+            cache.set_value(cache_key, current)
+        if current > max_requests:
+            frappe.throw("Rate limit exceeded", frappe.RateLimitExceededError)
+    except frappe.RateLimitExceededError:
+        raise
+    except Exception:
+        logger.exception("Rate limiter unavailable; allowing request")
 
 
 def _validate_webhook_token():
     token = frappe.request.headers.get("X-OpsEdge-Token") if frappe.request else None
-    expected = frappe.get_conf().get("opsedge_webhook_token")
+    expected = _get_webhook_token()
     if not expected or token != expected:
         frappe.throw("Invalid webhook token", frappe.PermissionError)
+    _check_rate_limit("webhook_token")
+
+
+def _lookup_device(tb_device_id):
+    """Return active IoT Device Registry record for a ThingsBoard device ID."""
+    if not tb_device_id:
+        frappe.throw("device_id is required", frappe.MandatoryError)
+
+    device = frappe.db.get_value(
+        "IoT Device Registry",
+        {"thingsboard_device_id": tb_device_id},
+        ["name", "linked_workstation", "is_active"],
+        as_dict=True,
+    )
+    if not device:
+        frappe.throw(f"Unknown device {tb_device_id}", frappe.DoesNotExistError)
+    return device
+
+
+def _parse_timestamp(ts):
+    """Parse a ThingsBoard millisecond timestamp into a Frappe datetime string."""
+    if ts is None:
+        return now()
+    try:
+        return format_datetime(get_datetime(float(ts) / 1000))
+    except (ValueError, TypeError, OverflowError) as e:
+        logger.warning("Invalid telemetry timestamp %r: %s", ts, e)
+        frappe.throw("Invalid timestamp", frappe.ValidationError)
+
+
+def _parse_metric_value(metric_value):
+    """Parse a telemetry metric value to float; log and coerce on failure."""
+    if metric_value is None:
+        return 0.0
+    if isinstance(metric_value, bool):
+        return 1.0 if metric_value else 0.0
+    try:
+        return flt(metric_value)
+    except (ValueError, TypeError):
+        logger.warning("Could not parse metric value %r as float; defaulting to 0.0", metric_value)
+        return 0.0
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
@@ -30,40 +116,50 @@ def telemetry():
     _validate_webhook_token()
     data = frappe.request.get_json() or {}
     tb_device_id = data.get("device_id")
-    if not tb_device_id:
-        frappe.throw("device_id is required", frappe.MandatoryError)
-
-    device = frappe.db.get_value(
-        "IoT Device Registry",
-        {"thingsboard_device_id": tb_device_id},
-        ["name", "linked_workstation", "is_active"],
-        as_dict=True,
-    )
-    if not device:
-        frappe.throw(f"Unknown device {tb_device_id}", frappe.DoesNotExistError)
+    device = _lookup_device(tb_device_id)
 
     if not device.is_active:
         return {"status": "skipped", "reason": "device_inactive"}
 
     values = data.get("values", {})
-    ts = data.get("ts")
-    recorded_at = frappe.utils.format_datetime(frappe.utils.get_datetime(ts / 1000)) if ts else frappe.utils.now()
+    if not isinstance(values, dict):
+        frappe.throw("values must be an object", frappe.ValidationError)
 
-    for metric_key, metric_value in values.items():
-        _insert_telemetry(device, tb_device_id, metric_key, metric_value, recorded_at, data)
+    recorded_at = _parse_timestamp(data.get("ts"))
+    settings = _get_config()
 
-    if device.linked_workstation:
-        _update_workstation_status(device.linked_workstation, values)
+    if settings.enable_async_telemetry:
+        frappe.enqueue(
+            "frappe_factory.iot.webhooks._process_telemetry",
+            queue="default",
+            job_name=f"Process telemetry for {tb_device_id}",
+            device=device,
+            tb_device_id=tb_device_id,
+            values=values,
+            recorded_at=recorded_at,
+            raw_payload=data,
+        )
+        return {"status": "queued", "records": len(values)}
 
+    _process_telemetry(device, tb_device_id, values, recorded_at, data)
     frappe.db.commit()
     return {"status": "ok", "records": len(values)}
 
 
+def _process_telemetry(device, tb_device_id, values, recorded_at, raw_payload):
+    """Insert telemetry rows and update workstation status.
+
+    Designed to run synchronously inside the HTTP request or as a background job.
+    """
+    for metric_key, metric_value in values.items():
+        _insert_telemetry(device, tb_device_id, metric_key, metric_value, recorded_at, raw_payload)
+
+    if device.linked_workstation:
+        _update_workstation_status(device.linked_workstation, values)
+
+
 def _insert_telemetry(device, tb_device_id, metric_key, metric_value, recorded_at, raw_payload):
-    try:
-        metric_float = float(metric_value)
-    except (ValueError, TypeError):
-        metric_float = 0.0
+    metric_float = _parse_metric_value(metric_value)
 
     frappe.get_doc({
         "doctype": "Machine Telemetry Log",
@@ -86,7 +182,8 @@ def _update_workstation_status(workstation_name, values):
         "Fault": "Problem",
     }
     status = status_map.get(state, "Idle")
-    frappe.db.set_value("Workstation", workstation_name, "status", status)
+    if workstation_name:
+        frappe.db.set_value("Workstation", workstation_name, "status", status)
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
@@ -95,23 +192,21 @@ def alarm():
     _validate_webhook_token()
     data = frappe.request.get_json() or {}
     tb_device_id = data.get("device_id")
-    if not tb_device_id:
-        frappe.throw("device_id is required", frappe.MandatoryError)
+    device = _lookup_device(tb_device_id)
 
-    device = frappe.db.get_value(
-        "IoT Device Registry",
-        {"thingsboard_device_id": tb_device_id},
-        ["name", "linked_workstation"],
-        as_dict=True,
-    )
-    if not device:
-        frappe.throw(f"Unknown device {tb_device_id}", frappe.DoesNotExistError)
+    event_type = data.get("event_type", "Machine Fault")
+    if event_type not in ("Line Stoppage", "Machine Fault", "Quality Hold", "Shift Change", "Maintenance Start", "Maintenance End", "Custom"):
+        frappe.throw("Invalid event_type", frappe.ValidationError)
+
+    severity = data.get("severity", "Critical")
+    if severity not in ("Info", "Warning", "Critical"):
+        frappe.throw("Invalid severity", frappe.ValidationError)
 
     frappe.get_doc({
         "doctype": "Production Floor Event",
-        "event_type": data.get("event_type", "Machine Fault"),
-        "severity": data.get("severity", "Critical"),
-        "event_time": frappe.utils.now(),
+        "event_type": event_type,
+        "severity": severity,
+        "event_time": now(),
         "iot_device": device.name,
         "linked_workstation": device.linked_workstation,
         "thingsboard_alarm_id": data.get("alarm_id"),
@@ -128,20 +223,18 @@ def device_connected():
     data = frappe.request.get_json() or {}
     tb_device_id = data.get("device_id")
     connected = data.get("connected", True)
-    if not tb_device_id:
-        frappe.throw("device_id is required", frappe.MandatoryError)
+    device = _lookup_device(tb_device_id)
 
-    device_name = frappe.db.get_value(
-        "IoT Device Registry",
-        {"thingsboard_device_id": tb_device_id},
-        "name",
-    )
-    if not device_name:
-        frappe.throw(f"Unknown device {tb_device_id}", frappe.DoesNotExistError)
-
-    frappe.db.set_value("IoT Device Registry", device_name, "last_seen", frappe.utils.now())
+    frappe.db.set_value("IoT Device Registry", device.name, "last_seen", now())
     frappe.db.commit()
-    return {"status": "ok", "device": device_name, "connected": connected}
+    return {"status": "ok", "device": device.name, "connected": connected}
+
+
+@frappe.whitelist(allow_guest=True, methods=["GET"])
+def health_check():
+    """Return basic health status for monitoring/load balancers."""
+    _validate_webhook_token()
+    return {"status": "ok"}
 
 
 def on_attendance_submit(doc, method):
@@ -149,14 +242,21 @@ def on_attendance_submit(doc, method):
     if not doc.employee or not doc.attendance_date:
         return
     try:
-        summary = frappe.get_doc("Shift Attendance Summary", {"shift_date": doc.attendance_date})
+        summary_name = frappe.db.get_value("Shift Attendance Summary", {"shift_date": doc.attendance_date}, "name")
+        if not summary_name:
+            logger.info("No Shift Attendance Summary found for %s", doc.attendance_date)
+            return
+
+        summary = frappe.get_doc("Shift Attendance Summary", summary_name)
         if doc.status == "Present":
-            summary.present_count += 1
+            summary.total_present = cint(summary.total_present) + 1
         elif doc.status == "Absent":
-            summary.absent_count += 1
+            summary.total_absent = cint(summary.total_absent) + 1
         summary.save(ignore_permissions=True)
     except frappe.DoesNotExistError:
-        pass
+        logger.info("Shift Attendance Summary not found for %s", doc.attendance_date)
+    except Exception:
+        logger.exception("Failed to update attendance summary for %s", doc.name)
 
 
 def on_quality_submit(doc, method):
@@ -164,18 +264,22 @@ def on_quality_submit(doc, method):
     if doc.status != "Rejected":
         return
     try:
-        workstation = frappe.db.get_value("Work Order", doc.reference_name, "production_item")
+        workstation = doc.workstation
+        if not workstation and doc.reference_name:
+            # Reference may be a Work Order; fetch its workstation from the operation if possible.
+            workstation = frappe.db.get_value("Work Order", doc.reference_name, "workstation")
+
         frappe.get_doc({
             "doctype": "Production Floor Event",
             "event_type": "Quality Hold",
             "severity": "Critical",
-            "event_time": frappe.utils.now(),
-            "linked_workstation": doc.workstation,
+            "event_time": now(),
+            "linked_workstation": workstation,
             "work_order": doc.reference_name,
             "description": f"Quality Inspection {doc.name} rejected.",
         }).insert(ignore_permissions=True)
     except Exception:
-        pass
+        logger.exception("Failed to create quality floor event for %s", doc.name)
 
 
 def on_work_order_update(doc, method):
@@ -183,20 +287,87 @@ def on_work_order_update(doc, method):
     if doc.status not in ("In Process", "Completed", "Closed"):
         return
     try:
+        workstations = [op.workstation for op in (doc.operations or []) if op.workstation]
+        if not workstations:
+            return
+
         devices = frappe.get_all(
             "IoT Device Registry",
-            filters={"linked_workstation": ["in", [op.workstation for op in (doc.operations or [])]]},
+            filters={"linked_workstation": ["in", workstations]},
             pluck="name",
         )
         for device in devices:
             frappe.db.set_value("IoT Device Registry", device, "linked_work_order", doc.name)
     except Exception:
-        pass
+        logger.exception("Failed to sync work order %s to IoT devices", doc.name)
 
 
 def check_production_lag():
-    """Scheduled hourly check for production lag against n8n threshold."""
+    """Scheduled hourly check for production lag against configured threshold.
+
+    Creates a Production Floor Event when a work order's completion percentage
+    is below (100 - threshold) to avoid spamming one event per hour.
+    """
     settings = frappe.get_single("Factory Configuration")
-    threshold = settings.production_lag_threshold_pct or 20
-    # TODO: compare planned vs actual output and trigger n8n alert
-    pass
+    threshold = flt(settings.production_lag_threshold_pct or 20)
+    if threshold <= 0:
+        return
+
+    target_completion = 100 - threshold
+
+    work_orders = frappe.get_all(
+        "Work Order",
+        filters={"status": "In Process", "docstatus": 1},
+        fields=["name", "qty", "produced_qty", "planned_start_date"],
+    )
+
+    for wo in work_orders:
+        planned = flt(wo.qty)
+        if not planned:
+            continue
+
+        produced = flt(wo.produced_qty)
+        completion_pct = (produced / planned) * 100
+
+        if completion_pct < target_completion:
+            existing = frappe.db.exists(
+                "Production Floor Event",
+                {
+                    "work_order": wo.name,
+                    "event_type": "Line Stoppage",
+                    "event_time": [">=", today()],
+                },
+            )
+            if existing:
+                continue
+
+            frappe.get_doc({
+                "doctype": "Production Floor Event",
+                "event_type": "Line Stoppage",
+                "severity": "Warning",
+                "event_time": now(),
+                "work_order": wo.name,
+                "description": f"Production lag detected: {completion_pct:.1f}% completion vs planned {planned}.",
+            }).insert(ignore_permissions=True)
+
+    frappe.db.commit()
+
+
+def cleanup_old_telemetry():
+    """Daily scheduled task: delete Machine Telemetry Log rows older than retention days."""
+    settings = frappe.get_single("Factory Configuration")
+    retention_days = cint(settings.telemetry_retention_days or 90)
+    if retention_days <= 0:
+        return
+
+    cutoff = add_days(today(), -retention_days)
+    try:
+        rows = frappe.db.sql(
+            "DELETE FROM `tabMachine Telemetry Log` WHERE recorded_at < %s",
+            cutoff,
+        )
+        frappe.db.commit()
+        logger.info("Deleted %s old telemetry rows before %s", rows, cutoff)
+    except Exception:
+        logger.exception("Failed to clean up old telemetry rows")
+        raise
