@@ -8,4 +8,6 @@ from frappe.model.document import Document
 
 
 class FactoryConfiguration(Document):
-    pass
+    def validate(self):
+        if self.is_new() and frappe.db.exists("Factory Configuration", "Factory Configuration"):
+            frappe.throw("Only one Factory Configuration record is allowed.")
