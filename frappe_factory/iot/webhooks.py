@@ -145,18 +145,53 @@ def device_connected():
 
 
 def on_attendance_submit(doc, method):
-    """ERPNext Attendance on_submit hook."""
-    pass
+    """Update Shift Attendance Summary when Attendance is submitted."""
+    if not doc.employee or not doc.attendance_date:
+        return
+    try:
+        summary = frappe.get_doc("Shift Attendance Summary", {"shift_date": doc.attendance_date})
+        if doc.status == "Present":
+            summary.present_count += 1
+        elif doc.status == "Absent":
+            summary.absent_count += 1
+        summary.save(ignore_permissions=True)
+    except frappe.DoesNotExistError:
+        pass
 
 
 def on_quality_submit(doc, method):
-    """ERPNext Quality Inspection on_submit hook."""
-    pass
+    """Create Production Floor Event if Quality Inspection fails."""
+    if doc.status != "Rejected":
+        return
+    try:
+        workstation = frappe.db.get_value("Work Order", doc.reference_name, "production_item")
+        frappe.get_doc({
+            "doctype": "Production Floor Event",
+            "event_type": "Quality Hold",
+            "severity": "Critical",
+            "event_time": frappe.utils.now(),
+            "linked_workstation": doc.workstation,
+            "work_order": doc.reference_name,
+            "description": f"Quality Inspection {doc.name} rejected.",
+        }).insert(ignore_permissions=True)
+    except Exception:
+        pass
 
 
 def on_work_order_update(doc, method):
-    """ERPNext Work Order on_update hook."""
-    pass
+    """Sync active Work Order to linked IoT devices."""
+    if doc.status not in ("In Process", "Completed", "Closed"):
+        return
+    try:
+        devices = frappe.get_all(
+            "IoT Device Registry",
+            filters={"linked_workstation": ["in", [op.workstation for op in (doc.operations or [])]]},
+            pluck="name",
+        )
+        for device in devices:
+            frappe.db.set_value("IoT Device Registry", device, "linked_work_order", doc.name)
+    except Exception:
+        pass
 
 
 def check_production_lag():
