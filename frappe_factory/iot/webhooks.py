@@ -22,6 +22,31 @@ WEBHOOK_TOKEN_LIMIT = 1000
 WEBHOOK_TOKEN_WINDOW = 60
 
 
+def _log_audit(action, affected_doctype=None, affected_docname=None, details=None, source="Webhook", endpoint=None):
+    """Write an audit log for a webhook or scheduler-driven change."""
+    try:
+        ip = None
+        user = frappe.session.user if frappe.session else "Guest"
+        if frappe.request:
+            ip = frappe.request.headers.get("X-Forwarded-For", frappe.request.remote_addr)
+            if ip:
+                ip = ip.split(",")[0].strip()
+        frappe.get_doc({
+            "doctype": "OpsEdge Audit Log",
+            "timestamp": now(),
+            "source": source,
+            "endpoint": endpoint,
+            "ip_address": ip,
+            "user": user,
+            "affected_doctype": affected_doctype,
+            "affected_docname": affected_docname,
+            "action": action,
+            "details": frappe.as_json(details) if details else None,
+        }).insert(ignore_permissions=True)
+    except Exception:
+        logger.exception("Failed to write audit log")
+
+
 def _get_request():
     """Return the current request object (wrapper for testability)."""
     return frappe.request
@@ -193,6 +218,21 @@ def _process_telemetry(device, tb_device_id, values, recorded_at, raw_payload):
 
     if device.linked_workstation:
         _update_workstation_status(device.linked_workstation, values)
+        _log_audit(
+            "update_workstation_status",
+            affected_doctype="Workstation",
+            affected_docname=device.linked_workstation,
+            details={"machine_state": values.get("machine_state")},
+            endpoint="telemetry",
+        )
+
+    _log_audit(
+        "ingest_telemetry",
+        affected_doctype="Machine Telemetry Log",
+        affected_docname=device.name,
+        details={"records": len(values), "tb_device_id": tb_device_id},
+        endpoint="telemetry",
+    )
 
 
 def _insert_telemetry(device, tb_device_id, metric_key, metric_value, recorded_at, raw_payload):
@@ -395,7 +435,10 @@ def check_production_lag():
 def cleanup_old_telemetry():
     """Daily scheduled task: delete Machine Telemetry Log rows older than retention days."""
     settings = frappe.get_single("Factory Configuration")
-    retention_days = cint(settings.telemetry_retention_days or 90)
+    retention_days = settings.telemetry_retention_days
+    if retention_days is None:
+        retention_days = 90
+    retention_days = cint(retention_days)
     if retention_days <= 0:
         return
 

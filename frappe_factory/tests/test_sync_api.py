@@ -15,6 +15,7 @@ class TestSyncApi(unittest.TestCase):
             mock_frappe = MagicMock()
             mock_frappe.utils.now.return_value = "2026-06-23 12:00:00"
             mock_frappe.as_json = lambda x: str(x)
+            mock_frappe.throw.side_effect = Exception("frappe.throw")
             with patch("frappe_factory.sync.api.frappe", mock_frappe):
                 from frappe_factory.sync import api
                 yield api

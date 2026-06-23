@@ -25,6 +25,7 @@ class TestWebhookHelpers(unittest.TestCase):
                 telemetry_retention_days=90,
             )
             from frappe_factory.iot import webhooks
+            webhooks.frappe.throw.side_effect = Exception("frappe.throw")
             yield webhooks
 
     def test_telemetry_requires_device_id(self):
@@ -140,7 +141,8 @@ class TestDocEventHooks(unittest.TestCase):
     def test_on_quality_submit_creates_event(self):
         with patch("frappe_factory.iot.webhooks._db_get_value", return_value=None), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
-             patch("frappe_factory.iot.webhooks.logger"):
+             patch("frappe_factory.iot.webhooks.logger"), \
+             patch("frappe_factory.iot.webhooks.now", return_value="2026-06-23 12:00:00"):
             from frappe_factory.iot.webhooks import on_quality_submit
 
             doc = MagicMock()
@@ -150,13 +152,17 @@ class TestDocEventHooks(unittest.TestCase):
             doc.reference_name = "WO-001"
             on_quality_submit(doc, "on_submit")
             mock_get_doc.assert_called_once()
-            call_kwargs = mock_get_doc.call_args[1]
-            self.assertEqual(call_kwargs["work_order"], "WO-001")
+            kwargs = mock_get_doc.call_args.kwargs
+            if kwargs:
+                self.assertEqual(kwargs["work_order"], "WO-001")
+            else:
+                self.assertEqual(mock_get_doc.call_args.args[0]["work_order"], "WO-001")
 
     def test_on_quality_submit_fetches_workstation_from_work_order(self):
         with patch("frappe_factory.iot.webhooks._db_get_value", return_value="WS-002"), \
              patch("frappe_factory.iot.webhooks.frappe.get_doc") as mock_get_doc, \
-             patch("frappe_factory.iot.webhooks.logger"):
+             patch("frappe_factory.iot.webhooks.logger"), \
+             patch("frappe_factory.iot.webhooks.now", return_value="2026-06-23 12:00:00"):
             from frappe_factory.iot.webhooks import on_quality_submit
 
             doc = MagicMock()
@@ -165,8 +171,11 @@ class TestDocEventHooks(unittest.TestCase):
             doc.workstation = None
             doc.reference_name = "WO-001"
             on_quality_submit(doc, "on_submit")
-            call_kwargs = mock_get_doc.call_args[1]
-            self.assertEqual(call_kwargs["linked_workstation"], "WS-002")
+            kwargs = mock_get_doc.call_args.kwargs
+            if kwargs:
+                self.assertEqual(kwargs["linked_workstation"], "WS-002")
+            else:
+                self.assertEqual(mock_get_doc.call_args.args[0]["linked_workstation"], "WS-002")
 
     def test_on_work_order_update_links_devices(self):
         with patch("frappe_factory.iot.webhooks.frappe.get_all", return_value=["OED-0001", "OED-0002"]), \
