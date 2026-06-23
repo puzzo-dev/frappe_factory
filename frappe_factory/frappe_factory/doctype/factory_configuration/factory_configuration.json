@@ -15,6 +15,7 @@
   "section_break_1",
   "thingsboard_url",
   "thingsboard_tenant_admin",
+  "thingsboard_tenant_token",
   "column_break_2",
   "cloud_sync_url",
   "cloud_sync_interval_minutes",
@@ -85,6 +86,11 @@
    "label": "TB Tenant Admin Email"
   },
   {
+   "fieldname": "thingsboard_tenant_token",
+   "fieldtype": "Password",
+   "label": "TB Tenant Token"
+  },
+  {
    "fieldname": "column_break_2",
    "fieldtype": "Column Break"
   },
@@ -129,7 +135,7 @@
  "links": [],
  "modified": "2026-06-23 00:00:00.000000",
  "modified_by": "Administrator",
- "module": "Frappe IOT",
+ "module": "Frappe Factory",
  "name": "Factory Configuration",
  "owner": "Administrator",
  "permissions": [

@@ -1,16 +1,17 @@
 [project]
-name = "frappe_iot"
+name = "frappe_factory"
 version = "1.0.0"
 authors = [
     { name = "I-Varse Technologies NG", email = "dev@itechnologies.ng" }
 ]
-description = "IoT integration app for Frappe v15 — factory telemetry, ThingsBoard integration, and plant floor design"
+description = "IoT-powered factory management for Frappe v15 — factory telemetry, ThingsBoard integration, and plant floor design"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 dynamic = ["version"]
 dependencies = [
     # "frappe~=15.0.0" # Installed and managed by bench.
+    "requests>=2.31"
 ]
 
 [project.optional-dependencies]

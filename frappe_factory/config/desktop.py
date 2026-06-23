@@ -6,11 +6,11 @@ import frappe
 def get_data():
     return [
         {
-            "module_name": "Frappe IOT",
+            "module_name": "Frappe Factory",
             "color": "grey",
             "icon": "octicon octicon-cpu",
             "type": "module",
-            "label": "Frappe IOT",
+            "label": "Frappe Factory",
         }
     ]
 

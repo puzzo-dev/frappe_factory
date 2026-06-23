@@ -1,12 +1,12 @@
-# Frappe IOT
+# Frappe Factory
 
-IoT integration app for Frappe v15. Provides factory telemetry ingestion, ThingsBoard integration, plant floor design, and edge-to-cloud sync for the OpsEdge Workstation.
+IoT-powered factory management for **Frappe v15**. Provides factory telemetry ingestion, ThingsBoard integration, plant floor design, and edge-to-cloud sync for the OpsEdge Workstation.
 
 ## Module Overview
 
-- **IOT** (`frappe_iot/iot/`) — ThingsBoard REST client, webhook receivers, and production-lag checks.
-- **Sync** (`frappe_iot/sync/`) — Endpoints consumed by the `opsedge-sync` service for edge-to-cloud data sync.
-- **Plant Floor Designer** (`frappe_iot/page/plant_floor_designer/`) — Desk page for designing and viewing live factory floor layouts.
+- **IOT** (`frappe_factory/iot/`) — ThingsBoard REST client, webhook receivers, and production-lag checks.
+- **Sync** (`frappe_factory/sync/`) — Endpoints consumed by the `opsedge-sync` service for edge-to-cloud data sync.
+- **Plant Floor Designer** (`frappe_factory/page/plant_floor_designer/`) — Desk page for designing and viewing live factory floor layouts.
 
 ## Doctypes
 
@@ -24,7 +24,7 @@ IoT integration app for Frappe v15. Provides factory telemetry ingestion, Things
 ## Install
 
 ```bash
-bench --site opscloud.local install-app frappe_iot
+bench --site opscloud.local install-app frappe_factory
 bench --site opscloud.local migrate
 ```
 

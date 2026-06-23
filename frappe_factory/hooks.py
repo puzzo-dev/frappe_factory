@@ -1,5 +1,5 @@
-app_name = "frappe_iot"
-app_title = "Frappe IOT"
+app_name = "frappe_factory"
+app_title = "Frappe Factory"
 app_publisher = "I-Varse Technologies NG"
 app_description = "IoT integration app for Frappe v15 — factory telemetry, ThingsBoard integration, and plant floor design"
 app_email = "dev@itechnologies.ng"
@@ -10,11 +10,11 @@ required_apps = []
 # Add to Apps Screen
 add_to_apps_screen = [
     {
-        "name": "frappe_iot",
-        "logo": "/assets/frappe_iot/frappe_iot.svg",
+        "name": "frappe_factory",
+        "logo": "/assets/frappe_factory/frappe_factory.svg",
         "title": app_title,
-        "route": "/app/frappe_iot",
-        "has_permission": "frappe_iot.config.desktop.has_app_permission",
+        "route": "/app/frappe_factory",
+        "has_permission": "frappe_factory.config.desktop.has_app_permission",
     }
 ]
 
@@ -37,13 +37,13 @@ fixtures = [
 # ---------------
 doc_events = {
     "Attendance": {
-        "on_submit": "frappe_iot.iot.webhooks.on_attendance_submit"
+        "on_submit": "frappe_factory.iot.webhooks.on_attendance_submit"
     },
     "Quality Inspection": {
-        "on_submit": "frappe_iot.iot.webhooks.on_quality_submit"
+        "on_submit": "frappe_factory.iot.webhooks.on_quality_submit"
     },
     "Work Order": {
-        "on_update": "frappe_iot.iot.webhooks.on_work_order_update"
+        "on_update": "frappe_factory.iot.webhooks.on_work_order_update"
     }
 }
 
@@ -51,18 +51,18 @@ doc_events = {
 # ---------------
 scheduler_events = {
     "hourly": [
-        "frappe_iot.iot.webhooks.check_production_lag",
+        "frappe_factory.iot.webhooks.check_production_lag",
     ],
     "daily": [
-        "frappe_iot.sync.api.cleanup_old_sync_logs",
+        "frappe_factory.sync.api.cleanup_old_sync_logs",
     ],
 }
 
 # Testing
 # -------
-before_tests = "frappe_iot.tests.before_tests"
+before_tests = "frappe_factory.tests.before_tests"
 
-after_install = "frappe_iot.install.after_install"
+after_install = "frappe_factory.install.after_install"
 
 # Permissions
 # -----------
