@@ -79,4 +79,6 @@ We do **not** draw SVGs per company. The library is built once and each company'
 
 **Recommendation.** Draw our own core set of about 40 symbols during the design phase. Use draw.io and chempid only as shape references. The upload path covers anything unusual.
 
-**Proposed additions (pending approval):** `HMI Symbol` DocType, `Process Template` DocType, and a `feeds_into` link plus `symbol` field on Plant Asset. See [erd.md](erd.md).
+**Approved (22 Nov 2026):** the `HMI Symbol` record type, with its Port and Binding child tables, a `symbol` link on Plant Floor Widget and an optional `default_symbol` on Plant Asset. Specification in [trd.md](trd.md#hmi-symbol-library), fields in [erd.md](erd.md).
+
+**Still pending:** the `Process Template` DocType and the `feeds_into` link on Plant Asset (needed for auto-generated mimics and industry templates).

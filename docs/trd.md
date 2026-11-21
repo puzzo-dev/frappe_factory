@@ -138,6 +138,7 @@ All methods are `@frappe.whitelist(methods=[...])` with type hints on every para
 | `downtime.set_reason(entry: str, reason: str)` | POST | SPA | Operator and up | Stop reason |
 | `shift.close(summary: str, notes: str)` | POST | SPA | Supervisor | Submit shift summary |
 | `sync.push(batch: list[dict])` / `sync.pull(since: str)` | POST / GET | Sync service | Factory Integration | Edge ↔ cloud |
+| `hmi.get_symbols(since: str \| None)` | GET | SPA | any Factory role | Symbol library, cached per session |
 | `health.status()` | GET | Monitoring | System Manager | Agent, broker, DB, sync backlog |
 | `connectors.thingsboard.telemetry/alarm/device_connected` | POST | ThingsBoard | Guest + token + IP allowlist + rate limit | ThingsBoard adapter only |
 
@@ -173,6 +174,39 @@ Release 1 ships the full command path, switched off in three places. Turning it 
 - Tests: the full path runs against the `simulator` driver in CI.
 
 **Not in release 1:** command buttons in the SPA, setpoint screens, any recipe download.
+
+## HMI symbol library
+
+Every piece of equipment on a mimic is drawn from an `HMI Symbol` record. A symbol is drawn once and reused at every site, so a new customer's plant is assembled from the library, not drawn from scratch.
+
+**Record.** `HMI Symbol` (regular DocType, named `{symbol_code}-v{version}`, for example `pump-centrifugal-v2`):
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `symbol_code` | Data, unique with version | Stable id, for example `pump-centrifugal` |
+| `symbol_name` | Data | Label in the designer palette |
+| `category` | Select | Pump, Tank, Valve, Filter, Membrane, Dosing, UV, Analyser, Filler, Conveyor, Motor, Generator, Meter, Pipe fitting, Other |
+| `asset_types` | Small Text (list) | Plant Asset types it can draw; used for the default pick |
+| `svg` | Code | The drawing, sanitized on save |
+| `width`, `height` | Int | Default size in layout units |
+| `ports` | Table: HMI Symbol Port | Pipe connection points: `port_id`, `x`, `y`, `direction` (In, Out, Both) |
+| `bindings` | Table: HMI Symbol Binding | What can move: `property` (State, Level, Value, Alarm, Flow, Rotation), `element_id` (an `ff-*` id in the SVG), `effect` (Fill by state, Clip by level, Text, Show/hide, Animate), `required` |
+| `version` | Int | Starts at 1 |
+| `status` | Select | Draft, Published, Deprecated |
+| `is_standard` | Check | Shipped by I-Varse (read-only at customer sites) or uploaded by the customer |
+| `preview` | Attach Image | Palette thumbnail |
+
+Links in: `Plant Floor Widget.symbol` → HMI Symbol (a pinned version), and `Plant Asset.default_symbol` → HMI Symbol (optional; otherwise picked by `asset_types`).
+
+**Naming inside the SVG.** Elements that move carry ids starting with `ff-`: `ff-body` (state fill), `ff-level` (level clip), `ff-value` (text), `ff-alarm` (alarm marker anchor), `ff-flow` (animated path). Ports are declared in the record, not in the SVG. On save, the app checks that the `element_id` of every required binding exists.
+
+**Versioning.** A Published symbol is never edited. A change makes a new version. Widgets keep the version they were drawn with until a manager updates the layout. Deprecated symbols still render but leave the palette.
+
+**Distribution.** Standard symbols ship inside the app as fixtures (`frappe_factory/hmi/symbols/<code>/symbol.svg` + `symbol.json`), so a new edge site works offline. OpsCloud is the master for new and customer symbols: HMI Symbol is a cloud-owned master in the sync pull. The SPA loads symbols once per session through `hmi.get_symbols(since: str | None)` (GET, any Factory role) and caches them.
+
+**Security.** An uploaded SVG is untrusted. On save the server parses it with `defusedxml` and keeps only an allowlist of SVG elements and attributes: no `script`, no `foreignObject`, no `on*` event attributes, no external `href` or `xlink:href`, no `style` with `url()` or `@import`, no embedded raster images. Maximum 200 KB. Only Factory Manager and System Manager can upload.
+
+**First set.** About 40 symbols in ISA-101 style, drawn in-house during the design phase, starting with the Koyo line: borehole pump, tanks, sand and carbon filter vessels, RO skid, dosing and remineralization unit, lead analyser, three-way divert valve, UV unit, filler (with head count), generator, fuel tank and meters.
 
 ## Notifications
 

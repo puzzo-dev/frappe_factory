@@ -8,6 +8,8 @@ Tag is the hub: devices produce tags, and alarms, meters and commands are define
 
 ![ERD: 19 Frappe Factory DocTypes, 4 ERPNext DocTypes](images/erd.png)
 
+The diagram shows the main chain; HMI Symbol and its two child tables are in the reference below (Plant Floor Widget and Plant Asset link to it).
+
 Arrows point from a DocType to the one it links to (many-to-one). The arrows drawn are the main chain; every → line inside a box is a Link field to the named DocType, and ← in the ERPNext row shows which Frappe Factory DocType links to it.
 
 ## Entity reference
@@ -19,7 +21,7 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
 | Plant Area | Tree | `area_name`, `area_type` (Site, Area, Line, Cell), `site_code`, `notify_group` | → Plant Area (parent) |
-| Plant Asset | Regular | `asset_name`, `asset_type` (Pump, Tank, Filter, Filler, Generator, Meter, PLC, Other), `current_state`, `state_since` | → Plant Area, → Workstation, → Asset (ERPNext, optional) |
+| Plant Asset | Regular | `asset_name`, `asset_type` (Pump, Tank, Filter, Filler, Generator, Meter, PLC, Other), `current_state`, `state_since` | → Plant Area, → Workstation, → Asset (ERPNext, optional), → HMI Symbol (`default_symbol`, optional) |
 | IoT Device Registry | Regular | `device_name`, `connector` (Direct, ThingsBoard), `protocol` (Modbus TCP, Modbus RTU, OPC UA, Simulator), `address`, `external_id`, `credentials` (Password), `online`, `last_seen`, `firmware` | → Plant Asset |
 | Tag | Regular | `tag_key`, `label`, `unit`, `scale`, `offset`, `register_or_node`, `data_type`, `sample_ms`, `lo_lo`, `lo`, `hi`, `hi_hi`, `role` (Level, Flow, Pressure, Quality, Energy, Counter, State), `is_counter`, `is_interlock`, `writable` | → IoT Device Registry, → Plant Asset |
 
@@ -28,7 +30,10 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
 | Plant Floor Layout | Regular | `layout_name`, `background`, `width`, `height`, `is_published`, `published_at`, `widgets` (table) | → Plant Area |
-| Plant Floor Widget | Child | `widget_type` (Asset, Value, Pipe, Label, Tank), `x`, `y`, `w`, `h`, `rotation`, `path` (for pipes), `tags` (JSON list) | → Plant Asset |
+| Plant Floor Widget | Child | `widget_type` (Asset, Value, Pipe, Label, Tank), `x`, `y`, `w`, `h`, `rotation`, `path` (for pipes), `tags` (JSON list), `symbol` | → Plant Asset, → HMI Symbol (pinned version) |
+| HMI Symbol | Regular (named `{symbol_code}-v{version}`) | `symbol_code`, `symbol_name`, `category` (Pump, Tank, Valve, Filter, Membrane, Dosing, UV, Analyser, Filler, Conveyor, Motor, Generator, Meter, Pipe fitting, Other), `asset_types`, `svg` (sanitized), `width`, `height`, `ports` (table), `bindings` (table), `version`, `status` (Draft, Published, Deprecated), `is_standard`, `preview` | — |
+| HMI Symbol Port | Child | `port_id`, `x`, `y`, `direction` (In, Out, Both) | → HMI Symbol (parent) |
+| HMI Symbol Binding | Child | `property` (State, Level, Value, Alarm, Flow, Rotation), `element_id` (an `ff-*` id in the SVG), `effect` (Fill by state, Clip by level, Text, Show/hide, Animate), `required` | → HMI Symbol (parent) |
 | Resource Meter | Regular | `meter_name`, `kind` (Diesel, Water, Chemical, Power), `capacity`, `unit`, `low_level` | → Tag, → Plant Asset, → Item (optional) |
 | Alarm Definition | Regular | `alarm_code`, `condition` (HH, H, L, LL, State, Rate), `limit`, `severity` (Critical, High, Medium, Low), `on_delay_s`, `off_delay_s`, `deadband`, `is_interlock`, `recovery_steps` (table), `escalate_after_min` | → Tag |
 | Downtime Reason | Tree | `reason_name`, `planned` (Check), `category` | → Downtime Reason (parent) |
@@ -57,13 +62,12 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 | Factory Configuration | Single | site, connector, TimescaleDB connection, retention days, `enable_commands`, sync URL and keys | — |
 | OpsEdge Audit Log, OpsEdge Sync Log | Log | as today | — |
 
-**Proposed additions (HMI symbol library, see [scada-hmi.md](scada-hmi.md)) — pending approval**
+**Still proposed, pending approval** (see [scada-hmi.md](scada-hmi.md))
 
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
-| HMI Symbol | Regular | `symbol_name`, `category`, `svg`, `ports` (JSON: pipe connection points), `bindings` (JSON: bindable properties such as state, level, value, alarm), `version`, `is_standard` | — |
 | Process Template | Regular | `template_name`, `industry`, `layout` (JSON), `assets` (JSON) | → HMI Symbol (via layout) |
-| Plant Asset (new field) | — | `feeds_into` (table of downstream assets), `symbol` | → Plant Asset, → HMI Symbol |
+| Plant Asset (new field) | — | `feeds_into` (table of downstream assets) | → Plant Asset |
 
 ## Data outside MariaDB
 

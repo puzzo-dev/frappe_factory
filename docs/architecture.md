@@ -93,7 +93,8 @@ DocTypes are grouped into five Frappe modules. ERPNext DocTypes (Item, BOM, Work
 | Plant Asset | Regular | A machine, tank, pump, generator or meter; links Workstation and the ERPNext Asset where they exist |
 | IoT Device Registry | Regular (kept) | Device, connector, `external_id`, protocol, linked Plant Asset, credentials |
 | Tag | Regular | One measured point: device, key, unit, scale, limits (low/high, low-low/high-high), sampling rate, role (level, flow, quality, energy…) |
-| Plant Floor Layout + Widget | Regular + child (kept, extended) | The mimic: background, widgets bound to assets and tags, pipes and flow paths |
+| Plant Floor Layout + Widget | Regular + child (kept, extended) | The mimic: background, widgets bound to assets and tags, pipes and flow paths; each widget draws an HMI Symbol |
+| HMI Symbol (+ Port, Binding) | Regular + 2 child (new) | The shared symbol library: one SVG drawing per equipment type, its pipe connection points and what can move (state, level, value, alarm, flow). Drawn once, reused at every site; versioned; mastered on OpsCloud |
 
 **Operations**
 
@@ -172,7 +173,7 @@ Each factory runs a full edge Frappe site on its OpsEdge box. That site is the p
 
 | Data | Direction | How |
 | --- | --- | --- |
-| Masters (Item, BOM, Workstation, Employee, Alarm Definition, Downtime Reason) | Cloud → edge | Pulled on a schedule, cloud wins |
+| Masters (Item, BOM, Workstation, Employee, Alarm Definition, Downtime Reason, HMI Symbol) | Cloud → edge | Pulled on a schedule, cloud wins |
 | Work Orders | Cloud → edge | Pulled; status updates go back |
 | Production Runs, Downtime Entries, Interlock Trips, Quality Inspections, Refill Entries | Edge → cloud | Pushed when submitted, edge is the owner |
 | Factory Events, Alarms | Edge → cloud | Pushed in batches; cloud keeps a shorter retention |

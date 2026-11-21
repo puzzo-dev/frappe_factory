@@ -48,10 +48,11 @@ Decisions taken during architecture planning, 22 Nov 2026, with the reasons. New
 - **Considered:** FUXA (MIT, but a second system beside Frappe), Ignition/AVEVA (per-site licences), ThingsBoard (licence change). A customer's existing SCADA is supported as a data source through the connector interface.
 - **HMI style:** ISA-101 high-performance HMI.
 
-## D7 · Symbol library for many customers (proposed)
+## D7 · Symbol library for many customers
 
 - **Proposal:** One shared symbol library (about 40 ISA-101 symbols drawn in-house), auto-generated mimics from the plant model, industry templates, a designer, and custom SVG upload with a naming convention. Library mastered on OpsCloud and pulled by edge sites.
-- **Pending:** approval to add `HMI Symbol`, `Process Template` and `Plant Asset.feeds_into` to the Architecture doc, TRD and ERD.
+- **Approved (22 Nov 2026):** the `HMI Symbol` record type (with Port and Binding child tables), linked from Plant Floor Widget (`symbol`, pinned version) and Plant Asset (`default_symbol`). Versioned, sanitized on upload, shipped as fixtures, mastered on OpsCloud. Spec in [trd.md](trd.md#hmi-symbol-library).
+- **Still pending:** `Process Template` and `Plant Asset.feeds_into`.
 
 ## Licensing flags (for legal review)
 
