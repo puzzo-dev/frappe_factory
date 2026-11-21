@@ -44,13 +44,14 @@ Release 1 watches and records. It does not control any equipment.
 | Live plant mimic (SCADA style) | Operator commands: start/stop, setpoints (groundwork ships in R1) | Replacing the PLC or its safety logic |
 | Alarms with acknowledge, shelve, history | Predictive maintenance | Our own MQTT broker or time-series engine |
 | Interlock trip recording and recovery checklist | Energy cost optimisation | Payroll or HR features |
-| Production runs, counts, rejects | Multi-site fleet benchmarking | |
+| Production runs, counts, rejects | Cross-plant benchmarking reports (OEE ranked across plants) | |
 | Downtime with reasons | Native mobile app | |
 | Tanks, fuel, water, power monitoring | | |
 | Shift and daily summaries | | |
 | Notifications: Frappe in-app, email, WhatsApp (`frappe_whatsapp_openwa`) | | |
 | Edge box works offline, syncs to OpsCloud | | |
 | Direct connector and ThingsBoard connector | | |
+| Several plants in one app: a Plants home with one card per plant, each opening that plant | | |
 
 The pilot PLC and its protocol (Modbus TCP, Modbus RTU or OPC UA) are not chosen yet. The driver layer supports all three, so the choice does not block the build.
 
@@ -66,6 +67,8 @@ Stories are grouped by epic. IDs are used in the TRD, the tests and the screen d
 | US-102 | As a Supervisor, I want to open any machine and see its recent trend so that I can see what led to a problem | Click on a machine opens its detail: tags, last 24 h trend, last 20 events |
 | US-103 | As a Manager, I want to draw the plant layout once so that the mimic matches our real plant | Drag assets onto a canvas, bind tags, draw pipes, publish. Only one published layout per area |
 | US-104 | As anyone, I want to see when data is old so that I do not trust a frozen screen | A value older than 3× its sample rate is greyed with its age. A device offline shows a banner |
+| US-105 | As a Manager, I want every plant we run listed on one home screen so that I open the one that needs me | The app opens on Plants: one card per plant I may see, with state (Tripped, Alert, Offline, Running), a one-line reason, output and last seen. Problem plants come first. Clicking a card opens that plant's own screens; nothing from other plants shows there. New plants appear once added |
+| US-106 | As a Manager, I want to know when a plant stops reporting so that I don't read old figures as live | No status for 60 s marks the card Offline with the time last seen and its last known figures greyed. The plant keeps running and recording on its edge box and syncs when the link returns |
 
 **E2 · Alarms and trips**
 

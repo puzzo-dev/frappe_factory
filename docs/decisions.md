@@ -39,7 +39,7 @@ Decisions taken during architecture planning, 22 Nov 2026, with the reasons. New
 | Pilot site | Koyo 10-head sachet water plant |
 | PLC / protocol | Not chosen yet; driver layer supports Modbus TCP, Modbus RTU, OPC UA |
 | Control | Monitor-only in release 1; command groundwork built and disabled behind three switches |
-| Charts | Apache ECharts (most complete open-source option) |
+| Charts | frappe-ui charts, which run on Apache ECharts 6 (Frappe Charts only for Desk dashboard charts) |
 | Licence | Commercial licence owned by I-Varse Technologies |
 
 ## D6 · SCADA and HMI

@@ -178,6 +178,8 @@ Each factory runs a full edge Frappe site on its OpsEdge box. That site is the p
 | Production Runs, Downtime Entries, Interlock Trips, Quality Inspections, Refill Entries | Edge → cloud | Pushed when submitted, edge is the owner |
 | Factory Events, Alarms | Edge → cloud | Pushed in batches; cloud keeps a shorter retention |
 | Shift and Daily Summaries | Edge → cloud | Pushed when closed |
+| Plant status (state, one-line note, output, open alarms, last seen) | Edge → cloud | Sent on change, at least every 15 s; fills the Plants cards. No message for 60 s marks the plant Offline with its last known values |
+| Live tag values of an open plant screen | Edge → cloud | Relayed only while someone on OpsCloud has that plant open; stops 60 s after the last viewer leaves |
 | Rollups (hourly) | Edge → cloud time-series DB | Optional, for fleet trends |
 | Raw telemetry | Stays on the edge | Never sent; pulled on demand for an investigation |
 
@@ -199,15 +201,17 @@ A Vue 3 + frappe-ui single-page app at `/factory`, built into the app's assets l
 | --- | --- | --- | --- |
 | Control room | Factory Manager, Floor Supervisor | Desktop, wall screen | Mimic, alarms, KPIs, trends; dense, dark theme option |
 | Floor (kiosk) | Machine Operator, Quality Inspector | Tablet at the line | Large touch targets, one task per screen, PIN switch-user, works offline for short drops |
-| Manager | Factory Manager, owner | Phone, desktop | Summaries, approvals, trips, multi-site on OpsCloud |
+| Manager | Factory Manager, owner | Phone, desktop | Plants home (one card per plant, opens that plant), summaries, approvals, trips |
 
 **Stack**
 
 - `frappe-ui` components and `createResource` / `createListResource` for data. Pinned to a version that runs on both Frappe v15 and v16.
 - Realtime through Frappe's socket.io: the bridge calls `frappe.publish_realtime` on `factory:<site>:state`, `:alarm` and `:tag:<tag>` rooms. Live tag values are throttled to 1 update per second per tag.
 - Mimic and floor designer: SVG, drawn from the Plant Floor Layout. Widgets bind to tags and assets. Pipes animate flow when the upstream pump or valve is on.
-- Charts: Apache ECharts for all trends and dashboards, reading `get_series`.
+- Charts: frappe-ui charts (`frappe-ui/charts`, which run on ECharts 6) for all trends and dashboards, reading `get_series`. Limit lines use `referenceLines`; trip bands, zoom and point thinning go through `echartOptions`; only the stacked Trends panels draw raw ECharts inside `ChartContainer`.
 - PWA install for the kiosk shell, with a small IndexedDB queue for actions taken during a short network drop on the factory LAN.
+
+**Navigation.** The app opens on Plants: one card per plant the user may see, problems first. A card opens that plant, and every other screen (alarms, runs, setup) is scoped to the open plant; the sidebar's first item goes back to Plants. The sidebar is fixed at full screen height and scrolls only if its own items outgrow the screen. The page body scrolls under a fixed header, as in frappe-ui's DesktopShell.
 
 **Desk.** A `Frappe Factory` workspace with shortcuts and number cards for admins. The jQuery `plant_floor_designer` page is retired after the SPA designer ships.
 
@@ -291,25 +295,26 @@ Durations are left open until the pilot site's PLC and protocol are confirmed.
 
 ## Screens and decisions
 
-The design phase starts from this list. Each screen gets its empty, loading, error and offline states.
+The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Tabs, Dialog, SettingsDialog) as 16 boards in the [screen designs](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz), each a 1440 × 900 laptop screen. See [screens.md](screens.md) for a picture of each. Each screen still gets its empty, loading, error and offline states when built. The kiosk login and the tablet layouts are not drawn yet.
 
-| # | Screen | Shell | Main user |
+| # | Screen | What it holds | Main user |
 | --- | --- | --- | --- |
-| 1 | Plant overview (live mimic, SCADA style) | Control room | Supervisor, Manager |
-| 2 | Line / asset detail (status, tags, trends, recent events) | Control room | Supervisor |
-| 3 | Alarm console (active, shelved, history) | Control room, Floor | Supervisor, Operator |
-| 4 | Interlock trip and recovery checklist | Control room, Floor | Supervisor, Quality Inspector |
-| 5 | Production run (start, counts, rejects, stop) | Floor | Operator |
-| 6 | Downtime: give a reason | Floor | Operator, Supervisor |
-| 7 | Resources: tanks, fuel, water, power | Control room, Manager | Manager, Storekeeper |
-| 8 | Trend explorer (any tag, any range) | Control room | Supervisor, Maintenance |
-| 9 | Shift handover and shift summary | Floor, Manager | Supervisor |
-| 10 | Daily dashboard (OEE, output, uptime, trips) | Manager | Manager, owner |
-| 11 | Floor layout designer | Control room | Manager |
-| 12 | Devices and connectivity (online, last seen, connector health) | Control room | Manager, Maintenance |
-| 13 | Fleet view, many sites | Manager (OpsCloud) | Owner |
-| 14 | Kiosk login and switch user (PIN) | Floor | Operator |
-| 15 | Settings: site, connector, alarms, retention, sync | Desk + SPA | Manager, System Manager |
+| 0 | Plants (home) | One card per plant: state, one-line reason, output, last seen; Add plant | Manager, owner |
+| 1 | Plant | Live mimic from the plant's layout, pinned tags, active alarms, runway, shift figures | Supervisor |
+| 2 | Alarms | Active, Shelved, History; ISA-18.2 states; side panel with trend, cause, action, notifications | Supervisor, Operator |
+| 3 | Interlock trip recovery | Trip banner, trend, six steps (two automatic from tags), lab samples, cause, key reset at the panel, sign-off | Supervisor, Quality Inspector |
+| 4 | Production runs | Weekly KPIs and the run list with output against plan, rejects, OEE | Supervisor, Manager |
+| 5 | Run detail | OEE breakdown, output per hour, per-filler counts, downtime in the run, materials to ERPNext | Supervisor |
+| 6 | Downtime | Filler timeline, lost time by reason, stops table with a reason picker for PLC-opened stops | Operator, Supervisor |
+| 7 | Resources | Tank levels, diesel and generator, consumables runway, ERPNext material request | Manager, Storekeeper |
+| 8 | Trends | Tag picker, stacked charts on one time axis, events, min / average / max | Supervisor, Maintenance |
+| 9 | Shift handover | Auto summary, items for the next shift (become ToDos), notes, shift checks, two sign-offs | Supervisor |
+| 10 | Devices and tags | Devices with health; tags with address, poll, deadband, live value, quality, write lock | Maintenance |
+| 11 | Layout editor | Symbol palette, canvas, inspector binding tags to symbol states, problems list, publish | Manager |
+| 12 | Symbol library | Built-in and company symbols, states, ports, versions, where used | Manager |
+| 13 | Alarm definitions | List plus edit dialog: limit, deadband, delays, priority, cause, action, who is told | Manager |
+| 14 | Plant settings · connector | Edge or ThingsBoard, MQTT, live interval, TimescaleDB retention | Manager, System Manager |
+| 15 | Plant settings · commands | The three switches, all off in release 1 | Manager |
 
 **Decisions (22 Nov 2026)**
 
@@ -318,7 +323,7 @@ The design phase starts from this list. Each screen gets its empty, loading, err
 - **Pilot site:** the Koyo sachet water plant.
 - **PLC and protocol:** not chosen yet. The agent's driver layer supports Modbus TCP, Modbus RTU and OPC UA, so this is a configuration choice.
 - **Commands:** monitor-only in release 1. The command groundwork ships disabled (see TRD).
-- **Charts:** Apache ECharts, the most complete open-source option.
+- **Charts:** frappe-ui charts, which run on Apache ECharts, so the app gets ECharts without a second chart library. Frappe Charts (the SVG library behind Desk dashboards) is used only for Desk dashboard charts.
 - **Licence:** commercial licence owned by I-Varse Technologies. Dependency licences to check are listed in the TRD.
 
 The full decision record, with reasons, is in [decisions.md](decisions.md).

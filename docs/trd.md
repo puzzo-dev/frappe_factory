@@ -15,7 +15,7 @@ This TRD sets the technical contracts the code agent builds against: services, m
 | Pilot site | Koyo 10-head sachet water plant |
 | PLC protocol | Not chosen yet. Driver layer supports Modbus TCP, Modbus RTU and OPC UA |
 | Control | Release 1 is monitor-only. Command groundwork ships, disabled |
-| Charts | Apache ECharts (most complete open-source library; Apache 2.0) |
+| Charts | frappe-ui charts (`frappe-ui/charts`, built on Apache ECharts 6; Apache 2.0). Raw ECharts only through their `echartOptions` hook or inside `ChartContainer` |
 | IoT connector | Direct (default) and ThingsBoard, behind one interface |
 | Frappe versions | v15 and v16 |
 | Licence | Commercial licence owned by I-Varse Technologies |
@@ -31,7 +31,7 @@ Eight components. Five run on the OpsEdge box, one in OpsCloud, and two are the 
 | Bridge | Edge | Python, `paho-mqtt`, `httpx` | Subscribe to state/alarm/status topics, post batches to Frappe every 1 s or 200 messages, retry with back-off, dedupe by message ID |
 | TimescaleDB | Edge (optional in cloud) | PostgreSQL 16 + TimescaleDB | Raw readings, continuous aggregates, retention, compression |
 | Frappe Factory app | Edge site and OpsCloud | Python, Frappe v15/v16, ERPNext | Domain DocTypes, alarm lifecycle, trips, runs, downtime, summaries, sync outbox, APIs, realtime |
-| Frontend SPA | Served by Frappe | Vue 3, `frappe-ui`, Apache ECharts, Vite | Control room, floor kiosk and manager shells at `/factory` |
+| Frontend SPA | Served by Frappe | Vue 3, `frappe-ui`, frappe-ui charts (ECharts underneath), Vite | Control room, floor kiosk and manager shells at `/factory` |
 | Sync service (`opsedge-sync`) | Edge | Python, `httpx` | Read the outbox in order, post to OpsCloud, pull masters |
 | OpsCloud site | Cloud | Frappe + ERPNext + Frappe Factory | Head office, fleet view, finance, received documents |
 
@@ -51,6 +51,7 @@ All MQTT messages are JSON, UTF-8, with times in UTC as ISO 8601 with millisecon
 | `factory/{site}/{device}/status` | Agent | 1 | Yes | `DeviceStatus` (also the MQTT last-will message: offline) |
 | `factory/{site}/{device}/cmd` | Bridge | 1 | No | `CommandRequest` — reserved, unused in release 1 |
 | `factory/{site}/{device}/cmd/ack` | Agent | 1 | No | `CommandResult` — reserved, unused in release 1 |
+| `factory/{site}/summary` | Bridge | 1 | Yes | `PlantStatus`: state, one-line note, output this shift, open alarms by priority, lowest runway. On change, at least every 15 s; the sync service forwards it to OpsCloud |
 
 **Payloads**
 
@@ -141,6 +142,9 @@ All methods are `@frappe.whitelist(methods=[...])` with type hints on every para
 | `hmi.get_symbols(since: str \| None)` | GET | SPA | any Factory role | Symbol library, cached per session |
 | `health.status()` | GET | Monitoring | System Manager | Agent, broker, DB, sync backlog |
 | `connectors.thingsboard.telemetry/alarm/device_connected` | POST | ThingsBoard | Guest + token + IP allowlist + rate limit | ThingsBoard adapter only |
+| `plants.list()` | GET | SPA | any Factory role | Plants home cards: every plant the user may see, from Plant Status, problems first |
+| `sync.status(status: dict)` | POST | Sync service | Factory Integration | Upserts the plant's one Plant Status row on OpsCloud and publishes it to the `factory:plants` room |
+| `plant.watch(site: str)` | POST | SPA (OpsCloud) | any Factory role | Asks that plant's edge to relay live tag values while its screen is open. Renewed every 30 s; the relay stops 60 s after the last renewal |
 
 **Realtime** (`frappe.publish_realtime`, room per site)
 
@@ -152,6 +156,8 @@ All methods are `@frappe.whitelist(methods=[...])` with type hints on every para
 | `ff_trip` | `{trip, status}` | on change |
 
 Live tag values reach the bridge over MQTT and are pushed to the SPA without being saved in MariaDB.
+
+**Several plants in one app.** Each plant is a site-level Plant Area tied to one edge box, and access is per plant: a User Permission on that Plant Area plus a `permission_query_conditions` hook on every plant-scoped DocType. `Plant Status` (a regular DocType, one row per plant, overwritten, never a log) holds the latest PlantStatus message. No message for 60 s sets it to Offline and keeps the last figures with their time. The SPA subscribes to `factory:plants` on the Plants home and to `factory:<site>:*` only for the open plant. Opening a plant from OpsCloud starts `plant.watch`; the edge then relays that plant's telemetry through the sync channel at the plant's live interval (2 s by default) until the watch lapses.
 
 ## Command groundwork
 
@@ -336,4 +342,4 @@ Three dependencies need a decision from a lawyer before licences are sold. These
 | `frappe_whatsapp_openwa` | AGPL-3.0 (declared in its `hooks.py`) | AGPL applies to network use too | It is I-Varse's own app: relicense it under the same commercial licence, if all its code is I-Varse's |
 | TimescaleDB features used (compression, continuous aggregates, retention) | Timescale License (TSL) | Free to use inside a product; the main ban is offering TimescaleDB itself as a hosted database service | Use the TSL build (the Apache-only build lacks these features). Re-check the current TSL text (effective June 2025) |
 
-Other dependencies are permissive and cause no conflict: Frappe and frappe-ui (MIT), Apache ECharts (Apache 2.0), Mosquitto and paho-mqtt (EPL-2.0 / EDL-1.0), pymodbus (BSD), asyncua (LGPL-3.0, used as a library without changes). A licence scan (for example `pip-licenses` and `license-checker`) runs in CI and fails on a new copyleft dependency.
+Other dependencies are permissive and cause no conflict: Frappe and frappe-ui (MIT), Apache ECharts, which frappe-ui charts bring in (Apache 2.0), Mosquitto and paho-mqtt (EPL-2.0 / EDL-1.0), pymodbus (BSD), asyncua (LGPL-3.0, used as a library without changes). A licence scan (for example `pip-licenses` and `license-checker`) runs in CI and fails on a new copyleft dependency.

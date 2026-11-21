@@ -9,13 +9,14 @@ Architecture and product plans for Frappe Factory, agreed on 22 Nov 2026. Read t
 | [prd.md](prd.md) | Goals for the Koyo pilot, personas, scope, user stories with acceptance criteria, workflow diagrams, release criteria |
 | [trd.md](trd.md) | Components, MQTT contract, TimescaleDB schema, Frappe API, command groundwork, notifications, sync protocol, security, performance, deployment, testing, licensing |
 | [erd.md](erd.md) | Entity diagram and field reference for every DocType, plus TimescaleDB tables |
+| [screens.md](screens.md) | The 16 screen designs in frappe-ui, one picture each, with their sources in [`design/`](design/) |
 | [scada-hmi.md](scada-hmi.md) | Which SCADA we use (our own), alternatives considered, how equipment is drawn (ISA-101), and the symbol library for many customers |
 
 Diagrams are in [`images/`](images/).
 
 ## Next step
 
-Screen designs, starting with the Koyo plant overview (live mimic) and the lead-trip recovery screen. The 15-screen list is in [architecture.md](architecture.md#screens-and-decisions).
+Screens are designed ([screens.md](screens.md)). Next: review them, then the code agent starts phase 1 of the build plan in [architecture.md](architecture.md#build-plan). Still to draw: kiosk login and the tablet layouts.
 
 ## Rules for the code agent
 

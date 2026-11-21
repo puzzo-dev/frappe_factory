@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plants · Frappe Factory</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+:root{--surface-base:oklch(1 0 0);--surface-sidebar:oklch(0.979 0 0);--surface-gray-1:oklch(0.979 0 0);--surface-gray-2:oklch(0.964 0 0);--surface-gray-3:oklch(0.946 0 0);--surface-gray-10:oklch(0.205 0 0);--ink-gray-4:oklch(0.683 0 0);--ink-gray-5:oklch(0.586 0 0);--ink-gray-6:oklch(0.439 0 0);--ink-gray-7:oklch(0.341 0 0);--ink-gray-8:oklch(0.205 0 0);--ink-gray-9:oklch(0.168 0 0);--outline-gray-1:oklch(0.946 0 0);--outline-gray-2:oklch(0.913 0 0);--ink-blue-link:oklch(0.641 0.186 251.565);--surface-red-2:oklch(0.947 0.026 17.626);--surface-red-7:oklch(0.556 0.198 26.552);--ink-red-7:oklch(0.497 0.185 27.335);--outline-red-3:oklch(0.867 0.068 18.55);--surface-amber-2:oklch(0.967 0.045 91.733);--ink-amber-7:oklch(0.612 0.136 63.758);--outline-amber-3:oklch(0.917 0.063 91.484);--surface-green-2:oklch(0.965 0.03 155.987);--ink-green-7:oklch(0.53 0.122 156.15);--shadow-sm:inset 0px 0.25px 1.5px 0px #ffffff29, 0px 0px 1px 0px #00000033, 0px 1px 3px 0px #00000024}
+a{color:var(--ink-blue-link)}a:hover{color:oklch(0.561 0.168 252.355)}
+.ffbtn:hover{background:var(--surface-gray-3)}
+.ffnav:hover{background:var(--surface-gray-2)}
+.ffcard:hover{border-color:var(--outline-gray-2);background:var(--surface-gray-1)}
+main>header~*{flex:1 1 auto;min-height:0;overflow-y:auto}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden; display: flex; background: var(--surface-base); color: var(--ink-gray-8); font-family: Inter, 'InterVar', system-ui, sans-serif; font-size: 14px; letter-spacing: .02em; line-height: 1.35">
+
+<nav aria-label="Main" style="flex: 0 0 14rem; height: 100%; overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; background: var(--surface-sidebar); border-right: 1px solid var(--outline-gray-1); display: flex; flex-direction: column; padding: 0 8px 16px">
+<button type="button" class="ffnav" style="display: flex; align-items: center; gap: 8px; height: 40px; margin: 4px 0 6px; padding: 0 6px; border: 0; border-radius: 8px; background: transparent; cursor: pointer; text-align: left; font: inherit">
+<span aria-hidden="true" style="width: 28px; height: 28px; flex: 0 0 28px; border-radius: 6px; background: var(--surface-gray-10); color: #fff; display: grid; place-items: center; font-weight: 600; font-size: 13px">FF</span>
+<span style="display: flex; flex-direction: column; min-width: 0; flex: 1"><span style="font-weight: 500; color: var(--ink-gray-8)">Frappe Factory</span><span style="font-size: 13px; color: var(--ink-gray-6); margin-top: 2px">Choose a plant</span></span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-gray-5)" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+</button>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<a href="Plants.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px; border-radius: 8px; background: var(--surface-base); box-shadow: var(--shadow-sm); color: var(--ink-gray-8); text-decoration: none; font-size: 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-gray-6)" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>Plants</a>
+</div>
+<div style="display: flex; align-items: center; height: 28px; padding: 0 8px; margin-top: 12px; color: var(--ink-gray-5)">Setup</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<a href="#" class="ffnav" style="display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px; border-radius: 8px; color: var(--ink-gray-6); text-decoration: none; font-size: 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/></svg>Plants and sites</a>
+<a href="#" class="ffnav" style="display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px; border-radius: 8px; color: var(--ink-gray-6); text-decoration: none; font-size: 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.3 10a.7.7 0 0 1-.63-1.08L11.4 3a.7.7 0 0 1 1.2-.04L16.3 8.9a.7.7 0 0 1-.57 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/></svg>Symbol library</a>
+<a href="#" class="ffnav" style="display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px; border-radius: 8px; color: var(--ink-gray-6); text-decoration: none; font-size: 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></svg>Factory settings</a>
+</div>
+</nav>
+
+<main style="flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden">
+<header style="flex: 0 0 auto; min-height: 48px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 20px; border-bottom: 1px solid var(--outline-gray-1)">
+<h1 style="margin: 0; font-size: 18px; font-weight: 600; color: var(--ink-gray-9)">Plants</h1>
+<div style="display: flex; align-items: center; gap: 8px">
+<div role="tablist" aria-label="View" style="display: inline-flex; padding: 2px; gap: 2px; border-radius: 8px; background: var(--surface-gray-2)">
+<button type="button" role="tab" aria-selected="true" style="height: 24px; padding: 0 10px; border: 0; border-radius: 6px; background: var(--surface-base); box-shadow: var(--shadow-sm); color: var(--ink-gray-8); font: 400 13px Inter, sans-serif; cursor: pointer">Cards</button>
+<button type="button" role="tab" aria-selected="false" style="height: 24px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-gray-6); font: 400 13px Inter, sans-serif; cursor: pointer">Table</button>
+</div>
+</div>
+</header>
+
+<div style="box-sizing: border-box; padding: 20px 20px 40px; display: flex; flex-direction: column; gap: 24px">
+
+
+<section aria-labelledby="plants-h" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+<h2 id="plants-h" style="margin: 0; font-size: 16px; font-weight: 600">Your plants</h2><span style="font-size: 13px; color: var(--ink-gray-5)">{{plantCount}} · open one to see it live</span>
+</div>
+<label style="display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; border-radius: 8px; background: var(--surface-gray-2); color: var(--ink-gray-5); min-width: 220px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search plants</span><input type="search" placeholder="Search plants" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 400 14px Inter, sans-serif; color: var(--ink-gray-8); outline: none"></label>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px">
+<sc-for list="{{plants}}" as="p" hint-placeholder-count="4">
+<a href="{{p.href}}" class="ffcard" aria-label="Open {{p.name}}" style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 12px; border: 1px solid {{p.border}}; background: var(--surface-base); color: inherit; text-decoration: none; min-width: 0; cursor: pointer">
+<div style="display: flex; align-items: center; gap: 10px">
+<span aria-hidden="true" style="width: 36px; height: 36px; flex: 0 0 36px; border-radius: 8px; background: var(--surface-gray-2); color: var(--ink-gray-7); display: grid; place-items: center; font-weight: 600; font-size: 13px">{{p.initials}}</span>
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1"><span style="font-size: 15px; font-weight: 600; color: var(--ink-gray-9)">{{p.name}}</span><span style="font-size: 13px; color: var(--ink-gray-5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{p.meta}}</span></div>
+<span style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; height: 20px; padding: 0 6px; border-radius: 99px; background: {{p.badgeBg}}; color: {{p.badgeInk}}; font-size: 12px; font-weight: 500"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{p.dot}}; box-sizing: border-box; border: {{p.dotBorder}}"></span>{{p.state}}</span>
+</div>
+<p style="margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-gray-6); min-height: 39px">{{p.note}}</p>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 12px; border-top: 1px solid var(--outline-gray-1); font-size: 13px">
+<span style="color: var(--ink-gray-5)">{{p.foot}}</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; color: var(--ink-gray-8); font-weight: 500">Open<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
+</div>
+</a>
+</sc-for>
+<button type="button" class="ffbtn" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 160px; border: 1px dashed var(--outline-gray-2); border-radius: 12px; background: transparent; color: var(--ink-gray-6); font: 400 14px Inter, sans-serif; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Add plant</button>
+</div>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const amber = 'oklch(0.723 0.152 71.82)', red = 'oklch(0.556 0.198 26.552)', green = 'oklch(0.57 0.119 158.092)', ink8 = 'oklch(0.205 0 0)';
+    const look = {
+      Tripped: { badgeBg: red, badgeInk: '#fff', border: 'var(--outline-red-3)', noteBg: 'var(--surface-red-2)', noteInk: 'var(--ink-red-7)', dot: '#fff', dotBorder: '0', dim: 1 },
+      Alert: { badgeBg: 'var(--surface-amber-2)', badgeInk: 'var(--ink-amber-7)', border: 'var(--outline-amber-3)', noteBg: 'var(--surface-amber-2)', noteInk: 'var(--ink-gray-8)', dot: amber, dotBorder: '0', dim: 1 },
+      Offline: { badgeBg: 'var(--surface-gray-2)', badgeInk: 'var(--ink-gray-6)', border: 'var(--outline-gray-1)', noteBg: 'var(--surface-gray-2)', noteInk: 'var(--ink-gray-7)', dot: 'transparent', dotBorder: '1.5px solid oklch(0.586 0 0)', dim: 0.55 },
+      Running: { badgeBg: 'var(--surface-green-2)', badgeInk: 'var(--ink-green-7)', border: 'var(--outline-gray-1)', noteBg: 'var(--surface-gray-1)', noteInk: 'var(--ink-gray-7)', dot: green, dotBorder: '0', dim: 1 }
+    };
+    const plants = [
+      { name: 'Koyo 1', initials: 'K1', meta: 'Sachet water · Koyo · pilot', state: 'Tripped', note: 'Lead interlock stopped filling at 08:14. Recovery 2 of 6 steps done.', foot: '3,770 bags this shift' },
+      { name: 'Plant B', initials: 'PB', meta: 'Bottled water · sample', state: 'Alert', note: 'RO salt rejection under the alert limit. Production continues.', foot: '14,200 bottles today' },
+      { name: 'Plant D', initials: 'PD', meta: 'Sachet water · sample', state: 'Offline', note: 'No data for 3 h. The plant keeps recording and syncs when the link returns.', foot: 'Last seen 05:34' },
+      { name: 'Plant C', initials: 'PC', meta: 'Juice · sample', state: 'Running', note: 'All lines running. Pasteurizer at 74 °C.', foot: '6,400 cartons today' }
+    ].map((p) => Object.assign({ href: 'Main.dc.html' }, p, look[p.state]));
+    return { plants, plantCount: plants.length + ' plants' };
+  }
+}
+</script>
+</body>
+</html>

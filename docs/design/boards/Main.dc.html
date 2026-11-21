@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plant · Frappe Factory</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+:root{--surface-base:oklch(1 0 0);--surface-sidebar:oklch(0.979 0 0);--surface-gray-1:oklch(0.979 0 0);--surface-gray-2:oklch(0.964 0 0);--surface-gray-3:oklch(0.946 0 0);--surface-gray-4:oklch(0.913 0 0);--surface-gray-7:oklch(0.586 0 0);--surface-gray-10:oklch(0.205 0 0);--ink-gray-4:oklch(0.683 0 0);--ink-gray-5:oklch(0.586 0 0);--ink-gray-6:oklch(0.439 0 0);--ink-gray-7:oklch(0.341 0 0);--ink-gray-8:oklch(0.205 0 0);--ink-gray-9:oklch(0.168 0 0);--outline-gray-1:oklch(0.946 0 0);--outline-gray-2:oklch(0.913 0 0);--outline-gray-3:oklch(0.83 0 0);--ink-blue-link:oklch(0.641 0.186 251.565);--surface-blue-2:oklch(0.96 0.021 241.348);--surface-blue-3:oklch(0.925 0.039 243.489);--surface-red-2:oklch(0.947 0.026 17.626);--surface-red-7:oklch(0.556 0.198 26.552);--ink-red-7:oklch(0.497 0.185 27.335);--outline-red-3:oklch(0.867 0.068 18.55);--surface-amber-2:oklch(0.967 0.045 91.733);--surface-amber-5:oklch(0.865 0.105 83.468);--ink-amber-7:oklch(0.612 0.136 63.758);--outline-amber-3:oklch(0.917 0.063 91.484);--surface-green-2:oklch(0.965 0.03 155.987);--ink-green-7:oklch(0.53 0.122 156.15);--outline-green-3:oklch(0.872 0.084 155.952);--shadow-sm:inset 0px 0.25px 1.5px 0px #ffffff29, 0px 0px 1px 0px #00000033, 0px 1px 3px 0px #00000024}
+a{color:var(--ink-blue-link)}a:hover{color:oklch(0.561 0.168 252.355)}
+.ffbtn:hover{background:var(--surface-gray-3)}
+.ffnav:hover{background:var(--surface-gray-2)}
+.flow{stroke-dasharray:4 9;animation:ffflow 1.2s linear infinite}
+@keyframes ffflow{to{stroke-dashoffset:-26}}
+.ffrun .roll,.spin{transform-box:fill-box;transform-origin:center;animation:ffspin 1.3s linear infinite}
+.ffrun .jl{animation:ffjl .8s ease-in-out infinite}
+.ffrun .jr{animation:ffjr .8s ease-in-out infinite}
+.ffrun .sach{animation:ffdrop .8s ease-in infinite}
+@keyframes ffspin{to{transform:rotate(360deg)}}
+@keyframes ffjl{50%{transform:translateX(2px)}}
+@keyframes ffjr{50%{transform:translateX(-2px)}}
+@keyframes ffdrop{0%{transform:translateY(-3px);opacity:0}25%{opacity:1}100%{transform:translateY(9px);opacity:0}}
+@media (prefers-reduced-motion: reduce){.flow,.spin,.ffrun *{animation:none}}
+
+body{margin:0}
+:root{--surface-base:oklch(1 0 0);--surface-gray-1:oklch(0.979 0 0);--surface-gray-2:oklch(0.964 0 0);--surface-gray-3:oklch(0.946 0 0);--surface-gray-4:oklch(0.913 0 0);--surface-gray-5:oklch(0.83 0 0);--surface-gray-6:oklch(0.683 0 0);--surface-gray-7:oklch(0.586 0 0);--surface-gray-8:oklch(0.439 0 0);--surface-gray-9:oklch(0.341 0 0);--surface-gray-10:oklch(0.205 0 0);--surface-sidebar:oklch(0.979 0 0);--surface-elevation-1:oklch(1 0 0);--surface-elevation-2:oklch(1 0 0);--surface-elevation-3:oklch(1 0 0);--surface-red-1:oklch(0.978 0.011 17.34);--surface-red-2:oklch(0.947 0.026 17.626);--surface-red-3:oklch(0.915 0.044 17.978);--surface-red-4:oklch(0.867 0.068 18.55);--surface-red-5:oklch(0.772 0.118 19.495);--surface-red-6:oklch(0.595 0.208 26.283);--surface-red-7:oklch(0.556 0.198 26.552);--surface-red-8:oklch(0.497 0.185 27.335);--surface-red-9:oklch(0.438 0.153 26.273);--surface-red-10:oklch(0.348 0.12 26.042);--surface-blue-1:oklch(0.976 0.011 243.65);--surface-blue-2:oklch(0.96 0.021 241.348);--surface-blue-3:oklch(0.925 0.039 243.489);--surface-blue-4:oklch(0.88 0.061 242.553);--surface-blue-5:oklch(0.73 0.121 245.297);--surface-blue-6:oklch(0.641 0.186 251.565);--surface-blue-7:oklch(0.587 0.174 252.167);--surface-blue-8:oklch(0.561 0.168 252.355);--surface-blue-9:oklch(0.477 0.149 253.403);--surface-blue-10:oklch(0.396 0.113 250.204);--surface-green-1:oklch(0.976 0.014 155.594);--surface-green-2:oklch(0.965 0.03 155.987);--surface-green-3:oklch(0.908 0.07 154.3);--surface-green-4:oklch(0.872 0.084 155.952);--surface-green-5:oklch(0.816 0.12 155.416);--surface-green-6:oklch(0.67 0.124 159.024);--surface-green-7:oklch(0.57 0.119 158.092);--surface-green-8:oklch(0.53 0.122 156.15);--surface-green-9:oklch(0.425 0.101 155.32);--surface-green-10:oklch(0.321 0.05 163.839);--surface-amber-1:oklch(0.98 0.015 86.424);--surface-amber-2:oklch(0.967 0.045 91.733);--surface-amber-3:oklch(0.936 0.056 93.962);--surface-amber-4:oklch(0.917 0.063 91.484);--surface-amber-5:oklch(0.865 0.105 83.468);--surface-amber-6:oklch(0.723 0.152 71.82);--surface-amber-7:oklch(0.659 0.142 67.548);--surface-amber-8:oklch(0.612 0.136 63.758);--surface-amber-9:oklch(0.472 0.124 46.689);--surface-amber-10:oklch(0.416 0.099 47.734);--surface-violet-1:oklch(0.976 0.011 291.956);--surface-violet-2:oklch(0.943 0.031 297.722);--surface-violet-3:oklch(0.891 0.058 291.738);--surface-violet-4:oklch(0.852 0.077 295.563);--surface-violet-5:oklch(0.761 0.129 293.171);--surface-violet-6:oklch(0.574 0.216 287.282);--surface-violet-7:oklch(0.545 0.18 287.523);--surface-violet-8:oklch(0.438 0.155 286.38);--surface-violet-9:oklch(0.356 0.139 285.299);--surface-violet-10:oklch(0.273 0.109 285.208);--ink-base:oklch(1 0 0);--ink-gray-1:oklch(0.946 0 0);--ink-gray-2:oklch(0.913 0 0);--ink-gray-3:oklch(0.83 0 0);--ink-gray-4:oklch(0.683 0 0);--ink-gray-5:oklch(0.586 0 0);--ink-gray-6:oklch(0.439 0 0);--ink-gray-7:oklch(0.341 0 0);--ink-gray-8:oklch(0.205 0 0);--ink-gray-9:oklch(0.168 0 0);--ink-red-1:oklch(0.947 0.026 17.626);--ink-red-2:oklch(0.915 0.044 17.978);--ink-red-3:oklch(0.867 0.068 18.55);--ink-red-4:oklch(0.772 0.118 19.495);--ink-red-5:oklch(0.595 0.208 26.283);--ink-red-6:oklch(0.556 0.198 26.552);--ink-red-7:oklch(0.497 0.185 27.335);--ink-red-8:oklch(0.438 0.153 26.273);--ink-red-9:oklch(0.348 0.12 26.042);--ink-blue-1:oklch(0.96 0.021 241.348);--ink-blue-2:oklch(0.925 0.039 243.489);--ink-blue-3:oklch(0.88 0.061 242.553);--ink-blue-4:oklch(0.73 0.121 245.297);--ink-blue-5:oklch(0.641 0.186 251.565);--ink-blue-6:oklch(0.587 0.174 252.167);--ink-blue-7:oklch(0.561 0.168 252.355);--ink-blue-8:oklch(0.477 0.149 253.403);--ink-blue-9:oklch(0.396 0.113 250.204);--ink-green-1:oklch(0.965 0.03 155.987);--ink-green-2:oklch(0.908 0.07 154.3);--ink-green-3:oklch(0.872 0.084 155.952);--ink-green-4:oklch(0.816 0.12 155.416);--ink-green-5:oklch(0.67 0.124 159.024);--ink-green-6:oklch(0.57 0.119 158.092);--ink-green-7:oklch(0.53 0.122 156.15);--ink-green-8:oklch(0.425 0.101 155.32);--ink-green-9:oklch(0.321 0.05 163.839);--ink-amber-1:oklch(0.967 0.045 91.733);--ink-amber-2:oklch(0.936 0.056 93.962);--ink-amber-3:oklch(0.917 0.063 91.484);--ink-amber-4:oklch(0.865 0.105 83.468);--ink-amber-5:oklch(0.723 0.152 71.82);--ink-amber-6:oklch(0.659 0.142 67.548);--ink-amber-7:oklch(0.612 0.136 63.758);--ink-amber-8:oklch(0.472 0.124 46.689);--ink-amber-9:oklch(0.416 0.099 47.734);--ink-violet-1:oklch(0.943 0.031 297.722);--ink-violet-2:oklch(0.891 0.058 291.738);--ink-violet-3:oklch(0.852 0.077 295.563);--ink-violet-4:oklch(0.761 0.129 293.171);--ink-violet-5:oklch(0.574 0.216 287.282);--ink-violet-6:oklch(0.545 0.18 287.523);--ink-violet-7:oklch(0.438 0.155 286.38);--ink-violet-8:oklch(0.356 0.139 285.299);--ink-violet-9:oklch(0.273 0.109 285.208);--ink-blue-link:oklch(0.641 0.186 251.565);--outline-base:oklch(1 0 0);--outline-gray-1:oklch(0.946 0 0);--outline-gray-2:oklch(0.913 0 0);--outline-gray-3:oklch(0.83 0 0);--outline-gray-4:oklch(0.683 0 0);--outline-gray-5:oklch(0.586 0 0);--outline-gray-6:oklch(0.439 0 0);--outline-gray-7:oklch(0.341 0 0);--outline-gray-8:oklch(0.205 0 0);--outline-gray-9:oklch(0.168 0 0);--outline-red-1:oklch(0.947 0.026 17.626);--outline-red-2:oklch(0.915 0.044 17.978);--outline-red-3:oklch(0.867 0.068 18.55);--outline-red-4:oklch(0.772 0.118 19.495);--outline-red-5:oklch(0.595 0.208 26.283);--outline-red-6:oklch(0.556 0.198 26.552);--outline-red-7:oklch(0.497 0.185 27.335);--outline-red-8:oklch(0.438 0.153 26.273);--outline-red-9:oklch(0.348 0.12 26.042);--outline-red-10:oklch(0.276 0.093 25.823);--outline-blue-1:oklch(0.96 0.021 241.348);--outline-blue-2:oklch(0.925 0.039 243.489);--outline-blue-3:oklch(0.88 0.061 242.553);--outline-blue-4:oklch(0.73 0.121 245.297);--outline-blue-5:oklch(0.641 0.186 251.565);--outline-blue-6:oklch(0.587 0.174 252.167);--outline-blue-7:oklch(0.561 0.168 252.355);--outline-blue-8:oklch(0.477 0.149 253.403);--outline-blue-9:oklch(0.396 0.113 250.204);--outline-blue-10:oklch(0.309 0.104 256.771);--outline-green-1:oklch(0.965 0.03 155.987);--outline-green-2:oklch(0.908 0.07 154.3);--outline-green-3:oklch(0.872 0.084 155.952);--outline-green-4:oklch(0.816 0.12 155.416);--outline-green-5:oklch(0.67 0.124 159.024);--outline-green-6:oklch(0.57 0.119 158.092);--outline-green-7:oklch(0.53 0.122 156.15);--outline-green-8:oklch(0.425 0.101 155.32);--outline-green-9:oklch(0.321 0.05 163.839);--outline-green-10:oklch(0.277 0.052 161.616);--outline-amber-1:oklch(0.967 0.045 91.733);--outline-amber-2:oklch(0.936 0.056 93.962);--outline-amber-3:oklch(0.917 0.063 91.484);--outline-amber-4:oklch(0.865 0.105 83.468);--outline-amber-5:oklch(0.723 0.152 71.82);--outline-amber-6:oklch(0.659 0.142 67.548);--outline-amber-7:oklch(0.612 0.136 63.758);--outline-amber-8:oklch(0.472 0.124 46.689);--outline-amber-9:oklch(0.416 0.099 47.734);--outline-amber-10:oklch(0.31 0.075 46.734);--outline-violet-1:oklch(0.943 0.031 297.722);--outline-violet-2:oklch(0.891 0.058 291.738);--outline-violet-3:oklch(0.852 0.077 295.563);--outline-violet-4:oklch(0.761 0.129 293.171);--outline-violet-5:oklch(0.574 0.216 287.282);--outline-violet-6:oklch(0.545 0.18 287.523);--outline-violet-7:oklch(0.438 0.155 286.38);--outline-violet-8:oklch(0.356 0.139 285.299);--outline-violet-9:oklch(0.273 0.109 285.208);--outline-violet-10:oklch(0.226 0.128 277.835);--outline-elevation-1:oklch(0.946 0 0);--outline-elevation-2:oklch(0.946 0 0);--shadow-sm:inset 0px 0.25px 1.5px 0px #ffffff29,0px 0px 1px 0px #00000033,0px 1px 3px 0px #00000024;--shadow-xl:0 0 0 1px #00000014,0 8px 24px -4px #0000001f,0 24px 48px -12px #00000029;--shadow-2xl:0 0 0 1px #00000014,0 12px 32px -6px #00000024,0 32px 64px -16px #0000002e}
+.ff{height:100vh;overflow:hidden;display:flex;background:var(--surface-base);color:var(--ink-gray-8);font-family:Inter,InterVar,system-ui,sans-serif;font-size:14px;letter-spacing:.02em;line-height:1.35;-webkit-font-smoothing:antialiased}
+.ff *{box-sizing:border-box}
+.ff a{color:var(--ink-blue-link);text-decoration:none}
+svg.i{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+svg.i.s35{width:14px;height:14px;flex-basis:14px}
+.tab{font-variant-numeric:tabular-nums}
+/* Sidebar */
+.side{box-sizing:border-box;flex:0 0 14rem;width:14rem;height:100%;overflow-y:auto;overscroll-behavior:contain;background:var(--surface-sidebar);border-right:1px solid var(--outline-gray-1);display:flex;flex-direction:column;padding:0 8px 12px}
+.side-head{box-sizing:border-box;display:flex;align-items:center;gap:8px;height:40px;margin:4px 0 6px;padding:0 6px;border:0;border-radius:8px;background:transparent;text-align:left;font:inherit;cursor:pointer;width:100%}
+.side-head:hover{background:var(--surface-gray-2)}
+.logo{width:28px;height:28px;flex:0 0 28px;border-radius:6px;background:var(--surface-gray-10);color:var(--ink-base);display:grid;place-items:center;font-weight:600;font-size:13px}
+.si{text-decoration:none;display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;color:var(--ink-gray-7)!important;font-size:14px}
+.si:hover{background:var(--surface-gray-2)}
+.si .i{color:var(--ink-gray-6)}
+.si.on{background:var(--surface-elevation-3);box-shadow:var(--shadow-sm);color:var(--ink-gray-8)!important}
+.si .lbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.si .cnt{margin-right:4px;font-size:12px;color:var(--ink-gray-5);font-variant-numeric:tabular-nums}
+.si .cnt.red{color:var(--ink-red-7);font-weight:500}
+.slabel{display:flex;align-items:center;height:28px;padding:0 8px;margin-top:12px;font-size:13px;color:var(--ink-gray-5)}
+.sgrp{display:flex;flex-direction:column;gap:2px}
+.side-foot{margin-top:auto;padding:8px 8px 0;font-size:12px;color:var(--ink-gray-5);display:flex;align-items:center;gap:6px}
+/* Page */
+.main{flex:1 1 auto;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.main>*:not(.ph){flex:1 1 auto;min-height:0;overflow-y:auto}
+.main>.ph{flex:0 0 auto}
+.panel>div{min-height:0}
+.panel>div[style*="overflow:auto"]{flex:1 1 auto}
+.ph{min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 20px;border-bottom:1px solid var(--outline-gray-1)}
+.crumb{display:flex;align-items:center;gap:6px;font-size:18px;min-width:0;white-space:nowrap}
+.crumb a{color:var(--ink-gray-5)!important;text-decoration:none}
+.crumb a:hover{color:var(--ink-gray-7)!important}
+.crumb .sep{color:var(--ink-gray-4)}
+.crumb .cur{color:var(--ink-gray-9);font-weight:600}
+.acts{display:flex;align-items:center;gap:8px}
+.body{padding:20px 20px 40px;display:flex;flex-direction:column;gap:24px}
+/* Buttons (sm: h-7 px-2 rounded-4 text-base) */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:28px;padding:0 8px;border:0;border-radius:8px;font:400 14px/1.15 Inter,sans-serif;letter-spacing:.02em;cursor:pointer;white-space:nowrap;color:var(--ink-gray-8);background:var(--surface-gray-2)}
+.btn:hover{background:var(--surface-gray-3)}
+.btn.solid{background:var(--surface-gray-10);color:var(--ink-base)}
+.btn.solid:hover{background:var(--surface-gray-9)}
+.btn.ghost{background:transparent}.btn.ghost:hover{background:var(--surface-gray-3)}
+.btn.outline{background:var(--surface-base);border:1px solid var(--outline-gray-2)}
+.btn.red{background:var(--surface-red-7);color:var(--ink-base)}
+.btn.sred{background:var(--surface-red-2);color:var(--ink-red-7)}
+.btn.xs{height:24px;padding:0 6px;border-radius:6px;font-size:12px}
+.btn.md{height:32px;padding:0 10px}
+.btn.ico{width:28px;padding:0}
+.btn.xs.ico{width:24px}
+.btn[disabled]{background:var(--surface-gray-2);color:var(--ink-gray-4);cursor:not-allowed}
+.btn.solid[disabled]{background:var(--surface-gray-7);color:var(--ink-base)}
+/* Badge (md: h-5 px-1.5 text-xs rounded-full) */
+.bd{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border-radius:999px;font-size:12px;line-height:1;white-space:nowrap;font-weight:500}
+.bd.sm{height:16px;padding:0 6px;font-size:11px}
+.bd.gray{color:var(--ink-gray-6);background:var(--surface-gray-2)}
+.bd.red{color:var(--ink-red-7);background:var(--surface-red-2)}
+.bd.amber{color:var(--ink-amber-7);background:var(--surface-amber-2)}
+.bd.green{color:var(--ink-green-7);background:var(--surface-green-2)}
+.bd.blue{color:var(--ink-blue-7);background:var(--surface-blue-2)}
+.bd.violet{color:var(--ink-violet-7);background:var(--surface-violet-2)}
+.bd.s-red{color:#fff;background:var(--surface-red-7)}
+.bd.s-amber{color:#fff;background:var(--surface-amber-7)}
+.bd.s-gray{color:var(--ink-base);background:var(--surface-gray-10)}
+.bd.o-gray{color:var(--ink-gray-6);border:1px solid var(--outline-gray-2);background:transparent}
+.dot{width:6px;height:6px;flex:0 0 6px;border-radius:50%;display:inline-block}
+.dot.g{background:var(--ink-green-6, var(--ink-green-7))}.dot.r{background:var(--surface-red-7)}.dot.a{background:var(--surface-amber-6)}.dot.x{background:var(--surface-gray-6)}.dot.o{border:1.5px solid var(--ink-gray-5);background:transparent}
+/* Inputs (TextInput subtle sm) */
+.in{display:flex;align-items:center;gap:6px;height:28px;padding:0 8px;border-radius:8px;border:1px solid var(--surface-gray-2);background:var(--surface-gray-2);color:var(--ink-gray-8);font:400 14px Inter,sans-serif;min-width:0}
+.in:hover{background:var(--surface-gray-3)}
+.in.muted{color:var(--ink-gray-4)}
+.in.focus{background:var(--surface-base);border-color:var(--outline-gray-4);box-shadow:var(--shadow-sm)}
+.in.out{background:var(--surface-base);border-color:var(--outline-gray-2)}
+.in.dis{background:var(--surface-gray-1);border-color:var(--outline-gray-1);color:var(--ink-gray-5)}
+.in.err{border-color:var(--outline-red-3);background:var(--surface-base)}
+.in .grow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.in .i{color:var(--ink-gray-5)}
+.ta{min-height:72px;align-items:flex-start;padding:6px 8px;height:auto;line-height:1.5}
+.fl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl>.lab{font-size:13px;color:var(--ink-gray-6)}
+.fl>.lab .req{color:var(--ink-red-6, var(--ink-red-7))}
+.fl>.hint{font-size:13px;color:var(--ink-gray-5);line-height:1.45}
+.fl>.errm{font-size:13px;color:var(--ink-red-7)}
+/* Switch sm / Checkbox */
+.sw{position:relative;display:inline-flex;align-items:center;width:26px;height:16px;flex:0 0 26px;border-radius:999px;background:var(--surface-gray-4);border:2px solid transparent}
+.sw::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--surface-base);box-shadow:0 1px 2px #0003}
+.sw.on{background:var(--surface-gray-10);justify-content:flex-end}
+.sw.dis{background:var(--surface-gray-3)}
+.sw.on.dis{background:var(--surface-gray-6)}
+.cb{width:16px;height:16px;flex:0 0 16px;border-radius:4px;border:1px solid var(--outline-gray-3);background:var(--surface-base);display:inline-grid;place-items:center}
+.cb.on{background:var(--surface-gray-10);border-color:var(--surface-gray-10)}
+.cb.on::after{content:"";width:8px;height:4px;border:2px solid #fff;border-top:0;border-right:0;transform:translateY(-1px) rotate(-45deg)}
+.cb.mix{background:var(--surface-gray-10);border-color:var(--surface-gray-10)}
+.cb.mix::after{content:"";width:8px;height:2px;background:#fff;border-radius:1px}
+.rd{width:16px;height:16px;flex:0 0 16px;border-radius:50%;border:1px solid var(--outline-gray-3);background:var(--surface-base);display:inline-grid;place-items:center}
+.rd.on{border:5px solid var(--surface-gray-10)}
+/* Tabs underline */
+.tabs{display:flex;gap:16px;border-bottom:1px solid var(--outline-gray-1);padding:0 20px}
+.tabs .t{display:inline-flex;align-items:center;gap:6px;height:36px;font-size:14px;color:var(--ink-gray-5);border-bottom:1px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap}
+.tabs .t:hover{color:var(--ink-gray-7)}
+.tabs .t.on{color:var(--ink-gray-9);border-bottom-color:var(--ink-gray-9)}
+.tabs .t .bd{height:16px;font-size:11px}
+/* Segmented (Tabs subtle) */
+.seg{display:inline-flex;padding:2px;gap:2px;border-radius:8px;background:var(--surface-gray-2)}
+.seg span{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:6px;font-size:13px;color:var(--ink-gray-6);cursor:pointer;white-space:nowrap}
+.seg span.on{background:var(--surface-elevation-3);box-shadow:var(--shadow-sm);color:var(--ink-gray-8)}
+/* List (frappe-ui/list) */
+.list{display:flex;flex-direction:column;margin:0 -12px}
+.lh,.lr{display:grid;align-items:center;column-gap:12px;padding:0 12px}
+.lh{height:32px;font-size:13px;color:var(--ink-gray-5);border-bottom:1px solid var(--outline-gray-1);white-space:nowrap}
+.lh .sort{display:inline-flex;align-items:center;gap:4px;color:var(--ink-gray-7)}
+.lr{min-height:44px;border-bottom:1px solid var(--outline-gray-1);font-size:14px;color:var(--ink-gray-7);cursor:pointer}
+.lr:hover{background:var(--surface-gray-1)}
+.lr.act{background:var(--surface-gray-3)}
+.lr.sel{background:var(--surface-gray-2)}
+.lr .c{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lr .t1{color:var(--ink-gray-8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lr .t1.b{font-weight:600;color:var(--ink-gray-9)}
+.lr .m{font-size:13px;color:var(--ink-gray-5);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lr .id{color:var(--ink-gray-4);font-variant-numeric:tabular-nums}
+.r{text-align:right;justify-content:flex-end}
+/* Card, panel, misc */
+.card{border:1px solid var(--outline-gray-1);border-radius:12px;padding:16px;background:var(--surface-base);min-width:0}
+.inset{background:var(--surface-gray-1);border-radius:8px;padding:10px 12px}
+.h2{margin:0;font-size:16px;font-weight:600;color:var(--ink-gray-8)}
+.h3{margin:0;font-size:14px;font-weight:600;color:var(--ink-gray-8)}
+.qs{font-size:13px;color:var(--ink-gray-5)}
+.meta{font-size:13px;color:var(--ink-gray-5)}
+.p{font-size:14px;line-height:1.55;color:var(--ink-gray-7);margin:0}
+.ps{font-size:13px;line-height:1.5;color:var(--ink-gray-6);margin:0}
+.kpi{display:flex;flex-direction:column;gap:6px}
+.kpi .k{font-size:13px;color:var(--ink-gray-5)}
+.kpi .v{font-size:20px;font-weight:600;color:var(--ink-gray-9);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.kpi .v small{font-size:13px;font-weight:400;color:var(--ink-gray-5)}
+.kpi .d{font-size:13px;color:var(--ink-gray-5)}
+.d-up{color:var(--ink-green-7)!important}.d-dn{color:var(--ink-red-7)!important}
+.bar{display:block;height:4px;border-radius:99px;background:var(--surface-gray-3);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;background:var(--ink-gray-7)}
+.bar>i.r{background:var(--surface-red-7)}.bar>i.a{background:var(--surface-amber-6)}.bar>i.g{background:var(--surface-green-7)}
+.bar.lg{height:8px}
+.panel{flex:0 0 20rem;width:20rem;border-left:1px solid var(--outline-gray-1);display:flex;flex-direction:column;min-width:0}
+.prow{display:grid;grid-template-columns:7.5rem minmax(0,1fr);align-items:center;gap:8px;min-height:32px;font-size:14px}
+.prow>span:first-child{font-size:13px;color:var(--ink-gray-5)}
+.prow>span:last-child{color:var(--ink-gray-8);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.divy>*+*{border-top:1px solid var(--outline-gray-1)}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid var(--outline-gray-2);background:var(--surface-base)}
+.alert .ttl{font-weight:500;color:var(--ink-gray-8)}
+.alert.red .ai{color:var(--ink-red-7)}.alert.amber .ai{color:var(--ink-amber-7)}.alert.blue .ai{color:var(--ink-blue-7)}.alert.green .ai{color:var(--ink-green-7)}
+.tline{position:relative;display:flex;flex-direction:column;gap:14px}
+.tline .ev{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;font-size:13px;color:var(--ink-gray-7);line-height:1.45}
+.tline .ev .ic{width:20px;height:20px;border-radius:50%;background:var(--surface-gray-2);display:grid;place-items:center;color:var(--ink-gray-6)}
+.tline .ev .ic svg{width:12px;height:12px;flex-basis:12px}
+.tline .ev b{font-weight:500;color:var(--ink-gray-8)}
+.tline .ev .w{color:var(--ink-gray-5)}
+.av{width:20px;height:20px;flex:0 0 20px;border-radius:50%;background:var(--surface-gray-3);color:var(--ink-gray-7);font-size:10px;font-weight:600;display:inline-grid;place-items:center;letter-spacing:0}
+.av.md{width:26px;height:26px;flex-basis:26px;font-size:10px}
+.avs{display:inline-flex}.avs .av{border:2px solid var(--surface-base);margin-left:-6px}.avs .av:first-child{margin-left:0}
+.kbd{display:inline-flex;align-items:center;height:18px;padding:0 4px;border-radius:4px;border:1px solid var(--outline-gray-2);font-size:11px;color:var(--ink-gray-6);background:var(--surface-base)}
+.overlay{position:absolute;inset:0;background:#0000004d}
+.dialog{position:absolute;background:var(--surface-elevation-1);border-radius:16px;box-shadow:var(--shadow-xl);overflow:hidden}
+.pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
+.mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
+.mi.on{background:var(--surface-gray-3)}
+.mi .i{color:var(--ink-gray-6)}
+.toast{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--surface-gray-9);color:var(--ink-base);box-shadow:var(--shadow-xl);font-size:14px}
+.sel-bar{display:flex;align-items:center;gap:8px;height:40px;padding:0 6px 0 12px;border-radius:12px;background:var(--surface-base);box-shadow:var(--shadow-2xl);font-size:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:8px;background:var(--surface-gray-2);font-size:13px;color:var(--ink-gray-7);white-space:nowrap}
+.chip .k{color:var(--ink-gray-5)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.grid-bg{background-image:radial-gradient(var(--outline-gray-2) 1px,transparent 1px);background-size:16px 16px}
+@media (prefers-reduced-motion: reduce){.ff *{animation:none!important;transition:none!important}}
+
+main>header~*{flex:1 1 auto;min-height:0;overflow-y:auto}
+</style>
+</helmet>
+<div style="height: 100vh; overflow: hidden; display: flex; background: var(--surface-base); color: var(--ink-gray-8); font-family: Inter, 'InterVar', system-ui, sans-serif; font-size: 14px; letter-spacing: .02em; line-height: 1.35">
+
+<nav class="side" aria-label="Plant">
+<button type="button" class="side-head"><span class="logo" aria-hidden="true">K1</span><span style="display:flex;flex-direction:column;min-width:0;flex:1"><span style="font-weight:500;color:var(--ink-gray-8)">Koyo 1</span><span style="font-size:13px;color:var(--ink-gray-5);margin-top:2px">Frappe Factory</span></span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--ink-gray-5)"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg></button>
+<a class="si" href="Plants.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span class="lbl">All plants</span></a>
+<div class="slabel">Operate</div><div class="sgrp">
+<a class="si on" href="Main.dc.html" aria-current="page"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/></svg><span class="lbl">Plant</span></a>
+<a class="si" href="Alarms.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="lbl">Alarms</span><span class="cnt">{{alarmCount}}</span></a>
+<a class="si" href="Trip.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span class="lbl">Interlock trips</span><span class="cnt red">{{tripCount}}</span></a>
+<a class="si" href="Runs.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 3 14 9-14 9V3z"/></svg><span class="lbl">Production runs</span></a>
+<a class="si" href="Downtime.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="lbl">Downtime</span><span class="cnt">3</span></a>
+<a class="si" href="Resources.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg><span class="lbl">Resources</span></a>
+<a class="si" href="Trends.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg><span class="lbl">Trends</span></a>
+<a class="si" href="Handover.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg><span class="lbl">Shift handover</span></a>
+</div><div class="slabel">Setup</div><div class="sgrp">
+<a class="si" href="Devices.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg><span class="lbl">Devices and tags</span></a>
+<a class="si" href="LayoutEditor.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span class="lbl">Layouts</span></a>
+<a class="si" href="Symbols.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.3 10a.7.7 0 0 1-.63-1.08L11.4 3a.7.7 0 0 1 1.2-.04L16.3 8.9a.7.7 0 0 1-.57 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/></svg><span class="lbl">Symbol library</span></a>
+<a class="si" href="AlarmDefs.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z"/><path d="M12 2v1"/></svg><span class="lbl">Alarm definitions</span></a>
+<a class="si" href="Settings.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></svg><span class="lbl">Plant settings</span></a>
+</div><div class="side-foot"><span class="dot g"></span>Edge online · synced 1m ago</div></nav>
+
+<main style="flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden">
+<header style="flex: 0 0 auto; min-height: 48px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 20px; border-bottom: 1px solid var(--outline-gray-1)">
+<div style="display: flex; align-items: center; gap: 6px; font-size: 18px; min-width: 0">
+<a href="Plants.dc.html" style="color: var(--ink-gray-5); text-decoration: none">Plants</a>
+<span aria-hidden="true" style="color: var(--ink-gray-4)">/</span>
+<span style="color: var(--ink-gray-5)">Koyo 1</span>
+<span aria-hidden="true" style="color: var(--ink-gray-4)">/</span>
+<button type="button" class="ffbtn" style="display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 6px; border: 0; border-radius: 8px; background: transparent; font: 600 18px Inter, sans-serif; color: var(--ink-gray-9); cursor: pointer">Treatment and filling<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-gray-5)" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+</div>
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; border-radius: 99px; background: var(--surface-gray-2); color: var(--ink-gray-6); font-size: 12px"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--ink-green-7)"></span>Live · 2 s</span>
+<a href="LayoutEditor.dc.html" class="ffbtn" style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; border: 0; text-decoration: none; border-radius: 8px; background: var(--surface-gray-2); color: var(--ink-gray-8); font: 400 14px Inter, sans-serif; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit layout</a>
+</div>
+</header>
+
+<div style="box-sizing: border-box; padding: 20px 20px 40px; display: flex; flex-direction: column; gap: 24px">
+
+<section aria-live="polite" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 12px 16px; border-radius: 12px; border: 1px solid {{s.border}}; background: {{s.bg}}">
+<span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 99px; background: {{s.badgeBg}}; color: #fff; font-size: 13px; font-weight: 500">{{s.word}}</span>
+<p style="margin: 0; flex: 1 1 360px; min-width: 0; color: {{s.ink}}; font-size: 14px; line-height: 1.5">{{s.msg}}</p>
+<span style="font-size: 13px; color: var(--ink-gray-5)">Last trip {{s.lastTrip}}</span>
+<sc-if value="{{s.showTripLink}}" hint-placeholder-val="{{ false }}">
+<a href="Trip.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 10px; border-radius: 8px; background: var(--surface-red-7); color: #fff; font-weight: 500; text-decoration: none">Open trip</a>
+</sc-if>
+</section>
+
+<section aria-labelledby="pinned-h" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px"><h2 id="pinned-h" style="margin: 0; font-size: 16px; font-weight: 600; color: var(--ink-gray-8)">Pinned tags</h2><a href="#" style="font-size: 13px; text-decoration: none">Edit pinned tags</a></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 12px">
+<sc-for list="{{pins}}" as="p" hint-placeholder-count="6">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 12px; border: 1px solid {{p.border}}; background: var(--surface-base); min-width: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 13px; color: var(--ink-gray-5)"><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{p.name}}</span><sc-if value="{{p.interlock}}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; align-items: center; height: 16px; padding: 0 6px; border-radius: 99px; background: var(--surface-gray-2); color: var(--ink-gray-6); font-size: 11px">Interlock</span></sc-if></div>
+<div style="display: flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums"><span style="font-size: 20px; font-weight: 600; color: {{p.ink}}">{{p.value}}</span><span style="font-size: 13px; color: var(--ink-gray-5)">{{p.unit}}</span></div>
+<span style="font-size: 13px; color: var(--ink-gray-5)">{{p.meta}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+<section aria-labelledby="layout-h" style="flex: 999 1 620px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px"><h2 id="layout-h" style="margin: 0; font-size: 16px; font-weight: 600">Layout</h2><span style="font-size: 13px; color: var(--ink-gray-5)">Plant Floor Layout v3 · 21 symbols from the library</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--ink-gray-5)">
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink-gray-6)"></span>Running</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink-gray-5); box-sizing: border-box"></span>Stopped</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><polygon points="5,0 10,5 5,10 0,5" fill="oklch(0.723 0.152 71.82)"/></svg>Alarm</span>
+</div>
+</div>
+<div style="border: 1px solid var(--outline-gray-1); border-radius: 12px; background: var(--surface-gray-1); padding: 12px; overflow-x: auto">
+<svg viewBox="0 0 960 630" role="img" aria-label="Plant layout from source tank to the bank of ten fillers, with the quarantine loop" style="display: block; width: 100%; min-width: 720px; height: auto; font-family: Inter, sans-serif">
+<g fill="none" stroke="oklch(0.83 0 0)" stroke-width="4" stroke-linecap="round">
+<path d="M50 110 H76 M140 110 H170 M198 110 H220 M254 110 H284 M318 110 H372 M394 110 H414 M446 110 H476 M626 110 H802 V230"/>
+<path d="M600 74 V36 H700"/>
+<path d="M770 300 H744 M716 300 H594 M572 300 H550 M500 300 H372 M308 320 H286 M258 320 H230 V500 M70 500 H826"/>
+<path d="M70 500 V516 M154 500 V516 M238 500 V516 M322 500 V516 M406 500 V516 M490 500 V516 M574 500 V516 M658 500 V516 M742 500 V516 M826 500 V516"/>
+<path d="M404 308 V392 M340 340 V422 H380 M444 440 H562 M586 440 H604"/>
+</g>
+<path d="M630 437 H900 V8 H108 V56" fill="none" stroke="oklch(0.83 0 0)" stroke-width="3" stroke-dasharray="7 6"/>
+<g fill="none" stroke="oklch(0.641 0.186 251.565)" stroke-width="1.6" class="flow">
+<path d="M50 110 H76 M140 110 H170 M198 110 H220 M254 110 H284 M318 110 H372 M394 110 H414 M446 110 H476 M626 110 H802 V230 M770 300 H744 M716 300 H594 M572 300 H550 M500 300 H414"/>
+<path d="M394 300 H372 M308 320 H286 M258 320 H230 V500 M70 500 H826 M70 500 V516 M154 500 V516 M238 500 V516 M322 500 V516 M406 500 V516 M490 500 V516 M574 500 V516 M658 500 V516 M826 500 V516" opacity="{{s.runB}}"/>
+<path d="M404 308 V392 M340 340 V422 H380 M444 440 H562 M586 440 H604 M630 437 H900 V8 H108 V56" opacity="{{s.runC}}"/>
+</g>
+<g font-size="11" fill="oklch(0.439 0 0)">
+<text x="36" y="82" text-anchor="middle">Borehole</text>
+<text x="108" y="46" text-anchor="middle">T1 raw</text>
+<text x="184" y="146" text-anchor="middle">P-101</text>
+<text x="237" y="168" text-anchor="middle">Multimedia</text>
+<text x="301" y="168" text-anchor="middle">Carbon</text>
+<text x="355" y="22" text-anchor="middle">Antiscalant</text>
+<text x="383" y="142" text-anchor="middle">5 µm</text>
+<text x="430" y="148" text-anchor="middle">HP pump</text>
+<text x="551" y="164" text-anchor="middle">RO</text>
+<text x="728" y="62" text-anchor="middle">Reject</text>
+<text x="802" y="350" text-anchor="middle">T2 permeate</text>
+<text x="730" y="332" text-anchor="middle">P-301</text>
+<text x="648" y="198" text-anchor="middle">Dosing A B C</text>
+<text x="583" y="332" text-anchor="middle">1 µm</text>
+<text x="525" y="332" text-anchor="middle">UV-301</text>
+<text x="458" y="236" text-anchor="middle">AT-401</text>
+<text x="404" y="284" text-anchor="middle">XV-301</text>
+<text x="340" y="242" text-anchor="middle">T4 verify</text>
+<text x="272" y="352" text-anchor="middle">P-401</text>
+<text x="362" y="376" text-anchor="end">XV-402</text>
+<text x="452" y="406">T5 quarantine</text>
+<text x="574" y="424" text-anchor="middle">P-501</text>
+<text x="640" y="430">IX-501 resin</text>
+<text x="894" y="200" text-anchor="end">Return to T1</text>
+<text x="70" y="490">Filler bank · 10 Koyo fillers</text>
+</g>
+<g font-size="12" fill="oklch(0.205 0 0)" style="font-variant-numeric: tabular-nums">
+<text x="237" y="184" text-anchor="middle">ΔP 0.4</text>
+<text x="301" y="184" text-anchor="middle">ΔP 1.3</text>
+<text x="430" y="164" text-anchor="middle">12.6 bar</text>
+<text x="551" y="180" text-anchor="middle">6.0 m³/h</text>
+<text x="525" y="348" text-anchor="middle">96%</text>
+<text x="458" y="324" text-anchor="middle" fill="{{s.leadInk}}">{{s.lead}} µg/L</text>
+<text x="452" y="422">{{s.t5Text}}</text>
+<text x="640" y="446">{{s.resinText}}</text>
+</g>
+<circle cx="36" cy="110" r="14" fill="oklch(0.439 0 0)"/>
+<path class="spin" d="M29 110 H43 M36 103 V117" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+<rect x="76" y="56" width="64" height="100" rx="4" fill="#fff"/>
+<rect x="76" y="94" width="64" height="62" fill="oklch(0.925 0.039 243.489)"/>
+<rect x="76" y="56" width="64" height="100" rx="4" fill="none" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<text x="108" y="130" text-anchor="middle" font-size="13" fill="oklch(0.205 0 0)">62%</text>
+<circle cx="184" cy="110" r="14" fill="oklch(0.439 0 0)"/>
+<path class="spin" d="M177 110 H191 M184 103 V117" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+<rect x="220" y="70" width="34" height="80" rx="15" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<rect x="284" y="70" width="34" height="80" rx="15" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<polygon points="322,52 333,63 322,74 311,63" fill="oklch(0.723 0.152 71.82)"/>
+<text x="322" y="67" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">3</text>
+<rect x="344" y="30" width="22" height="26" rx="3" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<path d="M355 56 V108" stroke="oklch(0.683 0 0)" stroke-width="1.5" stroke-dasharray="3 3" opacity="{{s.dose}}"/>
+<rect x="372" y="96" width="22" height="28" rx="3" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<circle cx="430" cy="110" r="16" fill="oklch(0.439 0 0)"/>
+<path class="spin" d="M423 110 H437 M430 103 V117" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+<rect x="476" y="74" width="150" height="72" rx="4" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<rect x="488" y="86" width="126" height="10" rx="5" fill="oklch(0.913 0 0)"/>
+<rect x="488" y="104" width="126" height="10" rx="5" fill="oklch(0.913 0 0)"/>
+<rect x="488" y="122" width="126" height="10" rx="5" fill="oklch(0.913 0 0)"/>
+<rect x="700" y="22" width="56" height="28" rx="3" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<text x="728" y="40" text-anchor="middle" font-size="11" fill="oklch(0.205 0 0)">42%</text>
+<rect x="770" y="230" width="64" height="100" rx="4" fill="#fff"/>
+<rect x="770" y="260" width="64" height="70" fill="oklch(0.925 0.039 243.489)"/>
+<rect x="770" y="230" width="64" height="100" rx="4" fill="none" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<text x="802" y="300" text-anchor="middle" font-size="13" fill="oklch(0.205 0 0)">70%</text>
+<circle cx="730" cy="300" r="14" fill="oklch(0.439 0 0)"/>
+<path class="spin" d="M723 300 H737 M730 293 V307" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+<rect x="610" y="206" width="20" height="30" rx="3" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<rect x="638" y="206" width="20" height="30" rx="3" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<rect x="666" y="206" width="20" height="30" rx="3" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<path d="M620 236 V298 M648 236 V298 M676 236 V298" stroke="oklch(0.683 0 0)" stroke-width="1.5" stroke-dasharray="3 3" opacity="{{s.dose}}"/>
+<rect x="572" y="286" width="22" height="28" rx="3" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<rect x="500" y="284" width="50" height="32" rx="4" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<text x="525" y="304" text-anchor="middle" font-size="12" font-weight="600" fill="oklch(0.341 0 0)">UV</text>
+<path d="M458 278 V298" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<circle cx="458" cy="262" r="16" fill="{{s.pbFill}}" stroke="{{s.pbStroke}}" stroke-width="1.5"/>
+<text x="458" y="267" text-anchor="middle" font-size="12" font-weight="600" fill="{{s.pbText}}">Pb</text>
+<polygon points="394,292 414,308 414,292 394,308" fill="{{s.xvFill}}" stroke="{{s.xvStroke}}" stroke-width="1.5"/>
+<rect x="308" y="250" width="64" height="90" rx="4" fill="#fff"/>
+<rect x="308" y="{{s.t4Y}}" width="64" height="{{s.t4H}}" fill="oklch(0.925 0.039 243.489)"/>
+<rect x="308" y="250" width="64" height="90" rx="4" fill="none" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<text x="340" y="300" text-anchor="middle" font-size="13" fill="oklch(0.205 0 0)">{{s.t4Pct}}</text>
+<circle cx="272" cy="320" r="14" fill="{{s.p401}}" stroke="oklch(0.439 0 0)" stroke-width="1.5"/>
+<path class="{{s.p401Anim}}" d="M265 320 H279 M272 313 V327" stroke="{{s.p401Imp}}" stroke-width="2" stroke-linecap="round"/>
+<g transform="translate(70 0)" role="img" aria-label="Filler F1">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f1.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f1.body}}" stroke="{{fl.f1.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f1.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f1.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f1.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f1.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f1.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f1.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F1</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f1.ink}}">{{fl.f1.rate}}</text>
+</g>
+<g transform="translate(154 0)" role="img" aria-label="Filler F2">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f2.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f2.body}}" stroke="{{fl.f2.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f2.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f2.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f2.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f2.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f2.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f2.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F2</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f2.ink}}">{{fl.f2.rate}}</text>
+</g>
+<g transform="translate(238 0)" role="img" aria-label="Filler F3">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f3.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f3.body}}" stroke="{{fl.f3.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f3.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f3.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f3.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f3.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f3.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f3.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F3</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f3.ink}}">{{fl.f3.rate}}</text>
+</g>
+<g transform="translate(322 0)" role="img" aria-label="Filler F4">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f4.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f4.body}}" stroke="{{fl.f4.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f4.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f4.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f4.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f4.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f4.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f4.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F4</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f4.ink}}">{{fl.f4.rate}}</text>
+</g>
+<g transform="translate(406 0)" role="img" aria-label="Filler F5">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f5.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f5.body}}" stroke="{{fl.f5.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f5.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f5.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f5.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f5.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f5.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f5.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F5</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f5.ink}}">{{fl.f5.rate}}</text>
+</g>
+<g transform="translate(490 0)" role="img" aria-label="Filler F6">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f6.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f6.body}}" stroke="{{fl.f6.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f6.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f6.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f6.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f6.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f6.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f6.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F6</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f6.ink}}">{{fl.f6.rate}}</text>
+</g>
+<g transform="translate(574 0)" role="img" aria-label="Filler F7">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f7.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f7.body}}" stroke="{{fl.f7.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f7.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f7.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f7.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f7.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f7.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f7.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F7</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f7.ink}}">{{fl.f7.rate}}</text>
+</g>
+<g transform="translate(658 0)" role="img" aria-label="Filler F8">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f8.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f8.body}}" stroke="{{fl.f8.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f8.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f8.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f8.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f8.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f8.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f8.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F8</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f8.ink}}">{{fl.f8.rate}}</text>
+</g>
+<g transform="translate(742 0)" role="img" aria-label="Filler F9">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f9.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f9.body}}" stroke="{{fl.f9.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f9.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f9.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f9.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f9.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f9.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f9.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F9</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f9.ink}}">{{fl.f9.rate}}</text>
+</g>
+<g transform="translate(826 0)" role="img" aria-label="Filler F10">
+<path d="M-10 516 H10 L6 527 H-6 Z" fill="#fff" stroke="{{fl.f10.edge}}" stroke-width="1.2"/>
+<rect x="-18" y="527" width="36" height="52" rx="3" fill="{{fl.f10.body}}" stroke="{{fl.f10.edge}}" stroke-width="1.5"/>
+<g class="{{fl.f10.anim}}">
+<circle class="roll" cx="-9" cy="539" r="6" fill="none" stroke="{{fl.f10.part}}" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M-3 535 H9 L3 542 Z M3 542 V559" fill="none" stroke="{{fl.f10.part}}" stroke-width="1.2"/>
+<rect class="jl" x="-5" y="559" width="6" height="5" fill="{{fl.f10.part}}"/>
+<rect class="jr" x="5" y="559" width="6" height="5" fill="{{fl.f10.part}}"/>
+<rect class="sach" x="0" y="567" width="7" height="8" rx="2" fill="none" stroke="{{fl.f10.part}}" stroke-width="1.2"/>
+</g>
+<text x="0" y="596" text-anchor="middle" font-size="11" font-weight="600" fill="oklch(0.341 0 0)">F10</text>
+<text x="0" y="611" text-anchor="middle" font-size="11" fill="{{fl.f10.ink}}">{{fl.f10.rate}}</text>
+</g>
+<polygon points="332,362 348,382 332,382 348,362" fill="{{s.xv402}}" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<rect x="380" y="392" width="64" height="60" rx="4" fill="#fff"/>
+<rect x="380" y="{{s.t5Y}}" width="64" height="{{s.t5H}}" fill="oklch(0.917 0.063 91.484)"/>
+<rect x="380" y="392" width="64" height="60" rx="4" fill="none" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+<circle cx="574" cy="440" r="12" fill="{{s.p501}}" stroke="oklch(0.439 0 0)" stroke-width="1.5"/>
+<path class="{{s.p501Anim}}" d="M568 440 H580 M574 434 V446" stroke="{{s.p501Imp}}" stroke-width="2" stroke-linecap="round"/>
+<rect x="604" y="412" width="26" height="50" rx="10" fill="#fff" stroke="oklch(0.683 0 0)" stroke-width="1.5"/>
+</svg>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Output this shift</span><span style="font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums">3,770 <span style="font-size: 13px; font-weight: 400; color: var(--ink-gray-5)">of 5,380 so far</span></span><span aria-hidden="true" style="display: block; height: 4px; border-radius: 99px; background: var(--surface-gray-3)"><span style="display: block; height: 4px; width: 70%; border-radius: 99px; background: var(--ink-gray-7)"></span></span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Uptime this shift</span><span style="font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums">75%</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Stops this shift</span><span style="font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums">3 · 42 min</span><a href="Downtime.dc.html" style="font-size: 13px; text-decoration: none">1 needs a reason</a></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Production run</span><a href="RunDetail.dc.html" style="font-size: 14px; font-weight: 500; text-decoration: none">RUN-0412</a><span style="font-size: 13px; color: var(--ink-gray-5)">Work order WO-0412 · stopped by trip</span></div>
+</div>
+</section>
+
+<aside style="flex: 1 1 300px; max-width: 100%; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<section aria-labelledby="alarms-h" style="display: flex; flex-direction: column">
+<div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 8px"><h2 id="alarms-h" style="margin: 0; font-size: 16px; font-weight: 600">Active alarms</h2><a href="Alarms.dc.html" style="font-size: 13px; text-decoration: none">View all</a></div>
+<sc-for list="{{alarms}}" as="a" hint-placeholder-count="2">
+<div style="display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--outline-gray-1)">
+<svg width="18" height="18" viewBox="0 0 18 18" style="flex: 0 0 18px; margin-top: 1px" role="img" aria-label="{{a.prioLabel}}"><polygon points="9,0 18,9 9,18 0,9" fill="{{a.color}}"/><text x="9" y="13" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">{{a.prio}}</text></svg>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="color: var(--ink-gray-8)">{{a.title}}</span><span style="font-size: 13px; color: var(--ink-gray-5)">{{a.meta}}</span></div>
+<button type="button" class="ffbtn" style="flex: 0 0 auto; height: 24px; padding: 0 6px; border: 0; border-radius: 6px; background: var(--surface-gray-2); color: var(--ink-gray-8); font: 400 12px Inter, sans-serif; cursor: pointer">Acknowledge</button>
+</div>
+</sc-for>
+</section>
+<section aria-labelledby="runway-h" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: baseline; justify-content: space-between"><h2 id="runway-h" style="margin: 0; font-size: 16px; font-weight: 600">Runway</h2><span style="font-size: 13px; color: var(--ink-gray-5)">time left at current use</span></div>
+<sc-for list="{{runway}}" as="r" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px"><span style="color: var(--ink-gray-7)">{{r.name}}</span><span style="font-variant-numeric: tabular-nums; color: {{r.ink}}; font-weight: 500">{{r.value}}</span></div>
+<span aria-hidden="true" style="display: block; height: 4px; border-radius: 99px; background: var(--surface-gray-3)"><span style="display: block; height: 4px; border-radius: 99px; width: {{r.pct}}; background: {{r.bar}}"></span></span>
+</div>
+</sc-for>
+</section>
+</aside>
+
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"plantState":{"editor":"enum","options":["Run","Alert","Trip"],"default":"Trip","section":"Scenario"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.props.plantState ?? 'Trip';
+    const amber = 'oklch(0.723 0.152 71.82)', red = 'oklch(0.556 0.198 26.552)', ink8 = 'oklch(0.205 0 0)', gray6 = 'oklch(0.439 0 0)';
+    const base = {
+      runB: 1, runC: 0, dose: 1, xvFill: '#fff', xvStroke: 'oklch(0.683 0 0)', xv402: '#fff',
+      t4Y: 268, t4H: 72, t4Pct: '80%', t5Y: 452, t5H: 0, t5Text: 'Empty', resinText: '12% used',
+      p401: gray6, p401Anim: 'spin', p401Imp: '#fff', p501: '#fff', p501Anim: '', p501Imp: 'oklch(0.683 0 0)',
+      pbFill: '#fff', pbStroke: 'oklch(0.683 0 0)', pbText: 'oklch(0.341 0 0)', leadInk: ink8,
+      lastTrip: '6 days ago', showTripLink: false
+    };
+    const S = {
+      Run: Object.assign({}, base, {
+        word: 'Running', badgeBg: 'oklch(0.57 0.119 158.092)', bg: 'var(--surface-green-2)', border: 'var(--outline-green-3)', ink: 'var(--ink-gray-8)',
+        msg: 'All 6 interlocked tags are in band and fresh. The PLC holds the run permissive; this screen only reads it.', lead: '1.4'
+      }),
+      Alert: Object.assign({}, base, {
+        word: 'Alert', badgeBg: amber, bg: 'var(--surface-amber-2)', border: 'var(--outline-amber-3)', ink: 'var(--ink-gray-8)',
+        msg: 'AT-401 Lead is at 5.6 µg/L, over its alert limit of 5. Production continues. The alarm definition asks for a grab sample within 15 min.',
+        lead: '5.6', leadInk: amber, pbFill: amber, pbStroke: amber, pbText: '#fff'
+      }),
+      Trip: Object.assign({}, base, {
+        word: 'Tripped', badgeBg: red, bg: 'var(--surface-red-2)', border: 'var(--outline-red-3)', ink: 'var(--ink-gray-8)',
+        msg: 'AT-401 Lead reached 9.4 µg/L at 08:14 and the PLC stopped the filler. Incoming water is diverted to T5. Restart needs the recovery steps and a reset at the panel.',
+        lead: '9.4', leadInk: red, pbFill: red, pbStroke: red, pbText: '#fff',
+        runB: 0, runC: 1, dose: 0.3, xvFill: red, xvStroke: red, xv402: red,
+        t4Y: 340, t4H: 0, t4Pct: '0%', t5Y: 424, t5H: 28, t5Text: '46%', resinText: '12% used · running',
+        p401: '#fff', p401Anim: '', p401Imp: 'oklch(0.683 0 0)', p501: gray6, p501Anim: 'spin', p501Imp: '#fff',
+        lastTrip: '08:14, 32 min ago', showTripLink: true
+      })
+    };
+    const s = S[st] || S.Run;
+    const pin = (name, value, unit, meta, interlock, state) => ({
+      name, value, unit, meta, interlock,
+      ink: state === 'red' ? red : state === 'amber' ? amber : 'oklch(0.168 0 0)',
+      border: state === 'red' ? 'var(--outline-red-3)' : state === 'amber' ? 'var(--outline-amber-3)' : 'var(--outline-gray-1)'
+    });
+    const leadState = st === 'Trip' ? 'red' : st === 'Alert' ? 'amber' : '';
+    const pins = [
+      pin('AT-401 Lead', s.lead, 'µg/L', 'Alert 5 · trip 8 · 3 min ago', true, leadState),
+      pin('AT-301 pH', '8.0', '', 'Band 7.8–8.3', true, ''),
+      pin('AT-302 Conductivity', '186', 'µS/cm', 'Band 150–220', true, ''),
+      pin('AT-303 Turbidity', '0.21', 'NTU', 'Trip at 4', true, ''),
+      pin('UV-301 Intensity', '96', '%', 'Trip below 70', true, ''),
+      pin('FT-201 Permeate', '6.0', 'm³/h', 'Recovery 55%', false, '')
+    ];
+    const carbon = { prio: '3', prioLabel: 'Priority 3', color: amber, title: 'DP-102 Carbon filter ΔP high', meta: '1.3 bar · since 07:52' };
+    const diesel = { prio: '3', prioLabel: 'Priority 3', color: amber, title: 'Diesel runway under 48 h', meta: '41 h · since 06:10' };
+    const alarms = st === 'Trip'
+      ? [ { prio: '1', prioLabel: 'Priority 1', color: red, title: 'AT-401 Lead trip', meta: '9.4 µg/L · interlock · 08:14' },
+          { prio: '2', prioLabel: 'Priority 2', color: amber, title: 'T4 failed verification', meta: '6.1 µg/L at SP-2 · 08:26' }, carbon, diesel ]
+      : st === 'Alert'
+      ? [ { prio: '2', prioLabel: 'Priority 2', color: amber, title: 'AT-401 Lead alert', meta: '5.6 µg/L · 08:42' }, carbon, diesel ]
+      : [ carbon, diesel ];
+    const r = (name, value, pct, warn) => ({ name, value, pct, ink: warn ? amber : 'oklch(0.205 0 0)', bar: warn ? amber : 'oklch(0.341 0 0)' });
+    const runway = [ r('Raw water · T1', '14 h', '58%'), r('Treated water · T2', '3.1 h', '70%'), r('Diesel', '41 h', '28%', true), r('Dosing chemicals', '22 h', '62%'), r('Sachet film', '1.5 days', '50%') ];
+    const rates = ['218/h', '214/h', '221/h', '209/h', '216/h', '212/h', '219/h', '215/h', '', '216/h'];
+    const fl = {};
+    rates.forEach((rate, i) => {
+      const down = i === 8;
+      const stopped = st === 'Trip' || down;
+      fl['f' + (i + 1)] = stopped
+        ? { body: '#fff', part: 'oklch(0.683 0 0)', edge: st === 'Trip' && !down ? red : 'oklch(0.683 0 0)', ink: st === 'Trip' && !down ? red : 'oklch(0.586 0 0)', rate: down ? 'Maintenance' : 'Stopped', anim: '' }
+        : { body: gray6, part: '#fff', edge: gray6, ink: 'oklch(0.439 0 0)', rate, anim: 'ffrun' };
+    });
+    return { s, fl, pins, alarms, runway, alarmCount: String(alarms.length), tripCount: st === 'Trip' ? '1' : '' };
+  }
+}
+</script>
+</body>
+</html>

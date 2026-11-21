@@ -56,6 +56,7 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 | --- | --- | --- | --- |
 | Shift Production Summary | Submittable | `shift_date`, `good_qty`, `reject_qty`, `uptime_min`, `downtime_min`, `oee`, `water_l`, `diesel_l`, `kwh`, `alarms`, `trips`, `notes` | → Plant Area, → Shift Type |
 | Daily Plant Summary | Regular | `date`, same totals as shift, per site | → Plant Area (site) |
+| Plant Status | Regular, one row per plant, overwritten | `state` (Running, Alert, Tripped, Offline), `note`, `good_qty_shift`, `open_alarms_p1/p2/p3`, `lowest_runway`, `last_seen`; feeds the Plants home cards | → Plant Area (site) |
 | Resource Reading | Log | `ts`, `level`, `volume` (hourly from rollups) | → Resource Meter |
 | Sync Outbox | Log | `seq`, `ref_doctype`, `ref_name` (Dynamic Link), `operation`, `status`, `attempts`, `last_error` | → DocType |
 | Machine Telemetry | Virtual | reads TimescaleDB: `ts`, `tag`, `value`, `quality` | → Tag |
