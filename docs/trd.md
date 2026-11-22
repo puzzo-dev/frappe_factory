@@ -225,13 +225,38 @@ A machine with no symbol yet is placed as **Generic machine**: a labelled box th
 
 **Process Template** (proposed, needs approval). One record per industry bundles a symbol pack, asset types, tag templates, alarm definitions, downtime reasons, KPIs and a starter layout. Adding a plant starts from a template, so a rice mill gets a working setup on day one. I-Varse ships Water and beverage, Rice milling, Edible oil and Blank; a company can save any plant as its own template.
 
+## ERPNext link and other ERPs
+
+All ERP calls go through one adapter, so the rest of the app never knows where ERPNext lives. `frappe_factory/erp/base.py` defines `ErpAdapter` with `get_work_order`, `update_job_card`, `make_manufacture_entry`, `make_downtime_entry`, `set_workstation_status`, `make_quality_inspection`, `make_material_request` and `get_bin_qty`. Three implementations:
+
+| Adapter | Used when | How |
+| --- | --- | --- |
+| `NullAdapter` | Standalone | Every call is a no-op; `is_linked()` is False, so screens hide what needs ERPNext |
+| `LocalAdapter` | ERPNext on this site | `frappe.get_doc` and `frappe.new_doc` inside the same transaction as the Factory document |
+| `RemoteAdapter` | ERPNext on another site | `frappe.frappeclient.FrappeClient` with the key and secret from ERPNext Settings; every call goes through the Sync Outbox, so a network drop queues instead of failing |
+
+**Fields.** Base DocTypes carry no Link to an ERPNext DocType. Turning on the same-site link calls `create_custom_fields` for `erpnext_work_order`, `erpnext_workstation`, `erpnext_job_card` and so on; turning it off hides them. The remote adapter writes `erp_doctype` and `erp_ref` (Data). A `Machine Stop` maps its Downtime Reason to ERPNext's fixed `stop_reason` list (Excessive machine set up time, Unplanned machine maintenance, On-machine press checks, Machine operator errors, Machine malfunction, Electricity down, Other) through a mapping column on Downtime Reason, and keeps our reason in `remarks`.
+
+**Other ERPs.** No adapter. Frappe Factory publishes a versioned set of whitelisted methods under `frappe_factory.api.v1` with an OpenAPI file in the repo, Integration users (role Factory Integration, read on plant data, write only on `plant.set_plan`) and standard Frappe `Webhook` records with HMAC-SHA256 secrets.
+
+## Kiosk
+
+The kiosk is a separate route, `/factory/kiosk`, a frappe-ui SPA in full-screen mode with no sidebar, like ERPNext's `/app/point-of-sale`.
+
+1. A Floor Supervisor signs in with their Frappe user on the tablet and calls `kiosk.open_session(profile, shift_type, run=None)`. It checks the profile lists them, the role, and that the request's device token matches `Kiosk Profile.device_token`, then submits a `Kiosk Session`.
+2. The tablet then works under a kiosk token bound to that session. `kiosk.switch_user(user, pin)` checks the user is on `Kiosk Profile User` and the PIN (Password field on `Factory User Settings`), and sets the acting user for the next calls. Every write sets `owner` to the acting user, not the supervisor.
+3. Each action method checks both the role and the profile's `allowed_actions`, and only for machines in `Kiosk Profile.machines`.
+4. `kiosk.close_session()` needs a Floor Supervisor PIN, totals the session and links it to the Shift Production Summary.
+
+Five wrong PINs lock that user on that kiosk for 5 minutes. Device tokens are random 32-byte values stored hashed, reset from Settings → Kiosks.
+
 ## Notifications
 
 All notifications use Frappe's own `Notification` DocType for in-app, email and system alerts. WhatsApp goes through `frappe_whatsapp` with the `frappe_whatsapp_openwa` dual gateway (OpenWA session or Meta Cloud API, with its outbound queue, retries and fallback). Frappe Factory adds no messaging code of its own.
 
 **How it is wired**
 
-- Frappe Factory ships `Notification` records as fixtures on `Alarm`, `Interlock Trip`, `Downtime Entry`, `Resource Meter` and `Shift Production Summary`. Admins edit recipients and text in Desk.
+- Frappe Factory ships `Notification` records as fixtures on `Alarm`, `Interlock Trip`, `Machine Stop`, `Resource Meter` and `Shift Production Summary`. Admins edit recipients and text in Desk.
 - WhatsApp is a soft dependency. When `frappe_whatsapp` is installed, Frappe Factory also ships `WhatsApp Notification` records for the same events. The dual gateway routes them. When it is not installed, those fixtures are skipped.
 - Recipients come from roles and from a per-area `Notification Group` field on Plant Area (for example the Koyo line supervisors).
 - Meta Cloud API needs approved templates for business-initiated messages. The fixtures use templates; the OpenWA path can send the same text.

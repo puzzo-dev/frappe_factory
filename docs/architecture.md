@@ -102,7 +102,7 @@ DocTypes are grouped into five Frappe modules. ERPNext DocTypes (Item, BOM, Work
 | --- | --- | --- |
 | Production Run | Submittable | One run of a Work Order on a line: start/stop, counts good/reject, linked batch |
 | Factory Event | Log (replaces Production Floor Event) | Machine-made state changes and trips, high volume, not submittable |
-| Downtime Entry | Submittable | A stop that a supervisor gives a reason to; links its Factory Events |
+| Machine Stop | Submittable | A stop that a supervisor gives a reason to; links its Factory Events |
 | Downtime Reason | Tree | Planned / unplanned → category → reason |
 | Shift Production Summary | Regular | Closed per shift: output, OEE parts, downtime, resources used |
 | Daily Plant Summary | Regular | Same per day per site |
@@ -133,7 +133,7 @@ DocTypes are grouped into five Frappe modules. ERPNext DocTypes (Item, BOM, Work
 
 **Changes to the current repo**
 
-- `Production Floor Event` (submittable) splits into `Factory Event` (log) and `Downtime Entry` (submittable).
+- `Production Floor Event` (submittable) splits into `Factory Event` (log) and `Machine Stop` (submittable).
 - `Machine Telemetry Log` (one MariaDB row per reading) becomes the virtual `Machine Telemetry`. A migration patch moves existing rows into the time-series database and drops the table.
 - `Shift Attendance Summary` stays but reads from HRMS when installed. It is optional, not core.
 - `thingsboard_device_id` fields on Widget and Telemetry are removed. The device link is enough.
@@ -154,7 +154,7 @@ Alarms are evaluated at the edge, close to the data, and every alarm has a defin
 **Interlocks.** The PLC owns the trip. The agent reads the trip bit and the interlock state as tags and reports an `AlarmEvent` with the interlock flag. Frappe then:
 
 1. Opens an **Interlock Trip** with the readings around the trip (from the time-series database, for example 10 min before and after).
-2. Stops the running Production Run and opens a Downtime Entry with reason "Safety trip".
+2. Stops the running Production Run and opens a Machine Stop with reason "Safety trip".
 3. Notifies Floor Supervisor and Factory Manager (Frappe in-app and email notifications, and WhatsApp through frappe_whatsapp_openwa).
 4. Runs the recovery checklist from the Alarm Definition, for example: divert the slug to the re-purify tank, flush, re-test, record the lab value.
 5. Restart needs a supervisor sign-off in the app **and** the physical reset at the panel. The app never sends a reset command to a safety circuit.
@@ -175,7 +175,7 @@ Each factory runs a full edge Frappe site on its OpsEdge box. That site is the p
 | --- | --- | --- |
 | Masters (Item, BOM, Workstation, Employee, Alarm Definition, Downtime Reason, HMI Symbol) | Cloud → edge | Pulled on a schedule, cloud wins |
 | Work Orders | Cloud → edge | Pulled; status updates go back |
-| Production Runs, Downtime Entries, Interlock Trips, Quality Inspections, Refill Entries | Edge → cloud | Pushed when submitted, edge is the owner |
+| Production Runs, Machine Stops, Interlock Trips, Quality Inspections, Refill Entries | Edge → cloud | Pushed when submitted, edge is the owner |
 | Factory Events, Alarms | Edge → cloud | Pushed in batches; cloud keeps a shorter retention |
 | Shift and Daily Summaries | Edge → cloud | Pushed when closed |
 | Plant status (state, one-line note, output, open alarms, last seen) | Edge → cloud | Sent on change, at least every 15 s; fills the Plants cards. No message for 60 s marks the plant Offline with its last known values |
@@ -223,7 +223,7 @@ The five existing roles stay, plus one for maintenance and one for integrations.
 | --- | --- | --- |
 | Factory Manager | Everything in their sites; configure alarms, layouts, retention; approve trip restarts | System settings, connector secrets (System Manager only) |
 | Floor Supervisor | Start/stop runs, give downtime reasons, acknowledge and shelve alarms, sign off trip recovery | Change Alarm Definitions or layouts |
-| Machine Operator | See their line, record counts and rejects, acknowledge alarms on their line | Shelve alarms, submit Downtime Entries |
+| Machine Operator | See their line, record counts and rejects, acknowledge alarms on their line | Shelve alarms, submit Machine Stops |
 | Quality Inspector | Quality Inspections, lab values in trip recovery, hold a batch | Production or alarm settings |
 | Storekeeper | Refill Entries, resource readings, stock links | Production and alarms |
 | Maintenance Technician (new) | Asset history, work on downtime, acknowledge equipment alarms | Production counts |
@@ -288,14 +288,72 @@ The app is built in five phases. A phase closes only when its gate passes on rea
 1. **Foundation.** Modules restructured. Connector interface with both adapters (ThingsBoard adapter = current code moved). Time-series repository and virtual `Machine Telemetry`. Log retention through Log Settings. `compat.py`. CI on v15 and v16 with `IntegrationTestCase` tests. Semgrep clean on changed files.
 2. **Edge data path.** OpsEdge Agent reads the pilot PLC, buffers through a 24-hour link cut and backfills in order. Mosquitto, bridge and TimescaleDB run from one docker compose file on the OpsEdge box. Device and tag setup from Desk.
 3. **Alarms and trips.** Alarm Definitions, lifecycle, flood control. Interlock Trip with recovery checklist and sign-off. Notifications. Alarm console and trip screens. Trip drill: a simulated trip at the panel shows in the app within 5 seconds, and restart is impossible without sign-off.
-4. **Operations.** Production Run, Downtime Entry and reasons, resource meters and refills, shift and daily summaries, outbox sync to OpsCloud. Run and downtime screens on the floor kiosk.
+4. **Operations.** Production Run, Machine Stop and reasons, resource meters and refills, shift and daily summaries, outbox sync to OpsCloud. Run and downtime screens on the floor kiosk.
 5. **Full UI and fleet.** All 15 screens with their states, floor layout designer in the SPA, fleet view on OpsCloud. `deep-app-audit` with no open high findings. Docs written with `technical-writing`.
 
 Durations are left open until the pilot site's PLC and protocol are confirmed.
 
+## Standalone or with ERPNext
+
+Frappe Factory installs on plain Frappe and does on its own everything ThingsBoard does; linked to ERPNext it runs with how the business runs: work orders, stock, quality and people. `required_apps` is `frappe` only, and the app checks `"erpnext" in frappe.get_installed_apps()` or the ERPNext Settings link before showing anything that needs ERPNext.
+
+| Mode | What you get | How it connects |
+| --- | --- | --- |
+| Standalone | The full IoT and SCADA platform: plants, devices and tags, live plant screens, alarms, interlock trips, machine stops with reasons, trends, resources, shift handover, kiosks, notifications, API | — |
+| ERPNext on the same site | Adds production runs from Work Orders, Job Card counts, Manufacture stock entries, Downtime Entries, Workstation status, Quality Inspections, Material Requests and the Manufacturing dashboard | Python calls inside one site. Turning the link on adds Custom Fields such as `erpnext_work_order` |
+| ERPNext on another site | The same as same-site | ERPNext REST API with the API key and secret of a user holding Manufacturing User, Stock User and Quality Manager, as Frappe CRM does. Names kept in Data fields; failed calls wait in the outbox and show under Logs |
+| Another publisher's ERP | Standalone, plus plan targets coming in for OEE | Their system calls the Frappe REST API as an Integration user and receives events from Frappe Webhook records, signed with HMAC-SHA256 |
+
+**Same job as ThingsBoard.** What a ThingsBoard user expects, and where it lives in standalone Frappe Factory:
+
+| ThingsBoard | Frappe Factory standalone |
+| --- | --- |
+| Devices, device profiles, provisioning | IoT Device Registry, Tag, asset types and tag templates from Process Templates |
+| Telemetry and attributes | TimescaleDB hypertable, 1-minute aggregates, retention per plant |
+| Assets and relations | Plant Area tree, Plant Asset, Workstation link when ERPNext is on |
+| Alarms | Alarm Definition and Alarm, ISA-18.2 life cycle, shelving, escalation |
+| SCADA and dashboards | Layouts with the symbol library, plant screens, Trends, the company Dashboard |
+| Rule engine | Alarm Definitions, Frappe Notifications, Server Scripts and webhooks. A visual rule builder is not in release 1 |
+| Tenants and customers | Companies and plants with per-plant permissions. Customer-facing portals are not in release 1 |
+| Transports (MQTT, HTTP) | OpsEdge agent reads Modbus and OPC UA directly and publishes MQTT; the REST API takes HTTP |
+| RPC to devices | Command groundwork, off in release 1 |
+| Edge | OpsEdge box with offline buffering and sync |
+| Firmware updates (OTA), CoAP, LwM2M | Not planned |
+
+## ERPNext integration map
+
+Every link below is a switch in Settings → ERPNext, so a company turns on only what it uses. ERPNext names Downtime Entry and Plant Floor already exist as DocTypes, and DocType names are unique per site, so our stop record is called **Machine Stop**; Plant Floor Layout and Plant Floor Widget keep their names.
+
+| Frappe Factory | ERPNext DocType | Direction | What happens |
+| --- | --- | --- | --- |
+| Plant Area (site) | Company, Warehouse, Plant Floor | Link | Each plant picks its Company, finished-goods Warehouse and ERPNext Plant Floor |
+| Plant Asset | Workstation, Workstation Type | Link, status out | Machine state sets Workstation status (Production, Idle, Problem, Maintenance, Off), so ERPNext's Plant Floor view matches the machines |
+| Production Run | Work Order, Job Card | In at start, counts out | A run starts from a Work Order; counts and time logs post to its Job Card |
+| Production Run, at the end | Stock Entry (Manufacture) | Out | Good quantity to finished goods, rejects as scrap; draft or submit is a setting |
+| Machine Stop | Downtime Entry | Out | Each closed stop: workstation, operator, from and to time, reason mapped to ERPNext's stop reasons, remarks |
+| Trip samples, shift checks | Quality Inspection | Out | Against the item and batch; a rejected sample holds the run's stock entry |
+| Resources | Bin, Material Request | Stock in, requests out | Runway reads Bin actual quantity; Request creates a Material Request |
+| Refill Entry | Stock Entry (Material Receipt) | Out | Diesel and chemical deliveries |
+| Production plan attainment | Production Plan | In | Plan figures for the Dashboard |
+| Shift handover crew | Employee, Shift Type, Employee Checkin | In | Only when HRMS is installed |
+| Kiosk users | Employee | In | Operator on a Downtime Entry or Job Card is the Employee linked to the kiosk user |
+
+## Kiosk access
+
+A kiosk is a full-screen station app, like ERPNext POS: a Floor Supervisor opens a session on a registered tablet, only the people assigned to that Kiosk Profile can sign in, and it shows only that station's machines. Access needs both a role and an assignment.
+
+| Who | Role | On the kiosk | Why |
+| --- | --- | --- | --- |
+| Machine Operator | Machine Operator | Sign in with PIN, give stop reasons, log rejects | Does the work at the line and needs nothing else on a shared screen |
+| Quality Inspector | Quality Inspector | Record samples | Samples become quality records, so only trained people enter them |
+| Floor Supervisor | Floor Supervisor | Open and close the session, start and end runs, leave full screen with a PIN | Owns the shift; closing writes the session to the shift handover |
+| Factory Manager | Factory Manager | Not on the kiosk. Creates Kiosk Profiles, assigns users, registers tablets in Settings → Kiosks | Setup stays off the shared tablet |
+
+Why both a role and an assignment: the role gives permission on the DocTypes, and the assignment on the Kiosk Profile limits it to one station and its machines, as POS Profile users do in ERPNext. A role alone would let any operator open any kiosk in any plant. The PIN switches users inside an open session, so every action on a shared tablet is signed by a person without typing passwords. Device registration stops the kiosk opening on a personal phone; full screen keeps Desk, setup and other plants out of reach; the screen returns to the name list after 10 minutes without a tap. PINs are stored hashed in a Password field.
+
 ## Screens and decisions
 
-The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Tabs, Dialog, SettingsDialog) as 21 boards in the [screen designs](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz), each a 1440 × 900 laptop screen. See [screens.md](screens.md) for a picture of each. Each screen still gets its empty, loading, error and offline states when built. Every desktop screen uses the same Sidebar component: a company version on Plants and New plant, a plant version inside a plant. The kiosk has no sidebar by design.
+The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Tabs, Dialog, SettingsDialog) as 27 boards in the [screen designs](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz), each a 1440 × 900 laptop screen. See [screens.md](screens.md) for a picture of each. Each screen still gets its empty, loading, error and offline states when built. Every desktop screen uses the same Sidebar component: a company version on Plants and New plant, a plant version inside a plant. The kiosk has no sidebar by design.
 
 | # | Screen | What it holds | Main user |
 | --- | --- | --- | --- |
@@ -318,6 +376,9 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 16 | New plant · choose industry | Four-step wizard; step 2 picks a Process Template (water, rice milling, edible oil, blank) | Manager, System Manager |
 | 17–18 | Plant · rice mill, oil mill | The same plant screen drawn from the rice milling and edible oil symbol packs | Supervisor |
 | 19–20 | Kiosk · sign in, line view | Tablet at the line: tap your name and PIN; filler tiles, trip banner, big reason buttons, rejects, samples | Operator, Quality Inspector |
+| 21–22 | Dashboard, app menu | Company home: factory metrics (works standalone) and manufacturing metrics from ERPNext. App menu: Apps on this site, Open kiosk, Switch to Desk, help, theme, settings, log out | Manager, owner |
+| 23–25 | Settings · ERPNext, API and webhooks, Kiosks | Link ERPNext on this site or another; integration users and webhooks for other ERPs; kiosk profiles with assigned users, allowed actions and registered tablet | Factory Manager, System Manager |
+| 26 | Kiosk · open session | Like ERPNext POS opening: pick an assigned kiosk, shift and run, then full screen | Floor Supervisor |
 
 **Decisions (22 Nov 2026)**
 

@@ -6,7 +6,7 @@ Nov 22, 2026 · I-Varse Technologies NG
 
 Tag is the hub: devices produce tags, and alarms, meters and commands are defined on them. Production and downtime hang off ERPNext Work Orders.
 
-![ERD: 20 Frappe Factory DocTypes, 4 ERPNext DocTypes](images/erd.png)
+![ERD: 24 Frappe Factory DocTypes, 8 ERPNext DocTypes](images/erd.png)
 
 The diagram shows the main chain; HMI Symbol and its two child tables are in the reference below (Plant Floor Widget and Plant Asset link to it).
 
@@ -44,9 +44,9 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 | --- | --- | --- | --- |
 | Production Run | Submittable | `start`, `end`, `good_qty`, `reject_qty`, `rejects` (table: qty, reason), `status` | → Work Order, → Plant Area (line), → Batch (optional) |
 | Factory Event | Log | `ts`, `event_type` (State, Status), `from_state`, `to_state`, `reason_code`, `msg_id` (unique) | → Plant Asset, → IoT Device Registry |
-| Downtime Entry | Submittable | `start`, `end`, `duration_min`, `planned`, `comment`, `events` (table) | → Production Run, → Downtime Reason, → Plant Asset |
+| Machine Stop (was Downtime Entry; renamed because ERPNext already has a Downtime Entry DocType) | Submittable | `start`, `end`, `duration_min`, `planned`, `comment`, `events` (table) | → Production Run, → Downtime Reason, → Plant Asset |
 | Alarm | Regular | `status` (Raised, Acknowledged, Cleared, Shelved, Closed), `raised_at`, `acked_at`, `acked_by`, `cleared_at`, `shelved_until`, `shelve_reason`, `peak_value`, `repeat_count`, `escalation_level` | → Alarm Definition, → Plant Asset |
-| Interlock Trip | Submittable | `tripped_at`, `readings_snapshot` (JSON), `steps` (table: step, done_by, done_at, value), `lab_value`, `signed_off_by`, `signed_off_at`, `restarted_at` | → Alarm, → Production Run, → Downtime Entry, → Quality Inspection |
+| Interlock Trip | Submittable | `tripped_at`, `readings_snapshot` (JSON), `steps` (table: step, done_by, done_at, value), `lab_value`, `signed_off_by`, `signed_off_at`, `restarted_at` | → Alarm, → Production Run, → Machine Stop, → Quality Inspection |
 | Device Command | Submittable | `value`, `action`, `reason`, `status`, `requested_by`, `approved_by`, `sent_at`, `result`, `result_at` | → Tag, → IoT Device Registry |
 | Refill Entry | Submittable | `qty`, `supplier`, `level_before`, `level_after`, `delivery_note` | → Resource Meter, → Stock Entry (optional) |
 
@@ -62,6 +62,17 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 | Machine Telemetry | Virtual | reads TimescaleDB: `ts`, `tag`, `value`, `quality` | → Tag |
 | Factory Configuration | Single | site, connector, TimescaleDB connection, retention days, `enable_commands`, sync URL and keys | — |
 | OpsEdge Audit Log, OpsEdge Sync Log | Log | as today | — |
+
+**Kiosk and ERP link**
+
+| DocType | Kind | Key fields | Links to |
+| --- | --- | --- | --- |
+| Kiosk Profile | Regular | `kiosk_name`, `machines` (Table MultiSelect of Plant Asset), `allowed_actions`, `device_token`, `idle_minutes`, `disabled` | → Plant Area (site) |
+| Kiosk Profile User | Child of Kiosk Profile | `user`, `is_default` | → User |
+| Kiosk Session | Submittable, like POS Opening and Closing Entry | `opened_by`, `opened_at`, `closed_by`, `closed_at`, `status` | → Kiosk Profile, → Shift Type, → Production Run (only with ERPNext) |
+| ERPNext Settings | Single | `enabled`, `mode` (Same site, Another site), `site_url`, `api_key`, `api_secret` (Password), `company`, `fg_warehouse`, one Check per link (work orders, stock, downtime, workstation status, quality, material requests, HRMS) | — |
+
+Links to ERPNext DocTypes are never in these base DocTypes, because a Link to Work Order fails on a site without ERPNext. On a same-site link, turning the integration on adds Custom Fields such as `erpnext_work_order`; on another site, the ERPNext name is kept in a Data field `erp_ref` with `erp_doctype`.
 
 **Still proposed, pending approval** (see [scada-hmi.md](scada-hmi.md))
 

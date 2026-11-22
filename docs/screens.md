@@ -2,90 +2,114 @@
 
 Frappe Factory screen designs, built on frappe-ui. Live, clickable version: [Frappe Factory — screens](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz). Board sources are in [design/boards](design/boards); the scripts that generate them are in [design/build](design/build).
 
-The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. The rice mill and oil mill show the same plant screen drawn from other industry symbol packs. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
+Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked; everything else works standalone. The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. The rice mill and oil mill show the same plant screen drawn from other industry symbol packs. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
 
-Every desktop screen uses one Sidebar component: the company version on Plants and New plant, the plant version inside a plant. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. The floor kiosk is a 1180 × 820 tablet with no sidebar, by design.
+Every desktop screen uses one Sidebar component. At the top is the app menu (brand and user), opening Apps on this site, Open kiosk, Switch to Desk, help, theme, settings and log out, as in Frappe CRM and Helpdesk. Below it come the company items, or, inside a plant, the plant switcher and plant items. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. The floor kiosk is a 1180 × 820 tablet with no sidebar, by design.
 
-## 0 · Plants (home)
+## 0 · Dashboard · factory and manufacturing
 
-![Plants (home)](images/screens/00-Plants.png)
+![Dashboard · factory and manufacturing](images/screens/00-Dashboard.png)
 
-## 1 · New plant · choose industry
+## 1 · App menu open (apps, Desk, kiosk)
 
-![New plant · choose industry](images/screens/01-AddPlant.png)
+![App menu open (apps, Desk, kiosk)](images/screens/01-DashboardMenu.png)
 
-## 2 · Plant · Koyo 1 (live)
+## 2 · Plants
 
-![Plant · Koyo 1 (live)](images/screens/02-Main.png)
+![Plants](images/screens/02-Plants.png)
 
-## 3 · Alarms
+## 3 · New plant · choose industry
 
-![Alarms](images/screens/03-Alarms.png)
+![New plant · choose industry](images/screens/03-AddPlant.png)
 
-## 4 · Interlock trip recovery
+## 4 · Settings · ERPNext
 
-![Interlock trip recovery](images/screens/04-Trip.png)
+![Settings · ERPNext](images/screens/04-CompanyERPNext.png)
 
-## 5 · Production runs
+## 5 · Settings · API and webhooks
 
-![Production runs](images/screens/05-Runs.png)
+![Settings · API and webhooks](images/screens/05-CompanyAPI.png)
 
-## 6 · Run detail
+## 6 · Settings · Kiosks and assigned users
 
-![Run detail](images/screens/06-RunDetail.png)
+![Settings · Kiosks and assigned users](images/screens/06-CompanyKiosks.png)
 
-## 7 · Downtime
+## 7 · Plant · Koyo 1 (live)
 
-![Downtime](images/screens/07-Downtime.png)
+![Plant · Koyo 1 (live)](images/screens/07-Main.png)
 
-## 8 · Resources
+## 8 · Alarms
 
-![Resources](images/screens/08-Resources.png)
+![Alarms](images/screens/08-Alarms.png)
 
-## 9 · Trends
+## 9 · Interlock trip recovery
 
-![Trends](images/screens/09-Trends.png)
+![Interlock trip recovery](images/screens/09-Trip.png)
 
-## 10 · Shift handover
+## 10 · Production runs · needs ERPNext
 
-![Shift handover](images/screens/10-Handover.png)
+![Production runs · needs ERPNext](images/screens/10-Runs.png)
 
-## 11 · Kiosk · sign in with PIN
+## 11 · Run detail · needs ERPNext
 
-![Kiosk · sign in with PIN](images/screens/11-KioskLogin.png)
+![Run detail · needs ERPNext](images/screens/11-RunDetail.png)
 
-## 12 · Kiosk · line view
+## 12 · Downtime
 
-![Kiosk · line view](images/screens/12-KioskLine.png)
+![Downtime](images/screens/12-Downtime.png)
 
-## 13 · Plant · Rice mill
+## 13 · Resources
 
-![Plant · Rice mill](images/screens/13-RiceMill.png)
+![Resources](images/screens/13-Resources.png)
 
-## 14 · Plant · Oil mill
+## 14 · Trends
 
-![Plant · Oil mill](images/screens/14-OilMill.png)
+![Trends](images/screens/14-Trends.png)
 
-## 15 · Devices and tags
+## 15 · Shift handover
 
-![Devices and tags](images/screens/15-Devices.png)
+![Shift handover](images/screens/15-Handover.png)
 
-## 16 · Layout editor
+## 16 · Kiosk · open session
 
-![Layout editor](images/screens/16-LayoutEditor.png)
+![Kiosk · open session](images/screens/16-KioskOpen.png)
 
-## 17 · Symbol library · industry packs
+## 17 · Kiosk · sign in (assigned users only)
 
-![Symbol library · industry packs](images/screens/17-Symbols.png)
+![Kiosk · sign in (assigned users only)](images/screens/17-KioskLogin.png)
 
-## 18 · Alarm definitions
+## 18 · Kiosk · line view
 
-![Alarm definitions](images/screens/18-AlarmDefs.png)
+![Kiosk · line view](images/screens/18-KioskLine.png)
 
-## 19 · Plant settings · connector
+## 19 · Plant · Rice mill
 
-![Plant settings · connector](images/screens/19-Settings.png)
+![Plant · Rice mill](images/screens/19-RiceMill.png)
 
-## 20 · Plant settings · commands
+## 20 · Plant · Oil mill
 
-![Plant settings · commands](images/screens/20-SettingsCommands.png)
+![Plant · Oil mill](images/screens/20-OilMill.png)
+
+## 21 · Devices and tags
+
+![Devices and tags](images/screens/21-Devices.png)
+
+## 22 · Layout editor
+
+![Layout editor](images/screens/22-LayoutEditor.png)
+
+## 23 · Symbol library · industry packs
+
+![Symbol library · industry packs](images/screens/23-Symbols.png)
+
+## 24 · Alarm definitions
+
+![Alarm definitions](images/screens/24-AlarmDefs.png)
+
+## 25 · Plant settings · connector
+
+![Plant settings · connector](images/screens/25-Settings.png)
+
+## 26 · Plant settings · commands
+
+![Plant settings · commands](images/screens/26-SettingsCommands.png)

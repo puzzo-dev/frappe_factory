@@ -62,3 +62,13 @@ These are flags, not legal advice.
 - `frappe_whatsapp_openwa` declares AGPL-3.0 in its `hooks.py`; as I-Varse's own app it can be relicensed if all its code is I-Varse's.
 - TimescaleDB features used (compression, continuous aggregates, retention) are under the Timescale License: fine inside a product, not as a hosted database service. Use the TSL build.
 - The repo still says MIT in `license.txt`, `hooks.py` and `pyproject.toml`; these change when the build starts.
+
+## 22 Nov 2026 · standalone, ERPNext and kiosk
+
+| Decision | Choice | Why |
+| --- | --- | --- |
+| Standalone | Frappe Factory runs on plain Frappe and does everything ThingsBoard does. Production runs, OEE against work orders, stock and quality need ERPNext | Manufacturing needs items, BOMs, stock and costing; rebuilding them would duplicate ERPNext and drift |
+| ERPNext link | Same site or another site (URL, API key and secret), like Frappe CRM and Helpdesk; each link is its own switch | Companies that already run ERPNext elsewhere can still connect |
+| Other ERPs | Frappe REST API with Integration users, plus Frappe Webhooks; no built-in adapters | Keeps the product neutral; their middleware does the mapping |
+| Name clash | Our Downtime Entry is renamed Machine Stop | ERPNext already has Downtime Entry and Plant Floor; DocType names are unique per site |
+| Kiosk | Full-screen station app like ERPNext POS: Kiosk Profile with assigned users, Kiosk Session opened by a Floor Supervisor, PIN switch-user, registered tablet | Role alone would let any operator use any kiosk; assignment ties people to a station |

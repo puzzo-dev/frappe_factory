@@ -86,7 +86,7 @@ Stories are grouped by epic. IDs are used in the TRD, the tests and the screen d
 | --- | --- | --- |
 | US-301 | As an Operator, I want to start a run from a Work Order so that output is counted against it | Pick from open Work Orders for my line. Start time from the machine state when available |
 | US-302 | As an Operator, I want counts to come from the machine and record rejects by hand so that the numbers are right | Good count from the counter tag. Rejects entered with a reason. Totals update the Work Order on run close |
-| US-303 | As an Operator, I want to give a reason when the line stops so that stops are explained | A stop longer than 2 min opens a Downtime Entry. Reason picked from a tree in 2 taps |
+| US-303 | As an Operator, I want to give a reason when the line stops so that stops are explained | A stop longer than 2 min opens a Machine Stop. Reason picked from a tree in 2 taps |
 | US-304 | As a Supervisor, I want to review and correct downtime so that the records are right | Edit reason, split or merge stops before shift close. Submitted entries are read-only |
 
 **E4 · Resources**
@@ -113,6 +113,18 @@ Stories are grouped by epic. IDs are used in the TRD, the tests and the screen d
 | US-602 | As a System Manager, I want the plant to keep working offline so that internet cuts do not matter | All floor functions work without internet. Sync resumes and catches up in order |
 | US-603 | As a System Manager, I want to see sync and device health so that I fix problems early | Devices online/offline with last seen. Sync backlog and last success time |
 
+**E7 · Kiosk, ERPNext link and other systems**
+
+| ID | Story | Acceptance criteria |
+| --- | --- | --- |
+| US-701 | As a Factory Manager, I want to assign people to a kiosk so that only they can use that station | A Kiosk Profile lists its plant, machines, allowed actions and assigned users. Sign-in lists only assigned users. A user needs the action's role as well as the assignment |
+| US-702 | As a Floor Supervisor, I want to open the kiosk for my shift so that the line tablet is ready and locked | Opening works only on the registered tablet, for kiosks the supervisor is assigned to, and goes full screen. Leaving needs a Floor Supervisor PIN. Closing writes the session to the shift handover |
+| US-703 | As an operator, I want to sign in with my PIN so that what I enter carries my name | 4-digit PIN; wrong PIN 5 times locks that user for 5 min; idle 10 min returns to the name screen |
+| US-704 | As a company without ERPNext, I want Frappe Factory to work on its own so that I get a full IoT and SCADA platform | Installs on plain Frappe. Plants, devices, live screens, alarms, trips, stops, trends, resources, handover, kiosk and API all work. Anything that needs ERPNext is hidden, not broken |
+| US-705 | As a company on ERPNext, I want to link it on the same site or another site so that production follows our work orders | Settings → ERPNext: same site, or site URL with API key and secret plus Verify connection. Each link (work orders, stock, downtime, workstation status, quality, material requests, HRMS) is its own switch. Failures are listed under Logs |
+| US-706 | As a company on another ERP, I want to connect through the API so that our ERP keeps its role | Integration users with their own keys; documented REST methods; Frappe Webhooks for shift summaries, stops, trips and alarms; plan targets can be posted in |
+| US-707 | As a Factory Manager, I want one dashboard for factory and manufacturing so that I see the whole operation | Factory metrics always; Manufacturing metrics (work orders, completions, shortages, quality, plan) appear when ERPNext is linked |
+
 ## Workflow: lead trip and recovery
 
 Covers US-203, US-204 and US-205.
@@ -127,7 +139,7 @@ Covers US-301 to US-304.
 
 ![Production run and downtime](images/workflow-run-downtime.png)
 
-The machine counts, and the operator explains. A stop over 2 minutes opens a draft Downtime Entry that needs a reason. The supervisor reviews and submits all entries before the shift closes.
+The machine counts, and the operator explains. A stop over 2 minutes opens a draft Machine Stop that needs a reason. The supervisor reviews and submits all entries before the shift closes.
 
 ## Workflow: alarm lifecycle
 
