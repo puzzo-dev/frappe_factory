@@ -127,8 +127,8 @@ All methods are `@frappe.whitelist(methods=[...])` with type hints on every para
 
 | Method (module `frappe_factory.api.*`) | HTTP | Caller | Role | Purpose |
 | --- | --- | --- | --- | --- |
-| `ingest.events(batch: list[dict])` | POST | Bridge | Factory Integration | State, alarm and status messages. Idempotent on `msg_id` |
-| `ingest.agent_config(site: str)` | GET | Agent | Factory Integration | Devices, tags, limits, alarm rules for the agent |
+| `ingest.events(batch: list[dict])` | POST | Bridge | Service key (Factory Manager) | State, alarm and status messages. Idempotent on `msg_id` |
+| `ingest.agent_config(site: str)` | GET | Agent | Service key (Factory Manager) | Devices, tags, limits, alarm rules for the agent |
 | `plant.get_snapshot(area: str)` | GET | SPA | any Factory role | Current value, quality and age of every tag in an area, plus asset states |
 | `plant.get_series(tags: list[str], start: str, end: str, max_points: int = 2000)` | GET | SPA | any Factory role | Trend data from TimescaleDB |
 | `alarms.acknowledge(alarm: str, comment: str \| None)` | POST | SPA | Operator and up | Acknowledge |
@@ -138,12 +138,12 @@ All methods are `@frappe.whitelist(methods=[...])` with type hints on every para
 | `runs.start(work_order: str, line: str)` / `runs.close(run: str, rejects: list[dict])` | POST | SPA | Operator and up | Production runs |
 | `downtime.set_reason(entry: str, reason: str)` | POST | SPA | Operator and up | Stop reason |
 | `shift.close(summary: str, notes: str)` | POST | SPA | Supervisor | Submit shift summary |
-| `sync.push(batch: list[dict])` / `sync.pull(since: str)` | POST / GET | Sync service | Factory Integration | Edge ↔ cloud |
+| `sync.push(batch: list[dict])` / `sync.pull(since: str)` | POST / GET | Sync service | Service key (Factory Manager) | Edge ↔ cloud |
 | `hmi.get_symbols(since: str \| None)` | GET | SPA | any Factory role | Symbol library, cached per session |
 | `health.status()` | GET | Monitoring | System Manager | Agent, broker, DB, sync backlog |
 | `connectors.thingsboard.telemetry/alarm/device_connected` | POST | ThingsBoard | Guest + token + IP allowlist + rate limit | ThingsBoard adapter only |
 | `plants.list()` | GET | SPA | any Factory role | Plants home cards: every plant the user may see, from Plant Status, problems first |
-| `sync.status(status: dict)` | POST | Sync service | Factory Integration | Upserts the plant's one Plant Status row on OpsCloud and publishes it to the `factory:plants` room |
+| `sync.status(status: dict)` | POST | Sync service | Service key (Factory Manager) | Upserts the plant's one Plant Status row on OpsCloud and publishes it to the `factory:plants` room |
 | `plant.watch(site: str)` | POST | SPA (OpsCloud) | any Factory role | Asks that plant's edge to relay live tag values while its screen is open. Renewed every 30 s; the relay stops 60 s after the last renewal |
 
 **Realtime** (`frappe.publish_realtime`, room per site)
@@ -263,7 +263,7 @@ All ERP calls go through one adapter, so the rest of the app never knows where E
 
 **Fields.** Base DocTypes carry no Link to an ERPNext DocType. Turning on the same-site link calls `create_custom_fields` for `erpnext_work_order`, `erpnext_workstation`, `erpnext_job_card` and so on; turning it off hides them. The remote adapter writes `erp_doctype` and `erp_ref` (Data). A `Machine Stop` maps its Downtime Reason to ERPNext's fixed `stop_reason` list (Excessive machine set up time, Unplanned machine maintenance, On-machine press checks, Machine operator errors, Machine malfunction, Electricity down, Other) through a mapping column on Downtime Reason, and keeps our reason in `remarks`.
 
-**Other ERPs.** No adapter. Frappe Factory publishes a versioned set of whitelisted methods under `frappe_factory.api.v1` with an OpenAPI file in the repo, Integration users (role Factory Integration, read on plant data, write only on `plant.set_plan`) and standard Frappe `Webhook` records with HMAC-SHA256 secrets.
+**Other ERPs.** No adapter. Frappe Factory publishes a versioned set of whitelisted methods under `frappe_factory.api.v1` with an OpenAPI file in the repo, API keys created and revoked by the Factory Manager (one Frappe user per external system, holding Factory Manager and limited by User Permissions to the plants it serves) and standard Frappe `Webhook` records with HMAC-SHA256 secrets.
 
 ## Kiosk
 
@@ -326,7 +326,7 @@ Edge and cloud sync through an ordered outbox, with one owner per DocType. The d
 4. OpsCloud answers with the last applied `seq`. The edge marks those rows acked.
 5. On error, back-off is 5 s, 30 s, 2 min, then every 10 min. A failed row blocks later rows of the same document only, not the whole queue.
 
-**Pull (cloud → edge).** Every 5 minutes, the service calls `sync.pull(since)` with the last `modified` it saw per master DocType. Cloud-owned masters are inserted or updated on the edge with `ignore_permissions` under the Factory Integration user only.
+**Pull (cloud → edge).** Every 5 minutes, the service calls `sync.pull(since)` with the last `modified` it saw per master DocType. Cloud-owned masters are inserted or updated on the edge with `ignore_permissions` under the plant's service user (key created by the Factory Manager) only.
 
 **Links.** A document is sent only after the masters it links to exist in the cloud. Edge-created names carry the site code, so they never collide.
 
@@ -338,12 +338,12 @@ Edge and cloud sync through an ordered outbox, with one owner per DocType. The d
 | --- | --- |
 | Network | OpsEdge box on the factory LAN, firewall closed inbound from the internet. Outbound only to OpsCloud over HTTPS. Remote support over a VPN (WireGuard or Tailscale), never an open port |
 | MQTT | TLS on the LAN, one username per client (agent, bridge), ACLs per topic. Anonymous access off |
-| Frappe API | API key + secret per service user (`Factory Integration`). No guest methods on the Direct connector |
+| Frappe API | API key + secret per service user, created by the Factory Manager and limited to its plants by User Permissions. No guest methods on the Direct connector |
 | ThingsBoard webhooks | Token in Factory Configuration (Password field), IP allowlist, rate limit — as in the current code |
 | Database | TimescaleDB: agent user can write, Frappe user is read-only. MariaDB unchanged |
 | Secrets | Password fields in Frappe; `.env` files on the box readable by root only. Nothing in git |
 | Permissions | Role and Plant Area user permissions; `permission_query_conditions` and `has_permission` hooks return True/False; `get_query(..., ignore_permissions=False)` |
-| System user | `factory-system` user gets only `Factory Integration`, not `System Manager` (change from current code) |
+| System user | `factory-system` user holds Factory Manager limited to its plant, not `System Manager` (change from current code) |
 | Audit | Alarm actions, trip steps, sign-offs, commands, config changes, sync batches → `OpsEdge Audit Log` |
 | Code checks | Semgrep with frappe/semgrep-rules on every PR; `deep-app-audit` at each phase end |
 

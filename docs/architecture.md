@@ -221,14 +221,13 @@ The five existing roles stay, plus one for maintenance and one for integrations.
 
 | Role | Can do | Cannot do |
 | --- | --- | --- |
-| Factory Manager (also acts as Floor Engineer) | Everything in their sites; configure alarms, layouts, process flows, retention; approve trip restarts | System settings, connector secrets (System Manager only) |
+| Factory Manager (also acts as Floor Engineer) | Everything in their sites; configure alarms, layouts, process flows, retention; approve trip restarts; owns API access: creates, limits and revokes the API keys for other systems and the edge services | System settings, connector secrets (System Manager only) |
 | Floor Supervisor | Start/stop runs, give downtime reasons, acknowledge and shelve alarms, sign off trip recovery | Change Alarm Definitions or layouts |
-| Machine Operator | See their line, record counts and rejects, acknowledge alarms on their line | Shelve alarms, submit Machine Stops |
+| Machine Operator | See their line, record counts and rejects, acknowledge alarms on their line. Can also hold Maintenance Engineer where maintenance is part of the operator's job | Shelve alarms, submit Machine Stops (unless they also hold a role that can) |
 | Quality Inspector | Quality Inspections, lab values in trip recovery, hold a batch | Production or alarm settings |
 | Storekeeper | Refill Entries, resource readings, stock links | Production and alarms |
 | Maintenance Engineer (new) | Create and edit process flows (feeds into) and layouts; asset records; plan preventive maintenance; everything a Maintenance Technician can do | Users, settings, ERPNext link, alarm limits on quality interlocks |
-| Maintenance Technician (new) | Asset history, work on downtime, acknowledge equipment alarms | Production counts |
-| Factory Integration (new) | API-only user for the bridge and sync service; writes events, alarms, device status | Desk or SPA login |
+| Maintenance Technician (new) | Asset history, work on downtime, acknowledge equipment alarms; uses the Maintenance kiosk view (jobs, faults, spare parts) | Production counts |
 
 **Rules for the code** (from frappe/skills `frappe-app-dev`):
 
@@ -236,7 +235,7 @@ The five existing roles stay, plus one for maintenance and one for integrations.
 - `frappe.qb.get_query(..., ignore_permissions=False)` in user-facing code.
 - `has_permission` hooks return `True` or `False`, never `None`.
 - Guest endpoints exist only for the ThingsBoard adapter, with token, IP allowlist and rate limit. The Direct connector uses an authenticated API user, so it needs no guest endpoint.
-- The factory system user loses `System Manager`. It gets only `Factory Integration` and the permissions that role needs.
+- The factory system user loses `System Manager`. Its API key is created by the Factory Manager and limited by User Permissions to its own plant. There is no separate integration role.
 
 ## Versions and engineering workflow
 
@@ -303,7 +302,7 @@ Frappe Factory installs on plain Frappe and does on its own everything ThingsBoa
 | Standalone | The full IoT and SCADA platform: plants, devices and tags, live plant screens, alarms, interlock trips, machine stops with reasons, trends, resources, shift handover, kiosks, notifications, API | — |
 | ERPNext on the same site | Adds production runs from Work Orders, Job Card counts, Manufacture stock entries, Downtime Entries, Workstation status, Quality Inspections, Material Requests and the Manufacturing dashboard | Python calls inside one site. Turning the link on adds Custom Fields such as `erpnext_work_order` |
 | ERPNext on another site | The same as same-site | ERPNext REST API with the API key and secret of a user holding Manufacturing User, Stock User and Quality Manager, as Frappe CRM does. Names kept in Data fields; failed calls wait in the outbox and show under Logs |
-| Another publisher's ERP | Standalone, plus plan targets coming in for OEE | Their system calls the Frappe REST API as an Integration user and receives events from Frappe Webhook records, signed with HMAC-SHA256 |
+| Another publisher's ERP | Standalone, plus plan targets coming in for OEE | Their system calls the Frappe REST API with a key the Factory Manager created for it and receives events from Frappe Webhook records, signed with HMAC-SHA256 |
 
 **Same job as ThingsBoard.** What a ThingsBoard user expects, and where it lives in standalone Frappe Factory:
 
@@ -345,7 +344,7 @@ A kiosk is a full-screen station app, like ERPNext POS: a Floor Supervisor opens
 
 | Who | Role | On the kiosk | Why |
 | --- | --- | --- | --- |
-| Machine Operator | Machine Operator | Line view: give stop reasons, log rejects | Does the work at the line and needs nothing else on a shared screen |
+| Machine Operator | Machine Operator (and Maintenance Engineer, if they hold it) | Line view: give stop reasons, log rejects; Report a fault if they also hold Maintenance Engineer | Does the work at the line and needs nothing else on a shared screen |
 | Quality Inspector | Quality Inspector | Quality view: live analysers, held lots, routine checks, samples, QA release | Samples become quality records, so only trained people enter them |
 | Maintenance Technician | Maintenance Technician | Maintenance view: equipment status, own jobs, equipment alarms, fault reports, spare-part requests | Responds to equipment faults from the floor; never resets an interlock |
 | Floor Supervisor | Floor Supervisor | Open and close the session, start and end runs, leave full screen with their Frappe user + PIN | Owns the shift; closing writes the session to the shift handover |
@@ -407,7 +406,7 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 17–18 | Plant · Plant B, Plant D, rice mill, oil mill, poultry farm | The same plant screen drawn from the rice milling, edible oil and poultry symbol packs; each has its own layout editor | Supervisor |
 | 19–20 | Kiosk · sign in, line view | Tablet at the line: tap your Frappe user, then your PIN; filler tiles, trip banner, big reason buttons, rejects, samples | Operator, Quality Inspector |
 | 21–22 | Dashboard, app menu | Company home: factory metrics (works standalone) and manufacturing metrics from ERPNext. App menu: Apps on this site, Open kiosk, Switch to Desk, help, theme, settings, log out | Manager, owner |
-| 23–25 | Settings · ERPNext, API and webhooks, Kiosks | Link ERPNext on this site or another; integration users and webhooks for other ERPs; kiosk profiles with assigned users, allowed actions and registered tablet | Factory Manager, System Manager |
+| 23–25 | Settings · ERPNext, API and webhooks, Kiosks | Link ERPNext on this site or another; API keys (owned by the Factory Manager) and webhooks for other ERPs; kiosk profiles with assigned users, allowed actions and registered tablet | Factory Manager, System Manager |
 | 26 | Kiosk · open session | Like ERPNext POS opening: pick an assigned kiosk, shift and run, then full screen | Floor Supervisor |
 | 27 | Quality hold | Held lots split by time, tests from the template, sample results, QA decision per lot, close with the inspector's Frappe user + PIN | Quality Inspector, Factory Manager |
 | 28–29 | Kiosk · maintenance, quality | Maintenance: equipment tiles, my jobs, equipment alarms. Quality: live analysers, held lots, routine checks, QA release | Maintenance Technician, Quality Inspector |

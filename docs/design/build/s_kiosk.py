@@ -30,7 +30,7 @@ def kpage(name, body, overlay=''):
     return page(name, f'<div style="position:relative;height:100vh"><div class="ff" style="flex-direction:column;font-size:16px">{body}</div>{ov}</div>', {"$preview": {"width": W_, "height": H_}}, helmet_extra=KCSS)
 
 # ---------------- Sign in: Frappe user + PIN
-people = [('KE', 'Kemi E.', 'kemi.e@koyo1.ng', 'Machine Operator', True), ('SI', 'Sani I.', 'sani.i@koyo1.ng', 'Machine Operator', True), ('YB', 'Yusuf B.', 'yusuf.b@koyo1.ng', 'Machine Operator', False), ('GO', 'Grace O.', 'grace.o@koyo1.ng', 'Quality Inspector', True), ('MA', 'Musa A.', 'musa.a@koyo1.ng', 'Floor Supervisor', True)]
+people = [('KE', 'Kemi E.', 'kemi.e@koyo1.ng', 'Operator · Maint. Engineer', True), ('SI', 'Sani I.', 'sani.i@koyo1.ng', 'Machine Operator', True), ('YB', 'Yusuf B.', 'yusuf.b@koyo1.ng', 'Machine Operator', False), ('GO', 'Grace O.', 'grace.o@koyo1.ng', 'Quality Inspector', True), ('MA', 'Musa A.', 'musa.a@koyo1.ng', 'Floor Supervisor', True)]
 def ptile(i, a, n, e, r, pin):
     sel_ = i == 0
     return f'<button type="button" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border-radius:14px;border:{"2px solid var(--ink-gray-9)" if sel_ else "1px solid var(--outline-gray-2)"};background:{"var(--surface-base)" if pin else "var(--surface-gray-1)"};cursor:{"pointer" if pin else "not-allowed"};font:inherit;{"" if pin else "opacity:.7"}"><span class="av" style="width:56px;height:56px;flex:0 0 56px;font-size:18px">{a}</span><span style="font-size:16px;font-weight:500;color:var(--ink-gray-9)">{n}</span><span class="qs tab" style="font-size:13px">{e}</span><span class="qs" style="font-size:13px">{r}</span>{"" if pin else bd("No PIN yet","amber")}</button>'
@@ -46,7 +46,7 @@ login = f'''{topbar()}
 <div style="display:flex;gap:10px"><span style="color:var(--ink-amber-7);display:flex;margin-top:2px">{ic("lock","i s35")}</span><span>Yusuf B. has no PIN yet. He sets one himself in Frappe under My settings → Kiosk PIN, after signing in with his Frappe password.</span></div></div>
 <span class="qs" style="font-size:14px">Not listed? A Factory Manager adds your Frappe user to this kiosk in Settings → Kiosks.</span></div>
 <div style="border-left:1px solid var(--outline-gray-1);background:var(--surface-gray-1);padding:28px 32px;display:flex;flex-direction:column;align-items:center;gap:18px">
-<span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">KE</span><div style="text-align:center;display:flex;flex-direction:column;gap:2px"><div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kemi E.</div><div class="qs tab" style="font-size:14px">kemi.e@koyo1.ng · Machine Operator</div><div style="font-size:14px;color:var(--ink-gray-7);margin-top:6px">Enter your 6-digit PIN</div></div>
+<span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">KE</span><div style="text-align:center;display:flex;flex-direction:column;gap:2px"><div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kemi E.</div><div class="qs tab" style="font-size:14px">kemi.e@koyo1.ng · Machine Operator, Maintenance Engineer</div><div style="font-size:14px;color:var(--ink-gray-7);margin-top:6px">Enter your 6-digit PIN</div></div>
 <div style="display:flex;gap:12px">{dots}</div>
 <div style="display:grid;grid-template-columns:repeat(3,72px);gap:12px">{keys}</div>
 <a href="KioskLine.dc.html" class="kb solid" style="width:240px">Sign in</a>
@@ -66,7 +66,7 @@ def ftile(n, rate, count, state):
 tiles = ''.join([ftile('F1', '0 /h', '3,890', 'Stopped'), ftile('F2', '0 /h', '3,850', 'Stopped'), ftile('F3', '0 /h', '3,920', 'Stopped'), ftile('F4', '0 /h', '3,780', 'Stopped'), ftile('F5', '0 /h', '3,880', 'Stopped')])
 reasons = ['Power dip', 'Generator changeover', 'Jaw jam', 'Film change or splice', 'Seal temperature low', 'Waiting for water', 'No film', 'Other']
 rb = ''.join(f'<button type="button" class="kb" style="height:56px;justify-content:flex-start;{"background:var(--surface-gray-10);color:var(--ink-base)" if r=="Power dip" else ""}">{r}</button>' for r in reasons)
-line = f'''{topbar(('KE', 'Kemi E.', 'Operator · F1 – F5'))}
+line = f'''{topbar(('KE', 'Kemi E.', 'Operator · Maint. Engineer · F1 – F5'))}
 <div style="flex:1;overflow:auto;padding:20px 24px 24px;display:flex;flex-direction:column;gap:18px">
 <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;background:var(--surface-red-2);border:1px solid var(--outline-red-3)"><span style="color:var(--ink-red-7);display:flex">{ic("octagon","i")}</span><div style="flex:1"><div style="font-size:17px;font-weight:600;color:var(--ink-gray-9)">Line stopped by the lead interlock at 08:14</div><div style="font-size:15px;color:var(--ink-gray-7)">Do not restart. The supervisor is running the recovery steps.</div></div><span class="tab" style="font-size:22px;font-weight:600;color:var(--ink-red-7)">32 min</span></div>
 <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">{tiles}</div>
@@ -74,8 +74,8 @@ line = f'''{topbar(('KE', 'Kemi E.', 'Operator · F1 – F5'))}
 <div style="display:flex;justify-content:space-between;align-items:baseline"><div><div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Why did all fillers stop at 07:40?</div><div class="qs" style="font-size:14px">3 min · picked up by the PLC · 1 of 2 stops on your fillers without a reason</div></div><span class="qs" style="font-size:14px">Tap one</span></div>
 <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">{rb}</div>
 <div style="display:flex;justify-content:flex-end;gap:10px"><button type="button" class="kb">Skip for now</button><button type="button" class="kb solid">Save reason</button></div></section>
-<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
-<a href="KioskRejects.dc.html" class="kb" style="height:64px">{ic("x")}Log rejects</a><a href="KioskSample.dc.html" class="kb" style="height:64px">{ic("flask")}Record a sample</a><button type="button" class="kb" style="height:64px">{ic("phone")}Call supervisor</button></div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+<a href="KioskRejects.dc.html" class="kb" style="height:64px">{ic("x")}Log rejects</a><a href="KioskSample.dc.html" class="kb" style="height:64px">{ic("flask")}Record a sample</a><a href="KioskFault.dc.html" class="kb" style="height:64px">{ic("wrench")}Report a fault</a><button type="button" class="kb" style="height:64px">{ic("phone")}Call supervisor</button></div>
 </div>'''
 write('KioskLine.dc.html', kpage('Kiosk line', line))
 
