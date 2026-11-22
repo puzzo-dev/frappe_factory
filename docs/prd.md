@@ -125,6 +125,15 @@ Stories are grouped by epic. IDs are used in the TRD, the tests and the screen d
 | US-706 | As a company on another ERP, I want to connect through the API so that our ERP keeps its role | Integration users with their own keys; documented REST methods; Frappe Webhooks for shift summaries, stops, trips and alarms; plan targets can be posted in |
 | US-707 | As a Factory Manager, I want one dashboard for factory and manufacturing so that I see the whole operation | Factory metrics always; Manufacturing metrics (work orders, completions, shortages, quality, plan) appear when ERPNext is linked |
 
+**E8 · Quality assurance**
+
+| ID | Story | Acceptance criteria |
+| --- | --- | --- |
+| US-801 | As a Quality Inspector, I want to release the line myself after a quality fault so that filling only restarts on human test results | A quality-related trip has a QA release step after the samples. Release needs the inspector's PIN and the template's results. Sensor readings alone never satisfy it. Restart is blocked until it is done |
+| US-802 | As a Quality Inspector, I want everything made around a fault held so that suspect product never leaves | A Quality Hold opens with the trip and holds lots made since the last passing check, split by time. Held stock can't be dispatched; with ERPNext the batch is disabled |
+| US-803 | As a Quality Inspector, I want to decide each held lot so that good product is saved and bad product is scrapped | Decisions: Release, Release with deviation (Factory Manager too), Rework or reprocess, Scrap. The hold closes only when every lot is decided |
+| US-804 | As a Factory Manager, I want QA rules per product so that a rice mill and a water plant each test what matters | Quality Hold Templates per product or fault: tests, sample count, limits, default decisions; shipped with each Process Template |
+
 ## Workflow: lead trip and recovery
 
 Covers US-203, US-204 and US-205.

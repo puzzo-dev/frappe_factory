@@ -46,70 +46,74 @@ Every desktop screen uses one Sidebar component. At the top is the app menu (bra
 
 ![Interlock trip recovery](images/screens/09-Trip.png)
 
-## 10 · Production runs · needs ERPNext
+## 10 · Quality hold (QA decides held product)
 
-![Production runs · needs ERPNext](images/screens/10-Runs.png)
+![Quality hold (QA decides held product)](images/screens/10-QualityHold.png)
 
-## 11 · Run detail · needs ERPNext
+## 11 · Production runs · needs ERPNext
 
-![Run detail · needs ERPNext](images/screens/11-RunDetail.png)
+![Production runs · needs ERPNext](images/screens/11-Runs.png)
 
-## 12 · Downtime
+## 12 · Run detail · needs ERPNext
 
-![Downtime](images/screens/12-Downtime.png)
+![Run detail · needs ERPNext](images/screens/12-RunDetail.png)
 
-## 13 · Resources
+## 13 · Downtime
 
-![Resources](images/screens/13-Resources.png)
+![Downtime](images/screens/13-Downtime.png)
 
-## 14 · Trends
+## 14 · Resources
 
-![Trends](images/screens/14-Trends.png)
+![Resources](images/screens/14-Resources.png)
 
-## 15 · Shift handover
+## 15 · Trends
 
-![Shift handover](images/screens/15-Handover.png)
+![Trends](images/screens/15-Trends.png)
 
-## 16 · Kiosk · open session
+## 16 · Shift handover
 
-![Kiosk · open session](images/screens/16-KioskOpen.png)
+![Shift handover](images/screens/16-Handover.png)
 
-## 17 · Kiosk · sign in (assigned users only)
+## 17 · Kiosk · open session
 
-![Kiosk · sign in (assigned users only)](images/screens/17-KioskLogin.png)
+![Kiosk · open session](images/screens/17-KioskOpen.png)
 
-## 18 · Kiosk · line view
+## 18 · Kiosk · sign in (assigned users only)
 
-![Kiosk · line view](images/screens/18-KioskLine.png)
+![Kiosk · sign in (assigned users only)](images/screens/18-KioskLogin.png)
 
-## 19 · Plant · Rice mill
+## 19 · Kiosk · line view
 
-![Plant · Rice mill](images/screens/19-RiceMill.png)
+![Kiosk · line view](images/screens/19-KioskLine.png)
 
-## 20 · Plant · Oil mill
+## 20 · Plant · Rice mill
 
-![Plant · Oil mill](images/screens/20-OilMill.png)
+![Plant · Rice mill](images/screens/20-RiceMill.png)
 
-## 21 · Devices and tags
+## 21 · Plant · Oil mill
 
-![Devices and tags](images/screens/21-Devices.png)
+![Plant · Oil mill](images/screens/21-OilMill.png)
 
-## 22 · Layout editor
+## 22 · Devices and tags
 
-![Layout editor](images/screens/22-LayoutEditor.png)
+![Devices and tags](images/screens/22-Devices.png)
 
-## 23 · Symbol library · industry packs
+## 23 · Layout editor
 
-![Symbol library · industry packs](images/screens/23-Symbols.png)
+![Layout editor](images/screens/23-LayoutEditor.png)
 
-## 24 · Alarm definitions
+## 24 · Symbol library · industry packs
 
-![Alarm definitions](images/screens/24-AlarmDefs.png)
+![Symbol library · industry packs](images/screens/24-Symbols.png)
 
-## 25 · Plant settings · connector
+## 25 · Alarm definitions
 
-![Plant settings · connector](images/screens/25-Settings.png)
+![Alarm definitions](images/screens/25-AlarmDefs.png)
 
-## 26 · Plant settings · commands
+## 26 · Plant settings · connector
 
-![Plant settings · commands](images/screens/26-SettingsCommands.png)
+![Plant settings · connector](images/screens/26-Settings.png)
+
+## 27 · Plant settings · commands
+
+![Plant settings · commands](images/screens/27-SettingsCommands.png)

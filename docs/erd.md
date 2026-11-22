@@ -6,7 +6,7 @@ Nov 22, 2026 · I-Varse Technologies NG
 
 Tag is the hub: devices produce tags, and alarms, meters and commands are defined on them. Production and downtime hang off ERPNext Work Orders.
 
-![ERD: 24 Frappe Factory DocTypes, 8 ERPNext DocTypes](images/erd.png)
+![ERD: 28 Frappe Factory DocTypes, 8 ERPNext DocTypes](images/erd.png)
 
 The diagram shows the main chain; HMI Symbol and its two child tables are in the reference below (Plant Floor Widget and Plant Asset link to it).
 
@@ -80,6 +80,17 @@ Links to ERPNext DocTypes are never in these base DocTypes, because a Link to Wo
 | --- | --- | --- | --- |
 | Process Template | Regular | `template_name`, `industry`, `layout` (JSON), `assets` (JSON) | → HMI Symbol (via layout) |
 | Plant Asset (new field) | — | `feeds_into` (table of downstream assets) | → Plant Asset |
+
+**Quality**
+
+| DocType | Kind | Key fields | Links to |
+| --- | --- | --- | --- |
+| Quality Hold | Submittable | `status` (On hold, Decided, Closed), `opened_by_doctype` and `opened_by` (Dynamic Link: Interlock Trip, Alarm or a person), `qa_owner`, `approver`, `closed_at` | → Quality Hold Template, → Plant Area, → Batch (only with ERPNext) |
+| Hold Lot | Child of Quality Hold | `lot_label`, `from_time`, `to_time`, `machines`, `quantity`, `uom`, `location`, `decision` (Release, Release with deviation, Rework, Scrap), `decided_by`, `note` | — |
+| Quality Sample | Regular | `taken_at`, `sample_point`, `machine`, `test`, `method`, `result`, `unit`, `passed`, `attachment` | → Quality Hold or → Interlock Trip, → Quality Inspection (only with ERPNext) |
+| Quality Hold Template | Regular | `fault`, `tests` (table: test, limit, samples per lot, method), `release_rule`, `default_decisions` (table: lot kind, decision) | → Process Template, → Item |
+
+Interlock Definition gains `quality_related` and Alarm Definition gains `places_quality_hold`. With ERPNext, a hold also opens a Non Conformance for the corrective action.
 
 ## Data outside MariaDB
 

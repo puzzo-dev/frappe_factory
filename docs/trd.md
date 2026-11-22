@@ -250,6 +250,14 @@ The kiosk is a separate route, `/factory/kiosk`, a frappe-ui SPA in full-screen 
 
 Five wrong PINs lock that user on that kiosk for 5 minutes. Device tokens are random 32-byte values stored hashed, reset from Settings → Kiosks.
 
+## Quality hold and QA release
+
+`Interlock Definition.quality_related` (Check) and `Alarm Definition.places_quality_hold` (Check) decide when a hold opens. On a quality-related trip, the recovery checklist inserts two steps from the Quality Hold Template: the samples and `qa_release`. `trips.complete_step(trip, "qa_release")` checks the Quality Inspector role, the PIN, and that every required sample is in and passes; until then `trips.sign_off` refuses.
+
+Opening a hold creates `Quality Hold` with `Hold Lot` rows. Lots come from the filler counters and the checkpoint readings: everything from the last passing check to the fault, split where the readings crossed the alert limit. Tanks named in the template are held whole. `quality.decide_lot(lot, decision, note)` takes Release, Release with deviation, Rework or Scrap; deviation also needs `quality.approve_deviation` by a Factory Manager. `quality.close_hold` needs a decision on every lot and the inspector's PIN.
+
+With ERPNext: each `Quality Sample` creates a Quality Inspection (inspection type In Process, reference Job Card, status Accepted or Rejected); the hold sets the Batch `disabled` and opens a Non Conformance; Release clears the batch, Scrap posts a Material Issue to the scrap warehouse. Without ERPNext the samples and decisions stay in Frappe Factory.
+
 ## Notifications
 
 All notifications use Frappe's own `Notification` DocType for in-app, email and system alerts. WhatsApp goes through `frappe_whatsapp` with the `frappe_whatsapp_openwa` dual gateway (OpenWA session or Meta Cloud API, with its outbound queue, retries and fallback). Frappe Factory adds no messaging code of its own.

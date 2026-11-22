@@ -351,9 +351,32 @@ A kiosk is a full-screen station app, like ERPNext POS: a Floor Supervisor opens
 
 Why both a role and an assignment: the role gives permission on the DocTypes, and the assignment on the Kiosk Profile limits it to one station and its machines, as POS Profile users do in ERPNext. A role alone would let any operator open any kiosk in any plant. The PIN switches users inside an open session, so every action on a shared tablet is signed by a person without typing passwords. Device registration stops the kiosk opening on a personal phone; full screen keeps Desk, setup and other plants out of reach; the screen returns to the name list after 10 minutes without a tap. PINs are stored hashed in a Password field.
 
+## Quality assurance
+
+A quality fault stops the line twice over: the PLC stops it, and only a Quality Inspector's release on human test results lets it run again, whatever the sensors say. The analyser coming back under its limit never counts as proof, because the analyser itself may be the fault.
+
+**Two decisions, both QA's.** After a quality fault, QA decides two separate things:
+
+1. **Can the line run again?** A QA release step sits in every quality-related trip's recovery, between the lab results and the key reset. The Floor Supervisor can't restart before it, and Frappe Factory can't reset the PLC either.
+2. **What happens to what was made?** A Quality Hold opens automatically and holds everything made between the last passing check and the fault. Held product can't be dispatched or used until QA decides each lot: Release, Release with deviation (also needs the Factory Manager), Rework or reprocess, or Scrap.
+
+**What opens a hold.** An interlock trip flagged as quality-related, an Alarm Definition with "places a quality hold" ticked, or a person with the Quality Inspector or Floor Supervisor role.
+
+**Templates per product.** A Quality Hold Template says which tests, how many samples, pass limits, which lots, and the default decision for some lots. Each industry's Process Template ships its own:
+
+| Industry | Fault | QA must test before the line runs | Held product |
+| --- | --- | --- | --- |
+| Sachet water (Koyo) | Lead over the trip limit at AT-401 | Two lab results under 3 µg/L at SP-1, at least 10 min apart | Bags filled since the last passing check; T4 and T5 water |
+| Edible oil | Deodorizer temperature or vacuum out of band | Free fatty acid and peroxide value on refined oil | Refined oil and bottles since the last good check |
+| Rice milling | Metal detector or magnet reject, color sorter fault | Visual check, broken %, foreign matter on a sample per bag lot | Bags since the last good check |
+
+**Roles.** QA is the Quality Inspector role. On a trip they own the lab samples and the QA release; on a hold they own the tests and decisions. A Factory Manager approves any release with deviation. The supervisor never overrides QA; if QA keeps the line stopped, it escalates to the Factory Manager.
+
+**With ERPNext.** Each sample is a Quality Inspection (type In Process, against the Job Card), the held batch is disabled until release, scrap posts a Material Issue to the scrap warehouse, and the hold opens a Non Conformance for the corrective action. Without ERPNext the same records stay in Frappe Factory as Quality Samples.
+
 ## Screens and decisions
 
-The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Tabs, Dialog, SettingsDialog) as 27 boards in the [screen designs](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz), each a 1440 × 900 laptop screen. See [screens.md](screens.md) for a picture of each. Each screen still gets its empty, loading, error and offline states when built. Every desktop screen uses the same Sidebar component: a company version on Plants and New plant, a plant version inside a plant. The kiosk has no sidebar by design.
+The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Tabs, Dialog, SettingsDialog) as 28 boards in the [screen designs](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz), each a 1440 × 900 laptop screen. See [screens.md](screens.md) for a picture of each. Each screen still gets its empty, loading, error and offline states when built. Every desktop screen uses the same Sidebar component: a company version on Plants and New plant, a plant version inside a plant. The kiosk has no sidebar by design.
 
 | # | Screen | What it holds | Main user |
 | --- | --- | --- | --- |
@@ -379,6 +402,7 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 21–22 | Dashboard, app menu | Company home: factory metrics (works standalone) and manufacturing metrics from ERPNext. App menu: Apps on this site, Open kiosk, Switch to Desk, help, theme, settings, log out | Manager, owner |
 | 23–25 | Settings · ERPNext, API and webhooks, Kiosks | Link ERPNext on this site or another; integration users and webhooks for other ERPs; kiosk profiles with assigned users, allowed actions and registered tablet | Factory Manager, System Manager |
 | 26 | Kiosk · open session | Like ERPNext POS opening: pick an assigned kiosk, shift and run, then full screen | Floor Supervisor |
+| 27 | Quality hold | Held lots split by time, tests from the template, sample results, QA decision per lot, close with QA PIN | Quality Inspector, Factory Manager |
 
 **Decisions (22 Nov 2026)**
 

@@ -72,3 +72,4 @@ These are flags, not legal advice.
 | Other ERPs | Frappe REST API with Integration users, plus Frappe Webhooks; no built-in adapters | Keeps the product neutral; their middleware does the mapping |
 | Name clash | Our Downtime Entry is renamed Machine Stop | ERPNext already has Downtime Entry and Plant Floor; DocType names are unique per site |
 | Kiosk | Full-screen station app like ERPNext POS: Kiosk Profile with assigned users, Kiosk Session opened by a Floor Supervisor, PIN switch-user, registered tablet | Role alone would let any operator use any kiosk; assignment ties people to a station |
+| QA release | A Quality Inspector releases the line after any quality fault, on human test results; a Quality Hold holds product made since the last passing check until QA decides each lot | A sensor back in range is not proof: the sensor may be the fault |
