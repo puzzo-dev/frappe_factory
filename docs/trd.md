@@ -228,7 +228,7 @@ A machine with no symbol yet is placed as **Generic machine**: a labelled box th
 
 ## Process flow (feeds into)
 
-Approved 22 Nov 2026. Each Plant Asset lists the assets it feeds, which gives every plant a directed graph of how product moves.
+Approved 22 Nov 2026. Each Plant Asset lists the assets it feeds, which gives every plant a directed graph of how product moves. Each plant's flow is its own set of records, created and edited by the Factory Manager (acting as Floor Engineer) or a Maintenance Engineer; other roles can read it.
 
 **Data.** Child table `Plant Asset Feed` on Plant Asset: `to_asset` (Link Plant Asset, same plant only), `medium` (Select: product, water, air, feed), `is_return` (Check), `from_port` and `to_port` (Data, optional, the symbol ports a pipe joins). Instruments on a line, such as AT-401, are not nodes: they carry `on_link` pointing at the link they measure. Utilities such as generators stay out of the flow.
 
