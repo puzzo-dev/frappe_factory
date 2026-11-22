@@ -48,6 +48,7 @@ def connector_panel():
   row('Credentials', 'Username and password for this plant only, limited to its own topics. Shown once.', f'<span style="display:flex;gap:8px;align-items:center"><span class="qs tab">opsedge-koyo-1 · ••••••</span>{btn("Reset")}</span>'),
   row('Pair the edge box', 'Run opsedge pair with this code on the edge box. It downloads the broker, client ID and credentials above.', f'<span style="display:flex;gap:8px;align-items:center"><span class="in out" style="width:140px"><span class="grow tab">K1-7QF-2M9</span></span>{btn("New code")}</span>'),
   row('Uplink status', 'OpsEdge K1 · v0.4.2 · connected 3 h 12 min · 0 messages waiting', bd('Connected','green','g')),
+  row('Edge box page', 'https://opsedge-k1.local · reachable on the plant network only', f'<a class="btn" href="EdgeStatus.dc.html">{ic("ext")}Open</a>'),
 ])}
 {section('On the edge box', [
   row('Local broker', 'Mosquitto on OpsEdge K1 for the agent and the uplink. Set up by the edge installer; nothing to configure.', bd('Running','green','g')),

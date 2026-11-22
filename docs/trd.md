@@ -269,6 +269,27 @@ With none of these, the Resources page shows the source as "Not measured" and a 
 
 Diesel is a `Utility Tank` on a level tag (Koyo 1: `LT-901` on day tank DT-1). Runway is litres ÷ burn rate over the last 24 h of generator running; refuels are logged against an ERPNext Delivery Note or Stock Entry. Power has its own Plant Floor Layout (Utilities · power) built from the power symbols: grid incomer, energy meter, breaker, ATS, generator, distribution board and day tank. Utilities stay out of the Process Flow.
 
+## OpsEdge client
+
+One Python 3.11 service, `opsedge`, packaged as one image with three parts: **agent** (drivers and local alarms), **uplink** (MQTT client to the cloud), **web** (the local page). It runs next to Mosquitto and TimescaleDB from one docker compose file. The same image runs on a box that also hosts a full Frappe site; there the bridge replaces the uplink.
+
+**What it does**
+
+| Function | Detail |
+| --- | --- |
+| Pairing | `opsedge pair <code>` or the Pairing page. The code (24 h) comes from Plant settings → Connector and returns site URL, broker, client ID, credentials and a client certificate. Unpair wipes them |
+| Config | Devices, tags, scaling, alarm definitions and interlock monitors are edited in Frappe Factory only. Each save makes a numbered `Edge Config` version; the box pulls it (`edge.config(site, since)`), checks it, and swaps it in atomically. Offline it keeps the last good version. The box never edits config |
+| Drivers | Modbus TCP and RTU (`pymodbus`), OPC UA (`asyncua`), MQTT sensors (wireless level, energy meters). Per-device poll rate, timeouts and retries; scaling, deadband and quality (good, stale after 3 missed polls, bad) per tag |
+| Local alarms | Alarm definitions run on the box so alarms fire without the internet. Optional outputs: a stack light or buzzer on a PLC coil or relay module, SMS through a GSM modem. Interlocks stay in the PLC |
+| Store and forward | Raw readings in TimescaleDB; events and alarms in an outbox. Holds 7 days, sends in order when the uplink returns |
+| Uplink | See Deployment. Outbound only on 8883; ACL limits the plant to `factory/{site}/#` |
+| Commands | Received on `factory/{site}/cmd/#`, written only if all three command switches allow it, read back and acknowledged |
+| Scan | Modbus TCP sweep of a subnet, Modbus RTU id sweep on a serial port, OPC UA browse. Read-only. Selected results are sent to `edge.suggest_devices` and show as suggestions in Devices and tags |
+| Health | Clock sync (chrony; readings are refused for upload while the clock is unsynced), watchdog restart, disk and memory checks, a `status` message every 30 s that feeds `health.status` and the fleet offline alarm |
+| Update | Signed images from the release channel. Installs only with an empty buffer, keeps the previous version and rolls back if a service fails to start |
+
+**Local page.** Served by `web` at `https://opsedge-{site}.local` on the plant network only; never exposed through the uplink. Local technician accounts (`opsedge user add`), so it works offline; 5 wrong passwords lock for 15 min. Screens: Status, Pairing and network, Devices, Live tags (read-only), Scan, Logs and update. Plant settings → Connector links to it.
+
 ## ERPNext link and other ERPs
 
 All ERP calls go through one adapter, so the rest of the app never knows where ERPNext lives. `frappe_factory/erp/base.py` defines `ErpAdapter` with `get_work_order`, `update_job_card`, `make_manufacture_entry`, `make_downtime_entry`, `set_workstation_status`, `make_quality_inspection`, `make_material_request` and `get_bin_qty`. Three implementations:
