@@ -115,7 +115,7 @@ panel = f'''<aside class="panel"><div style="padding:16px;display:flex;flex-dire
 <div class="prow"><span>Item</span><span class="tab">PW-50CL</span></div>
 <div class="prow"><span>Pack</span><span>Bag of 20 sachets</span></div>
 <div class="prow"><span>Per bag</span><span class="tab">20 × 50 cl = 10 L</span></div>
-<div class="prow"><span>Work order</span><span><a href="#">WO-0412</a> · ERPNext</span></div>
+<div class="prow"><span>Work order</span><span><a href="CoProduction.dc.html">WO-0412</a> · ERPNext</span></div>
 <div class="prow"><span>Shift</span><span>Morning · 06:00 – 14:00</span></div>
 <div class="prow"><span>Supervisor</span><span>Musa A.</span></div>
 <div class="prow"><span>Started</span><span class="tab">22 Nov · 06:00:12</span></div>

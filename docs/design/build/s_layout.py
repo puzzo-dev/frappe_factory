@@ -67,7 +67,7 @@ cats = [
   ('Packaging', [('Sachet filler', S.filler(True))]),
 ]
 
-def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, layout_name, plant_name, plant_href, ver, live, nsym, issues_txt, side_kw, top=96, pos=('640','140')):
+def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, layout_name, plant_name, plant_href, ver, live, nsym, issues_txt, side_kw, top=96, pos=('640','140'), feeds='', flow_href='AssetFlow.dc.html'):
     # ---------- palette ----------
     pal = ''
     for c, items in cats:
@@ -88,6 +88,7 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
     <div style="flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
     {field('Asset', sel(asset), hint='The Plant Asset this symbol stands for.')}
     {field('Label', inp(sel_tag))}
+    {field('Feeds into', inp(feeds), hint='From Plant Asset → Feeds into. Pipes are drawn from it.') if feeds else ''}
     <div style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3 class="h3">States</h3><span class="qs">From the symbol's ports</span></div>
     {''.join(bind(*b) for b in binds)}
     </div>
@@ -108,11 +109,11 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
     <span style="width:1px;height:20px;background:var(--outline-gray-2);margin:0 4px"></span>
     {btn(icon="zout",kind="ghost",attrs="Zoom out")}<span class="tab" style="font-size:13px;width:40px;text-align:center;color:var(--ink-gray-7)">100%</span>{btn(icon="zin",kind="ghost",attrs="Zoom in")}
     <label style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-gray-7);margin-right:4px"><span class="sw"></span>Live values</label>
-    {btn("Preview","eye")}<button type="button" class="btn solid">Publish</button></div></header>'''
+    <a href="{flow_href}" class="btn">{ic("pipe")}From flow</a>{btn("Preview","eye")}<button type="button" class="btn solid">Publish</button></div></header>'''
 
     tools = f'''<div style="position:absolute;left:50%;top:16px;transform:translateX(-50%);display:flex;gap:2px;padding:4px;border-radius:12px;background:var(--surface-elevation-2);box-shadow:var(--shadow-2xl)">
     <span class="btn ico" style="background:var(--surface-gray-3)" title="Select">{ic("pointer")}</span><span class="btn ico ghost" title="Pipe">{ic("pipe")}</span><span class="btn ico ghost" title="Text">{ic("type")}</span><span class="btn ico ghost" title="Move canvas">{ic("move")}</span></div>'''
-    issues = f'''<div style="position:absolute;left:16px;bottom:20px;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;background:var(--surface-elevation-2);box-shadow:var(--shadow-2xl);font-size:13px">{issues_txt}<a href="#">Show</a></div>'''
+    issues = f'''<div style="position:absolute;left:16px;bottom:20px;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;background:var(--surface-elevation-2);box-shadow:var(--shadow-2xl);font-size:13px">{issues_txt}<button type="button" style="border:0;background:none;padding:0;font:inherit;color:var(--ink-blue-7);cursor:pointer">Show</button></div>'''
 
     canvas = f'<div class="grid-bg" style="flex:1;min-width:0;position:relative;background-color:var(--surface-gray-1);overflow:hidden"><div style="position:absolute;left:32px;right:32px;top:{top}px">{canvas_svg}</div>{tools}{issues}</div>'
 
@@ -123,4 +124,4 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
 editor('LayoutEditor.dc.html', cats, canvas_svg, S.pump(True), 'P-401', 'Centrifugal pump · v3', 'P-401 · Fill pump',
        [('running', 'PLC-1 · P-401.RUN', 'bool', True, 'Off'), ('speed', 'PLC-1 · P-401.HZ', 'number · Hz', True, '0.0'), ('fault', '', 'bool', False)],
        'Treatment and filling', 'Koyo 1', 'Main.dc.html', 'Draft · v13', 'Live: v12', 46,
-       '<span style="color:var(--ink-amber-7);display:flex">' + ic("alert-t","i s35") + '</span><span style="color:var(--ink-gray-8)">2 problems</span><span class="qs">P-401 fault · XV-402 not placed</span>', {})
+       '<span style="color:var(--ink-amber-7);display:flex">' + ic("alert-t","i s35") + '</span><span style="color:var(--ink-gray-8)">2 problems</span><span class="qs">P-401 fault · XV-402 not placed</span>', {}, feeds='<span class="chip" style="height:20px">XV-402</span> <span class="chip" style="height:20px">F1 – F10</span>')

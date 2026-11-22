@@ -83,4 +83,4 @@ We do **not** draw SVGs per company. The library is built once and each company'
 
 **Approved 22 Nov 2026:** the `Process Template` DocType (industry templates).
 
-**Still pending:** the `feeds_into` link on Plant Asset (needed for auto-generated mimics).
+**Approved 22 Nov 2026:** the `feeds_into` link on Plant Asset. See the TRD, Process flow (feeds into). Nothing in this doc is pending any more.

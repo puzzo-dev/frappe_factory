@@ -129,6 +129,8 @@ co('CoMaint.dc.html', 'CoMaint.dc.html', crumb(('Maintenance', None)), f'{btn("E
 <section class="card" style="display:flex;flex-direction:column;gap:4px"><div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:6px"><h2 class="h3">Preventive, next due</h2><span class="qs">by hours, days or tonnes</span></div>{pml}<span class="qs" style="margin-top:8px">With ERPNext, jobs mirror to Maintenance Visits on the asset.</span></section></div>''')
 
 # ---------------- Reports
+RH = {'Shift production summary': 'Runs.dc.html', 'OEE by plant and machine': 'Dashboard.dc.html', 'Downtime by reason': 'CoDowntime.dc.html', 'Alarms and trips': 'CoAlarms.dc.html',
+      'Quality holds and releases': 'CoHolds.dc.html', 'Resource use per unit': 'Resources.dc.html', 'Flock and lay rate': 'PoultryFarm.dc.html', 'Yield and recovery': 'RiceMill.dc.html'}
 reps = [('Shift production summary', 'Output, plan, OEE, stops and rejects per plant and shift, in each plant\'s pack unit', 'Every shift end · WhatsApp to managers', 'bars'),
         ('OEE by plant and machine', 'Availability × performance × quality, trended by day', 'Weekly · Monday 07:00 email', 'gauge'),
         ('Downtime by reason', 'Minutes lost by reason, machine and plant; stops without a reason', '—', 'clock'),
@@ -138,7 +140,7 @@ reps = [('Shift production summary', 'Output, plan, OEE, stops and rejects per p
         ('Flock and lay rate', 'Poultry: birds, mortality, lay rate, eggs per bird, feed and water per bird', 'Daily · 18:00 WhatsApp', 'chart'),
         ('Yield and recovery', 'Rice: head rice yield, broken %. Oil: oil yield, refining loss', '—', 'layers')]
 rc = ''.join(f'''<div class="card" style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;gap:10px;align-items:center"><span style="width:32px;height:32px;border-radius:8px;background:var(--surface-gray-2);display:grid;place-items:center;color:var(--ink-gray-7)">{ic(i)}</span><span style="font-weight:600;color:var(--ink-gray-9)">{t}</span></div>
-<p class="ps" style="min-height:40px">{d}</p><div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--outline-gray-1)"><span class="qs">{s}</span><span style="display:flex;gap:6px">{btn("Schedule",kind="ghost")}{btn("Open")}</span></div></div>''' for t, d, s, i in reps)
+<p class="ps" style="min-height:40px">{d}</p><div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--outline-gray-1)"><span class="qs">{s}</span><span style="display:flex;gap:6px">{btn("Schedule",kind="ghost")}<a href="{RH[t]}" class="btn">Open</a></span></div></div>''' for t, d, s, i in reps)
 co('CoReports.dc.html', 'CoReports.dc.html', crumb(('Reports', None)), f'{btn("New report","plus")}',
    f'''<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;gap:8px;align-items:baseline"><h2 class="h2">Reports</h2><span class="qs">8 built in · any can be scheduled to email or WhatsApp</span></div><span class="chip"><span class="k">Plant</span>All 6</span></div>
 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">{rc}</div>

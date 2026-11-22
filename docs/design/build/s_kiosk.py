@@ -163,7 +163,7 @@ def lot(ref, qty, sub, test, tc, act):
 lots = ''.join([
   lot('L1', '100 bags', '2,000 sachets · 07:56 – 08:03', '2 of 3 pass · S-4 at the outside lab', 'gray', '<button type="button" class="kb" style="height:44px;font-size:15px" disabled>Decide</button>'),
   lot('L2', '156 bags + 14 sachets', '3,134 sachets · 08:03 – 08:14', 'S-3 failed · 6.8 µg/L', 'red', '<a href="KioskDecide.dc.html" class="kb solid" style="height:44px;font-size:15px">Decide</a>'),
-  lot('L3', '2.3 m³ in T5', 'Not yet filled · template says reprocess', 'Reprocess via IX-501', 'gray', '<button type="button" class="kb solid" style="height:44px;font-size:15px">Decide</button>'),
+  lot('L3', '2.3 m³ in T5', 'Not yet filled · template says reprocess', 'Reprocess via IX-501', 'gray', '<a href="KioskDecide.dc.html" class="kb solid" style="height:44px;font-size:15px">Decide</a>'),
 ])
 def chk(name, rule, last, nxt, due=False):
     return f'<div style="display:grid;grid-template-columns:minmax(0,1fr) 76px;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--outline-gray-1)"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:500;color:var(--ink-gray-9)">{name}</span><span class="qs" style="font-size:13px">{rule} · last {last}</span></span><span class="tab" style="text-align:right;font-size:15px;font-weight:600;color:{"var(--ink-amber-7)" if due else "var(--ink-gray-8)"}">{nxt}</span></div>'

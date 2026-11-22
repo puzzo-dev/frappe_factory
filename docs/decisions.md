@@ -53,7 +53,7 @@ Decisions taken during architecture planning, 22 Nov 2026, with the reasons. New
 - **Proposal:** One shared symbol library (about 40 ISA-101 symbols drawn in-house), auto-generated mimics from the plant model, industry templates, a designer, and custom SVG upload with a naming convention. Library mastered on OpsCloud and pulled by edge sites.
 - **Approved (22 Nov 2026):** the `HMI Symbol` record type (with Port and Binding child tables), linked from Plant Floor Widget (`symbol`, pinned version) and Plant Asset (`default_symbol`). Versioned, sanitized on upload, shipped as fixtures, mastered on OpsCloud. Spec in [trd.md](trd.md#hmi-symbol-library).
 - **Approved 22 Nov 2026:** `Process Template`.
-- **Still pending:** `Plant Asset.feeds_into`.
+- **Approved 22 Nov 2026:** `Plant Asset.feeds_into` (child table Plant Asset Feed).
 
 ## Licensing flags (for legal review)
 
@@ -74,4 +74,5 @@ These are flags, not legal advice.
 | Name clash | Our Downtime Entry is renamed Machine Stop | ERPNext already has Downtime Entry and Plant Floor; DocType names are unique per site |
 | Kiosk | Full-screen station app like ERPNext POS: Kiosk Profile with assigned users, Kiosk Session opened by a Floor Supervisor, Frappe user + PIN sign-in, Line, Maintenance and Quality views, registered tablet | Role alone would let any operator use any kiosk; assignment ties people to a station |
 | Process Template | Approved as a DocType. One per industry: units of count, symbol pack, asset types, tag templates, alarm and interlock definitions, quality hold templates, downtime reasons, kiosk views, KPIs and a starter layout. I-Varse ships water, rice milling, edible oil, poultry farm and blank. A new plant copies it; the plant's layout is then edited on its own | Every industry starts with a working setup on day one, and template changes never alter running plants |
+| Process flow | Approved: each Plant Asset lists what it feeds (Plant Asset Feed). Drives generated layouts, starved and blocked stops, downstream alarm hold-off and quality hold tracing | One source of truth for how product moves, instead of re-describing it in every feature |
 | QA release | A Quality Inspector releases the line after any quality fault, on human test results; a Quality Hold holds product made since the last passing check until QA decides each lot | A sensor back in range is not proof: the sensor may be the fault |

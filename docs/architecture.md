@@ -411,6 +411,7 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 27 | Quality hold | Held lots split by time, tests from the template, sample results, QA decision per lot, close with the inspector's Frappe user + PIN | Quality Inspector, Factory Manager |
 | 28–29 | Kiosk · maintenance, quality | Maintenance: equipment tiles, my jobs, equipment alarms. Quality: live analysers, held lots, routine checks, QA release | Maintenance Technician, Quality Inspector |
 | 30–56 | Company lists, settings, kiosk actions, plant lists, layout editors | Alarms, trips, production, downtime, holds, maintenance and reports across all plants; General, Users and roles, Process templates, WhatsApp, ThingsBoard; My settings with the kiosk PIN; kiosk record a sample, log rejects, report a fault, request a spare part, decide a lot; plant trip and hold lists, past handovers, pinned tags; hold template editor; a layout editor for every plant | All roles |
+| 57 | Process flow | Each asset's Feeds into as a graph and a list, checks for loops and dead ends, Generate layout | Factory Manager |
 
 **Decisions (22 Nov 2026)**
 

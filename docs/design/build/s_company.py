@@ -67,7 +67,7 @@ def api():
 <div style="display:flex;flex-direction:column;gap:32px;padding-top:24px">
 {section('API', [
   row('REST API', 'Frappe\'s standard /api/resource and /api/method, plus the documented Frappe Factory methods.', f'<span class="in out" style="width:280px"><span class="grow tab">https://factory.ivarse.ng/api/v2</span>{ic("copy","i s35")}</span>'),
-  row('API reference', 'OpenAPI 3 description of every method and DocType the integration may use.', f'<a href="#" class="btn">{ic("file")}Open reference</a>'),
+  row('API reference', 'OpenAPI 3 description of every method and DocType the integration may use.', f'<a href="https://github.com/puzzo-dev/frappe_factory/blob/docs/architecture-and-plans/docs/trd.md#frappe-api-surface" target="_blank" rel="noopener" class="btn">{ic("file")}Open reference</a>'),
   row('Integration users', '2 users with the Factory Integration role. Each has its own key; revoke one without touching the other.', f'<span class="avs"><span class="av md">SB</span><span class="av md">ME</span></span>'),
   row('Plan targets in', 'Other systems post the daily plan per plant and shift, so OEE and plan attainment work without ERPNext.', '<span class="in out tab" style="width:280px"><span class="grow">plant.set_plan(plant, date, shift, item, qty)</span></span>'),
 ])}

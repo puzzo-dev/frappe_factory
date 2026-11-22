@@ -74,18 +74,14 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 
 Links to ERPNext DocTypes are never in these base DocTypes, because a Link to Work Order fails on a site without ERPNext. On a same-site link, turning the integration on adds Custom Fields such as `erpnext_work_order`; on another site, the ERPNext name is kept in a Data field `erp_ref` with `erp_doctype`.
 
-**Templates** (Process Template approved 22 Nov 2026)
+**Templates and process flow** (Process Template and feeds into approved 22 Nov 2026)
 
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
 | Process Template | Regular | `template_name`, `industry`, `version`, `machine_unit`, `pack_unit`, `pack_size`, `stock_uom`, `rated_speed`, `symbol_pack`, `layout` (JSON), `assets` (JSON), `kiosk_views` | → HMI Symbol (via layout), → Quality Hold Template, → Alarm Definition (copied into the plant) |
 | Plant (new field) | — | `process_template`, `template_version` | → Process Template |
-
-**Still proposed, pending approval** (see [scada-hmi.md](scada-hmi.md))
-
-| DocType | Kind | Key fields | Links to |
-| --- | --- | --- | --- |
-| Plant Asset (new field) | — | `feeds_into` (table of downstream assets) | → Plant Asset |
+| Plant Asset Feed | Child of Plant Asset (approved 22 Nov 2026) | `to_asset`, `medium`, `is_return`, `from_port`, `to_port` | → Plant Asset (same plant) |
+| Plant Asset (new field) | — | `feeds_into` (table of Plant Asset Feed), `on_link` for instruments on a line | → Plant Asset |
 
 **Quality**
 

@@ -226,6 +226,31 @@ A machine with no symbol yet is placed as **Generic machine**: a labelled box th
 
 **Process Template** (approved 22 Nov 2026). One record per industry bundles a symbol pack, asset types, tag templates, alarm definitions, downtime reasons, KPIs and a starter layout. Adding a plant starts from a template, so a rice mill gets a working setup on day one. I-Varse ships Water and beverage, Rice milling, Edible oil, Poultry farm and Blank; a company can save any plant as its own template. Each template carries its units of count (for example sachet and bag of 20, or egg and tray of 30). A plant gets its own copy of the starter layout, edited in that plant's layout editor; editing the template's layout changes new plants only.
 
+## Process flow (feeds into)
+
+Approved 22 Nov 2026. Each Plant Asset lists the assets it feeds, which gives every plant a directed graph of how product moves.
+
+**Data.** Child table `Plant Asset Feed` on Plant Asset: `to_asset` (Link Plant Asset, same plant only), `medium` (Select: product, water, air, feed), `is_return` (Check), `from_port` and `to_port` (Data, optional, the symbol ports a pipe joins). Instruments on a line, such as AT-401, are not nodes: they carry `on_link` pointing at the link they measure. Utilities such as generators stay out of the flow.
+
+**Rules.**
+
+- A link may only point to an asset in the same plant.
+- The graph must be acyclic once links marked `is_return` are removed. A return loop (IX-501 → T1) must be marked, or saving is refused.
+- Every path should end at a sink: a filler, packer, drain or store. Dead ends are listed as warnings, not errors.
+- A diverter (three-way valve) may have two outgoing links; its state tag decides which one is live.
+
+**API.** `flow.graph(plant)` returns nodes and links; `flow.downstream(asset)` and `flow.upstream(asset)` walk it (cached per plant, cleared when a link changes); `layout.generate(plant, area)` turns the graph into a draft layout using a layered left-to-right layout (elkjs in the editor), placing each asset's symbol and drawing a pipe per link. The draft opens in the layout editor; nothing is published until a manager publishes it.
+
+**What uses it.**
+
+| Feature | How it uses the flow |
+| --- | --- |
+| Generated layouts | Symbol order and pipes come from the links; a hand-drawn layout can also be checked against the flow |
+| Starved and blocked stops | When an asset stops, stops on downstream assets in the same minute are logged as Starved, and upstream ones as Blocked, not as their own fault |
+| Alarm flood control | After an upstream trip, alarms on downstream assets are held for 60 s (configurable), then raised if still true |
+| Quality hold tracing | A fault at a checkpoint holds product from every filler downstream of it; lots are split per sink |
+| Bottleneck view | OEE per asset along the path shows which machine limits the line |
+
 ## ERPNext link and other ERPs
 
 All ERP calls go through one adapter, so the rest of the app never knows where ERPNext lives. `frappe_factory/erp/base.py` defines `ErpAdapter` with `get_work_order`, `update_job_card`, `make_manufacture_entry`, `make_downtime_entry`, `set_workstation_status`, `make_quality_inspection`, `make_material_request` and `get_bin_qty`. Three implementations:

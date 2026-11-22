@@ -5,9 +5,11 @@ import math
 head = header('<div class="crumb"><span class="cur">Dashboard</span></div>',
   f'<span class="chip"><span class="k">Plants</span>All 6</span><div class="seg"><span class="on">Today</span><span>This week</span><span>This month</span></div>{btn("Export","download","ghost")}')
 
+KPI_HREF = {'OEE': 'CoProduction.dc.html', 'Plan attainment': 'CoProduction.dc.html', 'Unplanned downtime': 'CoDowntime.dc.html', 'Open alarms': 'CoAlarms.dc.html', 'Interlock trips': 'CoTrips.dc.html',
+            'Work orders open': 'CoProduction.dc.html', 'Completed today': 'CoProduction.dc.html', 'Material shortages': 'Resources.dc.html', 'Quality inspections': 'CoHolds.dc.html', 'Production plan': 'CoProduction.dc.html'}
 def kpi(k, v, d, ink=''):
     st = f';color:{ink}' if ink else ''
-    return f'<div class="card kpi"><span class="k">{k}</span><span class="v" style="font-size:20px{st}">{v}</span><span class="d">{d}</span></div>'
+    return f'<a href="{KPI_HREF[k]}" class="card kpi" style="color:inherit;text-decoration:none"><span class="k">{k}</span><span class="v" style="font-size:20px{st}">{v}</span><span class="d">{d}</span></a>'
 
 plants = [('Rice mill', 88, 96), ('Plant B', 82, 91), ('Poultry farm', 79, 75), ('Koyo 1', 70, 70), ('Oil mill', 61, 73)]
 def hbars():
@@ -48,7 +50,7 @@ for t, m, p, done, plan, u, due, (st, sc) in wos:
     pct = round(done / plan * 100)
     fd = f'{done:,}' if isinstance(done, int) else f'{done}'
     fp = f'{plan:,}' if isinstance(plan, int) else f'{plan}'
-    wrows += f'''<div class="lr" style="{WC};min-height:56px"><span class="c"><div class="t1">{t}</div><div class="m tab">{m}</div></span><span>{p}</span>
+    wrows += f'''<div class="lr" style="{WC};min-height:56px" onclick="location.href='{'RunDetail.dc.html' if m.startswith('WO-0412') else 'CoProduction.dc.html'}'"><span class="c"><div class="t1">{t}</div><div class="m tab">{m}</div></span><span>{p}</span>
 <span style="display:flex;flex-direction:column;gap:6px;min-width:0"><span class="tab" style="display:flex;justify-content:space-between;gap:8px"><span style="color:var(--ink-gray-8)">{fd}</span><span class="qs">of {fp} {u} · {pct}%</span></span><span class="bar"><i style="width:{pct}%"></i></span></span>
 <span class="qs" style="color:{"var(--ink-amber-7)" if due=="Yesterday" else "var(--ink-gray-7)"}">{due}</span><span>{bd(st, sc)}</span><span style="color:var(--ink-gray-4);display:flex" title="Open in ERPNext">{ic("ext","i s35")}</span></div>'''
 
@@ -62,9 +64,9 @@ body = f'''<div class="body">
 {kpi('Interlock trips', '1', 'Koyo 1 · 32 min', 'var(--ink-red-7)')}
 </div>
 <div style="display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.3fr) minmax(0,1fr);gap:12px">
-<div class="card" style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3 class="h3">OEE by plant</h3><span class="qs">line = 80% target</span></div>{hbars()}</div>
+<div class="card" style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3 class="h3">OEE by plant</h3><a href="Plants.dc.html" style="font-size:13px">Plants</a></div>{hbars()}</div>
 <div class="card" style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3 class="h3">Plan attainment · 14 days</h3><span class="qs">good output ÷ plan, per day</span></div>{lines()}</div>
-<div class="card" style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3 class="h3">Lost time by reason</h3><span class="qs">today</span></div>{prow}</div>
+<div class="card" style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3 class="h3">Lost time by reason</h3><a href="CoDowntime.dc.html" style="font-size:13px">View all</a></div>{prow}</div>
 </div></section>
 <section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;align-items:center;gap:8px"><h2 class="h2">Manufacturing</h2>{bd("From ERPNext · erp.ivarse.ng", "gray")}<span class="qs" style="margin-left:auto">Hidden when ERPNext is not linked</span></div>
 <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">

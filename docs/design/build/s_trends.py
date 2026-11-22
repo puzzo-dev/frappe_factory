@@ -73,7 +73,7 @@ for g, tags in groups:
         sw = f'<i style="width:8px;height:8px;border-radius:2px;background:{c}"></i>' if on else ''
         gl += f'<label class="si" style="height:28px;cursor:pointer;font-size:13px"><span class="cb{" on" if on else ""}"></span><span class="lbl" style="color:var(--ink-gray-{"8" if on else "7"})">{n}</span>{sw}</label>'
 picker = f'''<div style="flex:0 0 16rem;width:16rem;border-right:1px solid var(--outline-gray-1);display:flex;flex-direction:column;min-height:0">
-<div style="padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px"><span class="in muted">{ic("search")}<span class="grow">Search 64 tags</span></span><div style="display:flex;justify-content:space-between" class="qs"><span>3 of 8 on chart</span><a href="#">Clear</a></div></div>
+<div style="padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px"><span class="in muted">{ic("search")}<span class="grow">Search 64 tags</span></span><div style="display:flex;justify-content:space-between" class="qs"><span>3 of 8 on chart</span><button type="button" style="border:0;background:none;padding:0;font:inherit;color:var(--ink-blue-7);cursor:pointer">Clear</button></div></div>
 <div style="flex:1;overflow:auto;padding:0 4px 16px">{gl}</div>
 <div style="border-top:1px solid var(--outline-gray-1);padding:10px 12px;display:flex;flex-direction:column;gap:6px"><span class="qs">Saved views</span><span class="si" style="height:28px;font-size:13px">{ic("layers")}<span class="lbl">Lead and polishing</span></span><span class="si" style="height:28px;font-size:13px">{ic("layers")}<span class="lbl">RO health</span></span></div>
 </div>'''

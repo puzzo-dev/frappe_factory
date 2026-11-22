@@ -64,7 +64,7 @@ sample2 = f'''<div style="display:flex;flex-direction:column;gap:12px;padding:12
 </div>
 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end">
 {field('Method', sel('Portable ASV meter'))}
-<div class="fl" style="grid-column:span 2"><span class="lab">Certificate or photo</span><span class="in" style="border:1px dashed var(--outline-gray-3);background:var(--surface-base)">{ic('paperclip')}<span class="grow" style="color:var(--ink-gray-5)">Drop a file or <a href="#">browse</a></span></span></div>
+<div class="fl" style="grid-column:span 2"><span class="lab">Certificate or photo</span><span class="in" style="border:1px dashed var(--outline-gray-3);background:var(--surface-base)">{ic('paperclip')}<span class="grow" style="color:var(--ink-gray-5)">Drop a file or <button type="button" style="border:0;background:none;padding:0;font:inherit;color:var(--ink-blue-7);cursor:pointer">browse</button></span></span></div>
 </div>
 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span class="qs" style="display:inline-flex;align-items:center;gap:6px">{ic('info','i s35')}Logged as Quality Inspection QI-0931, linked to this trip.</span>{btn('Save result','check')}</div>
 </div>'''
@@ -101,7 +101,7 @@ steps = '<ol style="list-style:none;margin:0;padding:0">' + ''.join([
 ]) + '</ol>'
 
 head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Interlock trips','TripList.dc.html'),('TRIP-0007',None)),
-  f'{bd("Tripped · 32 min","s-red")}{btn("Report","file","ghost")}{btn(icon="more",kind="ghost",attrs="More")}')
+  f'{bd("Tripped · 32 min","s-red")}<a href="CoReports.dc.html" class="btn ghost">{ic("file")}Report</a>{btn(icon="more",kind="ghost",attrs="More")}')
 
 banner = f'''<div class="alert red" style="border-color:var(--outline-red-3);background:var(--surface-red-2)"><span class="ai">{ic('octagon')}</span>
 <div style="display:flex;flex-direction:column;gap:4px"><span class="ttl">Filling stopped by the lead interlock at 08:14</span>

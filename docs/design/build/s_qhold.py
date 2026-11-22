@@ -2,7 +2,7 @@
 from ff import *
 
 head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Quality holds','HoldList.dc.html'),('QH-0031',None)),
-  f'{bd("On hold","amber")}{btn("Report","file","ghost")}{btn(icon="more",kind="ghost",attrs="More")}')
+  f'{bd("On hold","amber")}<a href="CoReports.dc.html" class="btn ghost">{ic("file")}Report</a>{btn(icon="more",kind="ghost",attrs="More")}')
 
 banner = f'''<div class="alert amber" style="border-color:var(--outline-amber-3);background:var(--surface-amber-2)"><span class="ai">{ic('shield')}</span>
 <div style="display:flex;flex-direction:column;gap:4px"><span class="ttl">256 bags, 14 loose sachets and 2.3 m³ of water are on hold</span>

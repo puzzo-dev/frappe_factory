@@ -290,6 +290,7 @@ PLANT_NAV = [
 ]
 SETUP_NAV = [
     ('Devices.dc.html', 'cpu', 'Devices and tags'),
+    ('AssetFlow.dc.html', 'pipe', 'Process flow'),
     ('LayoutEditor.dc.html', 'layout', 'Layouts'),
     ('Symbols.dc.html', 'shapes', 'Symbol library'),
     ('AlarmDefs.dc.html', 'siren', 'Alarm definitions'),
@@ -323,9 +324,9 @@ def _head(badge=None, title=None, sub=None, open_=False):
             '<span style="font-size:13px;color:var(--ink-gray-7);margin-top:3px;line-height:1.1">Tunde B.</span></span>' + ic('chev-d', 'i', 'color:var(--ink-gray-5)') + '</button>')
 
 def _plant_switch(badge, name):
-    return ('<button type="button" class="si" style="height:36px;width:100%;border:1px solid var(--outline-gray-2);background:var(--surface-base);margin:2px 0 4px;font:inherit;cursor:pointer;text-align:left">'
+    return ('<a href="Plants.dc.html" class="si" aria-label="Switch plant" style="height:36px;width:100%;box-sizing:border-box;border:1px solid var(--outline-gray-2);background:var(--surface-base);margin:2px 0 4px;font:inherit;cursor:pointer;text-align:left;text-decoration:none">'
             f'<span style="width:20px;height:20px;border-radius:5px;background:var(--surface-gray-3);color:var(--ink-gray-8);display:grid;place-items:center;font-size:10px;font-weight:600">{badge}</span>'
-            f'<span class="lbl" style="font-weight:500;color:var(--ink-gray-8)">{name}</span>' + ic('chevs', 'i', 'color:var(--ink-gray-5)') + '</button>')
+            f'<span class="lbl" style="font-weight:500;color:var(--ink-gray-8)">{name}</span>' + ic('chevs', 'i', 'color:var(--ink-gray-5)') + '</a>')
 
 ALIAS = {'Trip.dc.html': 'TripList.dc.html', 'QualityHold.dc.html': 'HoldList.dc.html', 'Handover.dc.html': 'Handover.dc.html', 'HandoverHistory.dc.html': 'Handover.dc.html', 'SettingsCommands.dc.html': 'Settings.dc.html', 'PinnedTags.dc.html': None,
          'LayoutRice.dc.html': 'LAYOUT', 'LayoutOil.dc.html': 'LAYOUT', 'LayoutPoultry.dc.html': 'LAYOUT', 'LayoutEditor.dc.html': 'LAYOUT', 'QHTemplate.dc.html': 'CompanyTemplates.dc.html'}

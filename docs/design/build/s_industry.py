@@ -259,7 +259,7 @@ pd += ''.join([
 pd_svg = (f'<div style="position:relative"><svg viewBox="0 0 860 400" width="100%" role="img" aria-label="Sachet water line at Plant D, drawn with its last values from 05:34: raw tank, pump, media and cartridge filters, RO, lead analyser, UV, permeate tank and six fillers. No live data." style="display:block;opacity:.55">{pd}</svg>'
           f'<div style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 18px;border-radius:12px;background:var(--surface-elevation-2);box-shadow:var(--shadow-2xl);text-align:center">'
           f'<span style="font-weight:600;color:var(--ink-gray-9)">No live data since 05:34</span><span class="qs" style="max-width:320px;line-height:1.5">The edge box at Plant D stopped reporting. It keeps recording locally and sends the gap when the link returns. Values shown are the last received.</span>'
-          f'<span style="display:flex;gap:8px;margin-top:4px">{btn("Edge health","cpu")}<a href="Devices.dc.html" class="btn ghost">Devices</a></span></div></div>')
+          f'<span style="display:flex;gap:8px;margin-top:4px"><a href="Devices.dc.html" class="btn">{ic("cpu")}Edge health</a><a href="AssetFlow.dc.html" class="btn ghost">Process flow</a></span></div></div>')
 
 write('PlantD.dc.html', plant_screen(
   'Plant D', 'PD', 'PlantD.dc.html', 'Treatment and filling',
