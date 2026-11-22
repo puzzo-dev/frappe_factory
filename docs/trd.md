@@ -400,6 +400,19 @@ Targets for one OpsEdge box. Each is checked with a load test in CI or at the pi
 
 Rules: every service restarts by itself after a power cut. The agent uses the host network only where a serial (RTU) port is needed. Backups: Frappe backup nightly to OpsCloud object storage when online; `pg_dump` of TimescaleDB rollups weekly.
 
+**Two ways to deploy a plant.** Chosen per plant in Plant settings → Connector.
+
+| | Edge box · Frappe Factory in the cloud | Edge box with its own Frappe site |
+| --- | --- | --- |
+| On the edge box | opsedge-agent, mosquitto (local), timescaledb (raw readings, 7-day buffer), opsedge-uplink | Everything in the table above, including Frappe and ERPNext |
+| Frappe Factory runs | In the cloud only | On the box, synced to the cloud |
+| Internet down | PLC interlocks, the agent and local alarms keep running; readings buffer up to 7 days and are sent in order. Screens and kiosks need the internet | Everything keeps working; sync catches up |
+| Use when | Good, steady internet | Poor or costly internet |
+
+**opsedge-uplink** is the edge box's own MQTT client. It subscribes to the local broker and republishes `state`, `alarm`, `status` and 1-second telemetry to the cloud broker set in Connector, under the plant's own client ID and credentials, limited by ACL to `factory/{site}/#`. It connects out on 8883, so the plant needs no open ports. It also subscribes to `factory/{site}/cmd/#` and hands commands to the agent, which still checks the three command switches. Raw readings are batched to the cloud TimescaleDB every minute over the same link. `opsedge pair <code>` fetches broker, client ID and credentials from the site; the code comes from Connector and expires in 24 h.
+
+**Cloud side.** A long-running `frappe_factory.mqtt_consumer` process (added to the bench Procfile and supervisor config, like socketio) subscribes to `factory/+/#` on the cloud broker and does what the edge bridge does: dedupes by `msg_id`, writes alarms and events, pushes live values to the SPA. The cloud broker (Mosquitto or EMQX) is set up with the bench; per-plant users and ACLs are created when a plant is paired.
+
 **OpsCloud.** Standard Frappe Cloud-style multi-tenant bench, or own Kubernetes or Docker setup. Frappe Factory is installed with `install-app`. TimescaleDB in the cloud is optional (only for fleet trends from hourly rollups).
 
 **Release.** Semantic versions as in the current repo (`scripts/bump_version.py`). Edge images are tagged with the same version. An edge box upgrades only when its sync backlog is empty.

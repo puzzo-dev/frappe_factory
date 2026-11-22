@@ -36,22 +36,23 @@ def option(title, desc, on):
 
 def connector_panel():
     return f'''<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px"><div style="display:flex;flex-direction:column;gap:4px"><h2 style="margin:0;font-size:16px;font-weight:600;color:var(--ink-gray-8)">Connector</h2><p style="margin:0;font-size:14px;color:var(--ink-gray-6)">How Koyo 1's live data reaches Frappe Factory.</p></div>{btn("Test now","refresh")}</div>
-<div style="display:flex;flex-direction:column;gap:44px;padding-top:24px">
+<div style="display:flex;flex-direction:column;gap:40px;padding-top:24px">
 <section style="display:flex;flex-direction:column;gap:8px">
-{option('Frappe Factory edge', 'OpsEdge reads the PLCs and publishes to the plant MQTT broker. Data, alarms and trips stay on site if the internet drops, then sync.', True)}
-{option('ThingsBoard', 'Use an existing ThingsBoard server. Frappe Factory pulls telemetry and alarms through the ThingsBoard API. Community Edition is free; the source-available licence limits some uses.', False)}
+{option('Edge box · Frappe Factory in the cloud', 'The edge box reads the PLCs and sends everything to this site through its uplink. Screens and kiosks need the internet; the PLC interlocks and the edge keep running without it and catch up when it returns.', True)}
+{option('Edge box with its own Frappe site', 'A full Frappe Factory site runs on the edge box and syncs to this one. Screens and kiosks keep working when the internet drops. For plants with poor internet.', False)}
+{option('ThingsBoard', 'Use an existing ThingsBoard server instead of an edge box. Frappe Factory pulls telemetry and alarms through the ThingsBoard API.', False)}
 </section>
-{section('Edge', [
-  row('Edge agent', 'OpsEdge K1 · v0.4.2 · online · last message 1 s ago', bd('Online','green','g')),
-  row('Message broker', 'Mosquitto on OpsEdge K1, for this plant only. Set up and secured by the edge installer, the way bench sets up Redis. Nothing to configure.', bd('Running','green','g')),
-  row('Live update interval', 'How often open screens refresh. Interlocked tags are always sent on change.', f'<span class="in out" style="width:120px">{"<span class=grow>2 s</span>"}{ic("chev-d","i s35")}</span>'),
-  row('Cloud sync', 'Outbox to OpsCloud. 0 messages waiting.', '<span class="qs">Last sync 08:45:58</span>'),
+{section('Uplink · edge box to this site', [
+  row('Broker', 'The MQTT broker this site listens on. The edge box connects out to it, so the plant needs no open ports.', f'<span class="in out" style="width:280px"><span class="grow tab">mqtts://mqtt.koyo.ng:8883</span></span>'),
+  row('Client ID', 'One per plant. Topics are factory/koyo-1/…', '<span class="in out" style="width:280px"><span class="grow tab">opsedge-koyo-1</span></span>'),
+  row('Credentials', 'Username and password for this plant only, limited to its own topics. Shown once.', f'<span style="display:flex;gap:8px;align-items:center"><span class="qs tab">opsedge-koyo-1 · ••••••</span>{btn("Reset")}</span>'),
+  row('Pair the edge box', 'Run opsedge pair with this code on the edge box. It downloads the broker, client ID and credentials above.', f'<span style="display:flex;gap:8px;align-items:center"><span class="in out" style="width:140px"><span class="grow tab">K1-7QF-2M9</span></span>{btn("New code")}</span>'),
+  row('Uplink status', 'OpsEdge K1 · v0.4.2 · connected 3 h 12 min · 0 messages waiting', bd('Connected','green','g')),
 ])}
-{section('Time-series data', [
-  row('Database', 'TimescaleDB 2.17 on the plant site. Hypertable ff_tag_value.', bd('Healthy','green')),
-  row('Keep raw values', 'Every reading at full speed. Used by Trends up to 30 days.', f'<span class="in out" style="width:120px"><span class="grow">30 days</span>{ic("chev-d","i s35")}</span>'),
-  row('Keep 1-minute averages', 'Continuous aggregate. Used for reports and longer trends.', f'<span class="in out" style="width:120px"><span class="grow">2 years</span>{ic("chev-d","i s35")}</span>'),
-  row('Compress after', 'Older chunks are compressed, about 10× smaller.', f'<span class="in out" style="width:120px"><span class="grow">7 days</span>{ic("chev-d","i s35")}</span>'),
+{section('On the edge box', [
+  row('Local broker', 'Mosquitto on OpsEdge K1 for the agent and the uplink. Set up by the edge installer; nothing to configure.', bd('Running','green','g')),
+  row('Buffer', 'Readings kept on the box while the uplink is down, then sent in order.', f'<span class="in out" style="width:120px"><span class="grow">7 days</span>{ic("chev-d","i s35")}</span>'),
+  row('Live update interval', 'How often open screens refresh. Interlocked tags are always sent on change.', f'<span class="in out" style="width:120px"><span class="grow">2 s</span>{ic("chev-d","i s35")}</span>'),
 ])}
 </div>'''
 

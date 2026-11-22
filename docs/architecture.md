@@ -22,7 +22,7 @@ Non-negotiables. Every phase is checked against these:
 
 ## System context
 
-Each factory runs a complete stack on its OpsEdge box and keeps working when the link is down. OpsCloud receives documents, events and summaries, not raw readings.
+A factory runs one of two ways. With the app in the cloud, its OpsEdge box runs only the agent, a local broker, a raw-reading buffer and an uplink client that connects out to the cloud broker. With a full edge site, the box also runs Frappe Factory and keeps every screen working when the link is down, syncing documents, events and summaries to OpsCloud. See the TRD, Deployment.
 
 ![System context: field, edge box, cloud](images/system-context.png)
 
