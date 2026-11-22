@@ -221,7 +221,7 @@ The five existing roles stay, plus one for maintenance and one for integrations.
 
 | Role | Can do | Cannot do |
 | --- | --- | --- |
-| Factory Manager (also acts as Floor Engineer) | Everything in their sites; configure alarms, layouts, process flows, retention; approve trip restarts | System settings, connector secrets (System Manager only) |
+| Factory Manager | Everything in their sites; configure alarms, layouts, process flows, retention; approve trip restarts | System settings, connector secrets (System Manager only) |
 | Floor Supervisor | Start/stop runs, give downtime reasons, acknowledge and shelve alarms, sign off trip recovery; propose layout and flow changes through a Workflow, if one is set | Change Alarm Definitions; change layouts or flows directly |
 | Machine Operator | See their line, record counts and rejects, acknowledge alarms on their line; report faults; propose changes to process flows and layouts through a Workflow, only when one is set (otherwise read only) | Shelve alarms, submit Machine Stops |
 | Quality Inspector | Quality Inspections, lab values in trip recovery, hold a batch | Production or alarm settings |

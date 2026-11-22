@@ -232,7 +232,7 @@ Approved 22 Nov 2026. Each plant has one live `Process Flow` that lists which as
 
 **Who can change it.** The same rule covers `Process Flow` and `Plant Floor Layout`.
 
-- The Factory Manager (who also acts as Floor Engineer) edits and publishes directly.
+- The Factory Manager edits and publishes directly.
 - Every role below the Factory Manager can only change them through a Frappe `Workflow` on that DocType. Workflow is part of Frappe itself, so this also works without ERPNext. A Machine Operator, for example, saves a draft and moves it to Pending approval; the Factory Manager approves it, and the change becomes the plant's live flow or layout as a new version.
 - With no active Workflow on the DocType, or none whose transitions name the user's role, those roles can only read. A `has_permission` hook enforces this: write is `True` for Factory Manager, and for other roles only when an active Workflow gives their role a transition.
 
