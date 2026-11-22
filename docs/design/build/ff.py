@@ -174,6 +174,10 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
+.ffx{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.ffx:checked + .ffov{display:none !important}
+label.overlay,label.scrim{cursor:default}
+label.btn{cursor:pointer}
 .ff a.mi{color:var(--ink-gray-8)}
 .ff a.mi:hover{background:var(--surface-gray-2)}
 .mi .i{color:var(--ink-gray-6)}
@@ -457,3 +461,13 @@ def spark(values, w=120, h=28, color='var(--ink-gray-7)', lo=None, hi=None, line
     pts = ' '.join(f'{i*(w/(len(values)-1)):.1f},{h-2-(v-lo)/rng*(h-4):.1f}' for i, v in enumerate(values))
     ls = ''.join(f'<line x1="0" x2="{w}" y1="{h-2-(y-lo)/rng*(h-4):.1f}" y2="{h-2-(y-lo)/rng*(h-4):.1f}" stroke="{c}" stroke-width="1" stroke-dasharray="3 3"/>' for y, c in lines)
     return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" aria-hidden="true" style="display:block;overflow:visible">{ls}<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>'
+
+
+def closer(uid):
+    """A hidden checkbox: ticking it (via a <label for=uid>) hides the .ffov that follows it. Close, Cancel and
+    clicking the scrim all close the popup in place, with no script."""
+    return f'<input type="checkbox" id="{uid}" class="ffx" aria-hidden="true" tabindex="-1">'
+def close_btn(uid, label=None):
+    if label:
+        return f'<label for="{uid}" class="btn" role="button" tabindex="0">{label}</label>'
+    return f'<label for="{uid}" class="btn ghost ico" role="button" tabindex="0" aria-label="Close">{ic("x")}</label>'

@@ -175,6 +175,10 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
+.ffx{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.ffx:checked + .ffov{display:none !important}
+label.overlay,label.scrim{cursor:default}
+label.btn{cursor:pointer}
 .ff a.mi{color:var(--ink-gray-8)}
 .ff a.mi:hover{background:var(--surface-gray-2)}
 .mi .i{color:var(--ink-gray-6)}

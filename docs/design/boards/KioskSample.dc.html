@@ -175,6 +175,10 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
+.ffx{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.ffx:checked + .ffov{display:none !important}
+label.overlay,label.scrim{cursor:default}
+label.btn{cursor:pointer}
 .ff a.mi{color:var(--ink-gray-8)}
 .ff a.mi:hover{background:var(--surface-gray-2)}
 .mi .i{color:var(--ink-gray-6)}
@@ -228,7 +232,7 @@ a.kb{text-decoration:none}
 </div>
 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px"><a href="KioskSample.dc.html" class="kb" style="height:60px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg>Record a sample</a><button type="button" class="kb" style="height:60px" disabled><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>QA release · needs sample 2</button><button type="button" class="kb" style="height:60px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call supervisor</button></div>
 <span class="qs" style="font-size:13px;text-align:center">Every result and decision is signed with your Frappe user and confirmed with your PIN.</span>
-</div></div><div class="ff" style="position:absolute;inset:0;display:block;min-height:0;background:transparent;font-size:16px"><div class="overlay"></div><div class="dialog" role="dialog" aria-label="Record sample 2" style="left:50%;top:50%;transform:translate(-50%,-50%);width:960px;display:flex;flex-direction:column">
+</div></div><input type="checkbox" id="kd" class="ffx" aria-hidden="true" tabindex="-1"><div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent;font-size:16px"><label for="kd" class="overlay" aria-label="Close"></label><div class="dialog" role="dialog" aria-label="Record sample 2" style="left:50%;top:50%;transform:translate(-50%,-50%);width:960px;display:flex;flex-direction:column">
 <div style="padding:22px 26px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px"><div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-size:22px;font-weight:600;color:var(--ink-gray-9)">Record sample 2</h1><p class="ps" style="font-size:15px">TRIP-0007 · lead trip at 08:14 · sample 1 read 2.1 µg/L at 08:36</p></div><a href="KioskQA.dc.html" class="kb" style="width:44px;height:44px;padding:0" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></a></div>
 <div style="padding:18px 26px;display:flex;flex-direction:column;gap:18px;flex:1;min-height:0;overflow:auto"><div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px">
 <div style="display:flex;flex-direction:column;gap:16px">

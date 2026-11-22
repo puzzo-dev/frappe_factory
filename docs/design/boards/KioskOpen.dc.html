@@ -175,6 +175,10 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
+.ffx{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.ffx:checked + .ffov{display:none !important}
+label.overlay,label.scrim{cursor:default}
+label.btn{cursor:pointer}
 .ff a.mi{color:var(--ink-gray-8)}
 .ff a.mi:hover{background:var(--surface-gray-2)}
 .mi .i{color:var(--ink-gray-6)}
@@ -211,7 +215,7 @@ a.kb{text-decoration:none}
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><label class="fl"><span class="lab">Shift</span><span class="in out"><span class="grow">Morning · 06:00 – 14:00</span><svg class="i s35" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></label><label class="fl"><span class="lab">Production run</span><span class="in out"><span class="grow">RUN-0412 · from WO-0412</span><svg class="i s35" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span><span class="hint">From ERPNext. Hidden when ERPNext is not linked.</span></label></div>
 <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:var(--surface-green-2);font-size:14px"><span style="color:var(--ink-green-7);display:flex"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span style="color:var(--ink-gray-8)">This tablet is registered as T-02 for Filling hall T-02.</span></div>
 </div>
-<div style="padding:16px 28px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--outline-gray-1)"><span class="qs" style="font-size:13px;max-width:280px">Opens full screen. Leaving needs a supervisor's Frappe user and PIN. Closing writes every sign-in to the shift.</span><a href="KioskLogin.dc.html" class="kb solid">Open kiosk</a></div>
+<div style="padding:16px 28px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--outline-gray-1)"><span class="qs" style="font-size:13px;max-width:280px">Opens full screen. Leaving needs a supervisor's Frappe user and PIN. Closing writes every sign-in to the shift.</span><span style="display:flex;gap:10px"><a href="Dashboard.dc.html" class="kb">Cancel</a><a href="KioskLogin.dc.html" class="kb solid">Open kiosk</a></span></div>
 </div></div></div></div></div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1180, "height": 820}}'>

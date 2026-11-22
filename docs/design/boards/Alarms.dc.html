@@ -175,6 +175,10 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
+.ffx{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.ffx:checked + .ffov{display:none !important}
+label.overlay,label.scrim{cursor:default}
+label.btn{cursor:pointer}
 .ff a.mi{color:var(--ink-gray-8)}
 .ff a.mi:hover{background:var(--surface-gray-2)}
 .mi .i{color:var(--ink-gray-6)}
@@ -260,7 +264,7 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 <span class="r tab" style="display:flex;flex-direction:column;align-items:flex-end"><span>06:10</span><span class="m" style="margin-top:4px">2 h 36 min</span></span>
 </div>
 </div>
-<p class="qs" style="margin:0">Sorted by priority, then unacknowledged first. Cleared alarms that were never acknowledged stay here until someone acknowledges them.</p></div>
+<p class="qs" style="margin:0">Alarms are raised by the plant's Alarm definitions (Setup). Each alarm also sends a notification (Frappe bell, WhatsApp) that links back here; reading it does not acknowledge the alarm. Unacknowledged past its response time, it escalates to the Floor Supervisor, then the Factory Manager. Sorted by priority, then unacknowledged first. Cleared alarms that were never acknowledged stay here until someone acknowledges them.</p></div>
 </div>
 <aside class="panel" aria-label="Selected alarm">
 <div style="display:flex;align-items:center;justify-content:space-between;height:48px;padding:0 16px;border-bottom:1px solid var(--outline-gray-1)">

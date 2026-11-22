@@ -106,7 +106,7 @@ listv = f'''<div class="list" role="table" aria-label="Active alarms">
 <div class="lh" style="{COLS}" role="row"><span class="cb" aria-hidden="true"></span><span class="sort">Priority{ic('chev-d','i s35')}</span><span>Alarm</span><span class="r" style="display:flex">Value</span><span>State</span><span class="r" style="display:flex">Raised</span></div>
 {''.join(row(r) for r in rows)}
 </div>
-<p class="qs" style="margin:0">Sorted by priority, then unacknowledged first. Cleared alarms that were never acknowledged stay here until someone acknowledges them.</p>'''
+<p class="qs" style="margin:0">Alarms are raised by the plant's Alarm definitions (Setup). Each alarm also sends a notification (Frappe bell, WhatsApp) that links back here; reading it does not acknowledge the alarm. Unacknowledged past its response time, it escalates to the Floor Supervisor, then the Factory Manager. Sorted by priority, then unacknowledged first. Cleared alarms that were never acknowledged stay here until someone acknowledges them.</p>'''
 
 content = f'''<div style="display:flex;flex:1;min-height:0">
 <div style="flex:1;min-width:0;display:flex;flex-direction:column">

@@ -167,10 +167,10 @@ pin_panel = f'''{title('Kiosk PIN', 'Your PIN signs you in on the kiosks you are
 import s_dashboard
 from s_dashboard import head as dh, body as db
 bg = shell('Dashboard.dc.html', dh, db, scope='company')
-dlg = f'''<div class="ff" style="position:absolute;inset:0;display:block;min-height:0;background:transparent"><div class="overlay"></div>
+dlg = f'''{closer("dlg")}<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent"><label for="dlg" class="overlay" aria-label="Close"></label>
 <div class="dialog" role="dialog" aria-label="My settings" style="left:50%;top:48px;transform:translateX(-50%);width:960px;height:800px;display:flex">
 <div style="width:220px;flex-shrink:0;background:var(--surface-sidebar);border-right:1px solid var(--outline-gray-1);padding:8px;display:flex;flex-direction:column">
 <div style="display:flex;align-items:center;gap:8px;height:40px;padding:0 6px"><span class="av" style="width:24px;height:24px;flex:0 0 24px;font-size:10px">TB</span><span style="display:flex;flex-direction:column;line-height:1.15"><span style="font-weight:500;color:var(--ink-gray-8)">Tunde B.</span><span class="qs" style="font-size:12px">My settings</span></span></div>{my_nav('Kiosk PIN')}</div>
-<div style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative"><div style="position:absolute;right:16px;top:16px"><a href="Dashboard.dc.html" class="btn ghost ico" aria-label="Close">{ic("x")}</a></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative"><div style="position:absolute;right:16px;top:16px">{close_btn("dlg")}</div>
 <div style="flex:1;overflow:auto;padding:40px 3.5rem 64px">{pin_panel}</div></div></div></div>'''
 write('MySettings.dc.html', page('My settings', f'<div style="position:relative">{bg}{dlg}</div>', {"$preview": {"width": 1440, "height": 900}}))

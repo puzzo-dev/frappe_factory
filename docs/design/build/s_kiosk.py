@@ -26,7 +26,7 @@ def topbar_right():
     return '<span class="tab" style="font-size:20px;font-weight:600;color:var(--ink-gray-9)">08:46</span><span class="bd gray" style="height:24px;font-size:13px"><span class="dot g"></span>Online</span>'
 
 def kpage(name, body, overlay=''):
-    ov = f'<div class="ff" style="position:absolute;inset:0;display:block;min-height:0;background:transparent;font-size:16px"><div class="overlay"></div>{overlay}</div>' if overlay else ''
+    ov = (closer('kd') + f'<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent;font-size:16px"><label for="kd" class="overlay" aria-label="Close"></label>{overlay}</div>') if overlay else ''
     return page(name, f'<div style="position:relative;height:100vh"><div class="ff" style="flex-direction:column;font-size:16px">{body}</div>{ov}</div>', {"$preview": {"width": W_, "height": H_}}, helmet_extra=KCSS)
 
 # ---------------- Sign in: Frappe user + PIN
@@ -92,7 +92,7 @@ openk = f"""<div style="position:relative;flex:1;background:var(--surface-gray-1
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">{field('Shift', sel('Morning · 06:00 – 14:00', 'out'))}{field('Production run', sel('RUN-0412 · from WO-0412', 'out'), hint='From ERPNext. Hidden when ERPNext is not linked.')}</div>
 <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:var(--surface-green-2);font-size:14px"><span style="color:var(--ink-green-7);display:flex">{ic("check")}</span><span style="color:var(--ink-gray-8)">This tablet is registered as T-02 for Filling hall T-02.</span></div>
 </div>
-<div style="padding:16px 28px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--outline-gray-1)"><span class="qs" style="font-size:13px;max-width:280px">Opens full screen. Leaving needs a supervisor's Frappe user and PIN. Closing writes every sign-in to the shift.</span><a href="KioskLogin.dc.html" class="kb solid">Open kiosk</a></div>
+<div style="padding:16px 28px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--outline-gray-1)"><span class="qs" style="font-size:13px;max-width:280px">Opens full screen. Leaving needs a supervisor's Frappe user and PIN. Closing writes every sign-in to the shift.</span><span style="display:flex;gap:10px"><a href="Dashboard.dc.html" class="kb">Cancel</a><a href="KioskLogin.dc.html" class="kb solid">Open kiosk</a></span></div>
 </div></div></div>"""
 write('KioskOpen.dc.html', kpage('Open kiosk', openk))
 

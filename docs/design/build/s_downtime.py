@@ -87,7 +87,7 @@ table = f'''<section style="display:flex;flex-direction:column;gap:12px;position
 <div style="display:flex;gap:8px"><div class="seg"><span class="on">All</span><span>Needs a reason</span><span>Planned</span></div></div></div>
 <div class="list"><div class="lh" style="{C}"><span>Start</span><span>Lost</span><span>Where</span><span>Reason</span><span>Type</span><span>Logged by</span><span></span></div>{''.join(rows)}</div>
 <p class="qs" style="margin:0">The PLC opens a stop whenever a filler's run signal drops for more than 30 s. Anyone on shift can pick the reason; supervisors can split or merge stops.</p>
-{popover}
+{closer('pop')}<div class="ffov"><label for="pop" class="scrim" style="position:absolute;inset:0;z-index:2" aria-label="Close"></label>{popover}</div>
 </section>'''
 
 body = f'<div class="body" style="overflow:auto">{kpis}<div style="display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:12px">{timeline}{pareto}</div>{table}</div>'

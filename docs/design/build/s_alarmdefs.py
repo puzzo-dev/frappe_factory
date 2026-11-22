@@ -31,9 +31,9 @@ def radio(label, desc, on=False):
 def chipx(t):
     return f'<span class="chip" style="height:22px;background:var(--surface-gray-3)">{t}{ic("x","i s35")}</span>'
 
-dialog = f'''<div class="overlay"></div>
+dialog = f'''<label for="dlg" class="overlay" aria-label="Close"></label>
 <div class="dialog" role="dialog" aria-labelledby="dlg-t" style="left:50%;top:40px;transform:translateX(-50%);width:640px">
-<div style="padding:20px 24px 0;display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;flex-direction:column;gap:4px"><h2 id="dlg-t" style="margin:0;font-size:20px;font-weight:600;color:var(--ink-gray-9)">AT-401 Lead · high</h2><span class="qs">ALD-0012 · Koyo 1 · changed 3 Nov by Tunde B.</span></div>{btn(icon="x",kind="ghost",attrs="Close")}</div>
+<div style="padding:20px 24px 0;display:flex;justify-content:space-between;align-items:flex-start"><div style="display:flex;flex-direction:column;gap:4px"><h2 id="dlg-t" style="margin:0;font-size:20px;font-weight:600;color:var(--ink-gray-9)">AT-401 Lead · high</h2><span class="qs">ALD-0012 · Koyo 1 · changed 3 Nov by Tunde B.</span></div>{close_btn("dlg")}</div>
 <div style="padding:20px 24px;display:flex;flex-direction:column;gap:22px;max-height:660px;overflow:auto">
 <section style="display:flex;flex-direction:column;gap:12px"><h3 class="h3">When it raises</h3>
 <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr);gap:12px">
@@ -63,13 +63,13 @@ dialog = f'''<div class="overlay"></div>
 <div class="fl"><span class="lab">Roles</span><span class="in" style="height:auto;min-height:32px;flex-wrap:wrap;padding:4px 6px;gap:4px">{chipx("Floor Supervisor")}{chipx("Quality Inspector")}<span class="qs" style="padding:0 4px">Add role</span></span></div>
 <div style="display:flex;flex-direction:column;gap:2px">
 <label style="display:flex;align-items:center;justify-content:space-between;min-height:36px"><span style="display:flex;flex-direction:column"><span style="color:var(--ink-gray-8)">WhatsApp</span><span class="qs">Through frappe_whatsapp_openwa to the person on shift</span></span><span class="sw on"></span></label>
-<label style="display:flex;align-items:center;justify-content:space-between;min-height:36px"><span style="display:flex;flex-direction:column"><span style="color:var(--ink-gray-8)">Escalate if not acknowledged</span><span class="qs">After 10 min, to Factory Manager</span></span><span class="sw on"></span></label>
+<label style="display:flex;align-items:center;justify-content:space-between;min-height:36px"><span style="display:flex;flex-direction:column"><span style="color:var(--ink-gray-8)">Escalate if not acknowledged</span><span class="qs">After 10 min to the Floor Supervisor, after 20 min to the Factory Manager. Reading a notification does not acknowledge.</span></span><span class="sw on"></span></label>
 <label style="display:flex;align-items:center;justify-content:space-between;min-height:36px"><span style="display:flex;flex-direction:column"><span style="color:var(--ink-gray-8)">Allow shelving</span><span class="qs">Up to 8 h, with a reason</span></span><span class="sw"></span></label>
 </div></section>
 </div>
-<div style="padding:12px 24px 20px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--outline-gray-1)"><span class="qs">Saving starts a new version and syncs to OpsEdge K1</span><div style="display:flex;gap:8px">{btn("Cancel")}<button type="button" class="btn solid">Save</button></div></div>
+<div style="padding:12px 24px 20px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--outline-gray-1)"><span class="qs">Saving starts a new version and syncs to OpsEdge K1</span><div style="display:flex;gap:8px">{close_btn("dlg","Cancel")}<button type="button" class="btn solid">Save</button></div></div>
 </div>'''
 
 content = f'<div style="position:relative;flex:1;min-height:0">{lst}</div>'
-body_html = f'<div style="position:relative">{shell("AlarmDefs.dc.html", head, content)}<div class="ff" style="position:absolute;inset:0;display:block;min-height:0;background:transparent">{dialog}</div></div>'
+body_html = f'<div style="position:relative">{shell("AlarmDefs.dc.html", head, content)}{closer("dlg")}<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent">{dialog}</div></div>'
 write('AlarmDefs.dc.html', page('Alarm definitions', body_html, {"$preview": {"width": 1440, "height": 900}}))

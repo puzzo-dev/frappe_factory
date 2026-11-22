@@ -82,7 +82,7 @@ body = f'''<div class="body">
 def build(name, menu=False):
     content = shell('Dashboard.dc.html', head, body, scope='company', menu_open=menu)
     if menu:
-        content = f'<div style="position:relative">{content}<div class="ff" style="position:absolute;inset:0;display:block;min-height:0;background:transparent;pointer-events:none">{app_menu(8, 50)}</div></div>'
+        content = f'<div style="position:relative">{content}{closer("menu")}<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent"><label for="menu" class="scrim" style="position:absolute;inset:0;z-index:4" aria-label="Close menu"></label>{app_menu(8, 50)}</div></div>'
     write(name, page('Dashboard', content, {"$preview": {"width": 1440, "height": 900}}))
 
 build('Dashboard.dc.html')
