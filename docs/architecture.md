@@ -200,7 +200,7 @@ A Vue 3 + frappe-ui single-page app at `/factory`, built into the app's assets l
 | Shell | Who | Device | Shape |
 | --- | --- | --- | --- |
 | Control room | Factory Manager, Floor Supervisor | Desktop, wall screen | Mimic, alarms, KPIs, trends; dense, dark theme option |
-| Floor (kiosk) | Machine Operator, Quality Inspector | Tablet at the line | Large touch targets, one task per screen, PIN switch-user, works offline for short drops |
+| Floor (kiosk) | Machine Operator, Quality Inspector | Tablet at the line | Large touch targets, one task per screen, Frappe user + PIN sign-in, works offline for short drops |
 | Manager | Factory Manager, owner | Phone, desktop | Plants home (one card per plant, opens that plant), summaries, approvals, trips |
 
 **Stack**
@@ -340,16 +340,21 @@ Every link below is a switch in Settings → ERPNext, so a company turns on only
 
 ## Kiosk access
 
-A kiosk is a full-screen station app, like ERPNext POS: a Floor Supervisor opens a session on a registered tablet, only the people assigned to that Kiosk Profile can sign in, and it shows only that station's machines. Access needs both a role and an assignment.
+A kiosk is a full-screen station app, like ERPNext POS: a Floor Supervisor opens a session on a registered tablet, only the people assigned to that Kiosk Profile can sign in, and it shows only that station's machines. Each Kiosk Profile has a view: Line (filling and packing), Maintenance or Quality. Maintenance and QA watch their own part of the plant from their own tablets, so they respond quickly. Access needs both a role and an assignment.
 
 | Who | Role | On the kiosk | Why |
 | --- | --- | --- | --- |
-| Machine Operator | Machine Operator | Sign in with PIN, give stop reasons, log rejects | Does the work at the line and needs nothing else on a shared screen |
-| Quality Inspector | Quality Inspector | Record samples | Samples become quality records, so only trained people enter them |
-| Floor Supervisor | Floor Supervisor | Open and close the session, start and end runs, leave full screen with a PIN | Owns the shift; closing writes the session to the shift handover |
+| Machine Operator | Machine Operator | Line view: give stop reasons, log rejects | Does the work at the line and needs nothing else on a shared screen |
+| Quality Inspector | Quality Inspector | Quality view: live analysers, held lots, routine checks, samples, QA release | Samples become quality records, so only trained people enter them |
+| Maintenance Technician | Maintenance Technician | Maintenance view: equipment status, own jobs, equipment alarms, fault reports, spare-part requests | Responds to equipment faults from the floor; never resets an interlock |
+| Floor Supervisor | Floor Supervisor | Open and close the session, start and end runs, leave full screen with their Frappe user + PIN | Owns the shift; closing writes the session to the shift handover |
 | Factory Manager | Factory Manager | Not on the kiosk. Creates Kiosk Profiles, assigns users, registers tablets in Settings → Kiosks | Setup stays off the shared tablet |
 
-Why both a role and an assignment: the role gives permission on the DocTypes, and the assignment on the Kiosk Profile limits it to one station and its machines, as POS Profile users do in ERPNext. A role alone would let any operator open any kiosk in any plant. The PIN switches users inside an open session, so every action on a shared tablet is signed by a person without typing passwords. Device registration stops the kiosk opening on a personal phone; full screen keeps Desk, setup and other plants out of reach; the screen returns to the name list after 10 minutes without a tap. PINs are stored hashed in a Password field.
+Why both a role and an assignment: the role gives permission on the DocTypes, and the assignment on the Kiosk Profile limits it to one station and its machines, as POS Profile users do in ERPNext. A role alone would let any operator open any kiosk in any plant. Sign-in is always a Frappe user plus that user's own PIN: the person taps their user, listed from the assignment, and enters a 6-digit PIN checked against that user. A PIN on its own identifies no one, so every action on a shared tablet is recorded against a real Frappe user and tied to the shift. Every assigned user must set a PIN, in My settings after a normal password sign-in; without one they cannot sign in on any kiosk. Device registration stops the kiosk opening on a personal phone; full screen keeps Desk, setup and other plants out of reach; the screen returns to the name list after 10 minutes without a tap. PINs are stored hashed in a Password field. Five wrong PINs lock that user on every kiosk for 15 minutes.
+
+## Units of count
+
+Filler PLCs count sachets, the unit the machine makes; stock and work orders count the pack unit. Each product's Process Template sets both. For sachet water a sachet is 50 cl and a bag is 20 sachets (10 L). The stock unit is the bag, with Sachet as an ERPNext UOM conversion of 1/20. Rated speed is per filler in sachets per hour: 2,000 for a Koyo XY filler, so 100 bags an hour (to confirm on site). Screens show machine rates and rejects in sachets, output and plans in bags, and held product in both, plus litres. Loose sachets not yet bagged keep their own count and are never rounded into bags.
 
 ## Quality assurance
 
@@ -366,7 +371,7 @@ A quality fault stops the line twice over: the PLC stops it, and only a Quality 
 
 | Industry | Fault | QA must test before the line runs | Held product |
 | --- | --- | --- | --- |
-| Sachet water (Koyo) | Lead over the trip limit at AT-401 | Two lab results under 3 µg/L at SP-1, at least 10 min apart | Bags filled since the last passing check; T4 and T5 water |
+| Sachet water (Koyo) | Lead over the trip limit at AT-401 | Two lab results under 3 µg/L at SP-1, at least 10 min apart | Sachets filled since the last passing check, counted in sachets and bags; T4 and T5 water |
 | Edible oil | Deodorizer temperature or vacuum out of band | Free fatty acid and peroxide value on refined oil | Refined oil and bottles since the last good check |
 | Rice milling | Metal detector or magnet reject, color sorter fault | Visual check, broken %, foreign matter on a sample per bag lot | Bags since the last good check |
 
@@ -398,11 +403,12 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 15 | Plant settings · commands | The three switches, all off in release 1 | Manager |
 | 16 | New plant · choose industry | Four-step wizard; step 2 picks a Process Template (water, rice milling, edible oil, blank) | Manager, System Manager |
 | 17–18 | Plant · rice mill, oil mill | The same plant screen drawn from the rice milling and edible oil symbol packs | Supervisor |
-| 19–20 | Kiosk · sign in, line view | Tablet at the line: tap your name and PIN; filler tiles, trip banner, big reason buttons, rejects, samples | Operator, Quality Inspector |
+| 19–20 | Kiosk · sign in, line view | Tablet at the line: tap your Frappe user, then your PIN; filler tiles, trip banner, big reason buttons, rejects, samples | Operator, Quality Inspector |
 | 21–22 | Dashboard, app menu | Company home: factory metrics (works standalone) and manufacturing metrics from ERPNext. App menu: Apps on this site, Open kiosk, Switch to Desk, help, theme, settings, log out | Manager, owner |
 | 23–25 | Settings · ERPNext, API and webhooks, Kiosks | Link ERPNext on this site or another; integration users and webhooks for other ERPs; kiosk profiles with assigned users, allowed actions and registered tablet | Factory Manager, System Manager |
 | 26 | Kiosk · open session | Like ERPNext POS opening: pick an assigned kiosk, shift and run, then full screen | Floor Supervisor |
-| 27 | Quality hold | Held lots split by time, tests from the template, sample results, QA decision per lot, close with QA PIN | Quality Inspector, Factory Manager |
+| 27 | Quality hold | Held lots split by time, tests from the template, sample results, QA decision per lot, close with the inspector's Frappe user + PIN | Quality Inspector, Factory Manager |
+| 28–29 | Kiosk · maintenance, quality | Maintenance: equipment tiles, my jobs, equipment alarms. Quality: live analysers, held lots, routine checks, QA release | Maintenance Technician, Quality Inspector |
 
 **Decisions (22 Nov 2026)**
 

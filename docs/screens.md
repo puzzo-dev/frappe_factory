@@ -4,7 +4,9 @@ Frappe Factory screen designs, built on frappe-ui. Live, clickable version: [Fra
 
 Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked; everything else works standalone. The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. The rice mill and oil mill show the same plant screen drawn from other industry symbol packs. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
 
-Every desktop screen uses one Sidebar component. At the top is the app menu (brand and user), opening Apps on this site, Open kiosk, Switch to Desk, help, theme, settings and log out, as in Frappe CRM and Helpdesk. Below it come the company items, or, inside a plant, the plant switcher and plant items. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. The floor kiosk is a 1180 × 820 tablet with no sidebar, by design.
+Every desktop screen uses one Sidebar component. At the top is the app menu (brand and user), opening Apps on this site, Open kiosk, Switch to Desk, help, theme, settings and log out, as in Frappe CRM and Helpdesk. Below it come the company items, or, inside a plant, the plant switcher and plant items. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. Floor kiosks are a 1180 × 820 tablet with no sidebar, by design, in three views: line, maintenance and quality. Every kiosk sign-in is a Frappe user plus that user's PIN.
+
+Units: a sachet is 50 cl and a bag is 20 sachets (10 L). Each Koyo filler is rated at 2,000 sachets (100 bags) an hour, to be confirmed on site. Machine rates and rejects are in sachets, output and plans in bags, and held product in both.
 
 ## 0 · Dashboard · factory and manufacturing
 
@@ -78,42 +80,50 @@ Every desktop screen uses one Sidebar component. At the top is the app menu (bra
 
 ![Kiosk · open session](images/screens/17-KioskOpen.png)
 
-## 18 · Kiosk · sign in (assigned users only)
+## 18 · Kiosk · sign in with Frappe user + PIN
 
-![Kiosk · sign in (assigned users only)](images/screens/18-KioskLogin.png)
+![Kiosk · sign in with Frappe user + PIN](images/screens/18-KioskLogin.png)
 
-## 19 · Kiosk · line view
+## 19 · Kiosk · line view (filling and packing)
 
-![Kiosk · line view](images/screens/19-KioskLine.png)
+![Kiosk · line view (filling and packing)](images/screens/19-KioskLine.png)
 
-## 20 · Plant · Rice mill
+## 20 · Kiosk · maintenance view
 
-![Plant · Rice mill](images/screens/20-RiceMill.png)
+![Kiosk · maintenance view](images/screens/20-KioskMaint.png)
 
-## 21 · Plant · Oil mill
+## 21 · Kiosk · quality view
 
-![Plant · Oil mill](images/screens/21-OilMill.png)
+![Kiosk · quality view](images/screens/21-KioskQA.png)
 
-## 22 · Devices and tags
+## 22 · Plant · Rice mill
 
-![Devices and tags](images/screens/22-Devices.png)
+![Plant · Rice mill](images/screens/22-RiceMill.png)
 
-## 23 · Layout editor
+## 23 · Plant · Oil mill
 
-![Layout editor](images/screens/23-LayoutEditor.png)
+![Plant · Oil mill](images/screens/23-OilMill.png)
 
-## 24 · Symbol library · industry packs
+## 24 · Devices and tags
 
-![Symbol library · industry packs](images/screens/24-Symbols.png)
+![Devices and tags](images/screens/24-Devices.png)
 
-## 25 · Alarm definitions
+## 25 · Layout editor
 
-![Alarm definitions](images/screens/25-AlarmDefs.png)
+![Layout editor](images/screens/25-LayoutEditor.png)
 
-## 26 · Plant settings · connector
+## 26 · Symbol library · industry packs
 
-![Plant settings · connector](images/screens/26-Settings.png)
+![Symbol library · industry packs](images/screens/26-Symbols.png)
 
-## 27 · Plant settings · commands
+## 27 · Alarm definitions
 
-![Plant settings · commands](images/screens/27-SettingsCommands.png)
+![Alarm definitions](images/screens/27-AlarmDefs.png)
+
+## 28 · Plant settings · connector
+
+![Plant settings · connector](images/screens/28-Settings.png)
+
+## 29 · Plant settings · commands
+
+![Plant settings · commands](images/screens/29-SettingsCommands.png)

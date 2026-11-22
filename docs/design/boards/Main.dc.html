@@ -281,6 +281,7 @@ main>header~*{flex:1 1 auto;min-height:0;overflow-y:auto}
 <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink-gray-6)"></span>Running</span>
 <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink-gray-5); box-sizing: border-box"></span>Stopped</span>
 <span style="display: inline-flex; align-items: center; gap: 6px"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><polygon points="5,0 10,5 5,10 0,5" fill="oklch(0.723 0.152 71.82)"/></svg>Alarm</span>
+<span style="display: inline-flex; align-items: center; gap: 6px">Filler rates in 50 cl sachets per hour · 1 bag = 20 sachets</span>
 </div>
 </div>
 <div style="border: 1px solid var(--outline-gray-1); border-radius: 12px; background: var(--surface-gray-1); padding: 12px; overflow-x: auto">
@@ -521,7 +522,7 @@ main>header~*{flex:1 1 auto;min-height:0;overflow-y:auto}
 </svg>
 </div>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr)); gap: 12px">
-<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Output this shift</span><span style="font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums">3,770 <span style="font-size: 13px; font-weight: 400; color: var(--ink-gray-5)">of 5,380 so far</span></span><span aria-hidden="true" style="display: block; height: 4px; border-radius: 99px; background: var(--surface-gray-3)"><span style="display: block; height: 4px; width: 70%; border-radius: 99px; background: var(--ink-gray-7)"></span></span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Output this shift</span><span style="font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums">1,743 bags <span style="font-size: 13px; font-weight: 400; color: var(--ink-gray-5)">of 2,490 so far</span></span><span aria-hidden="true" style="display: block; height: 4px; border-radius: 99px; background: var(--surface-gray-3)"><span style="display: block; height: 4px; width: 70%; border-radius: 99px; background: var(--ink-gray-7)"></span></span></div>
 <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Uptime this shift</span><span style="font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums">75%</span></div>
 <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Stops this shift</span><span style="font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums">3 · 42 min</span><a href="Downtime.dc.html" style="font-size: 13px; text-decoration: none">1 needs a reason</a></div>
 <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: var(--ink-gray-5)">Production run</span><a href="RunDetail.dc.html" style="font-size: 14px; font-weight: 500; text-decoration: none">RUN-0412</a><span style="font-size: 13px; color: var(--ink-gray-5)">Work order WO-0412 · stopped by trip</span></div>
@@ -612,7 +613,7 @@ class Component extends DCLogic {
       : [ carbon, diesel ];
     const r = (name, value, pct, warn) => ({ name, value, pct, ink: warn ? amber : 'oklch(0.205 0 0)', bar: warn ? amber : 'oklch(0.341 0 0)' });
     const runway = [ r('Raw water · T1', '14 h', '58%'), r('Treated water · T2', '3.1 h', '70%'), r('Diesel', '41 h', '28%', true), r('Dosing chemicals', '22 h', '62%'), r('Sachet film', '1.5 days', '50%') ];
-    const rates = ['218/h', '214/h', '221/h', '209/h', '216/h', '212/h', '219/h', '215/h', '', '216/h'];
+    const rates = ['1,960/h', '1,920/h', '1,980/h', '1,880/h', '1,940/h', '1,900/h', '1,970/h', '1,930/h', '', '1,950/h'];
     const fl = {};
     rates.forEach((rate, i) => {
       const down = i === 8;
