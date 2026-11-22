@@ -43,7 +43,7 @@ def connector_panel():
 </section>
 {section('Edge', [
   row('Edge agent', 'OpsEdge K1 · v0.4.2 · online · last message 1 s ago', bd('Online','green','g')),
-  row('MQTT broker', 'Mosquitto on the edge box. Topics factory/koyo-1/…', f'<span class="in out" style="width:260px"><span class="grow tab">mqtts://edge.koyo1.local:8883</span></span>'),
+  row('Message broker', 'Mosquitto on OpsEdge K1, for this plant only. Set up and secured by the edge installer, the way bench sets up Redis. Nothing to configure.', bd('Running','green','g')),
   row('Live update interval', 'How often open screens refresh. Interlocked tags are always sent on change.', f'<span class="in out" style="width:120px">{"<span class=grow>2 s</span>"}{ic("chev-d","i s35")}</span>'),
   row('Cloud sync', 'Outbox to OpsCloud. 0 messages waiting.', '<span class="qs">Last sync 08:45:58</span>'),
 ])}

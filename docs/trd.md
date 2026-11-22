@@ -27,7 +27,7 @@ Eight components. Five run on the OpsEdge box, one in OpsCloud, and two are the 
 | Component | Runs on | Language / packages | Job |
 | --- | --- | --- | --- |
 | OpsEdge Agent | Edge | Python 3.11, `asyncio`, `pymodbus`, `asyncua`, `paho-mqtt`, `psycopg` | Poll PLCs, scale and check values, write raw readings to TimescaleDB, publish state/alarm/status to MQTT, buffer in a local SQLite file when MQTT or the database is down, evaluate edge alarm rules |
-| Mosquitto | Edge | Eclipse Mosquitto 2.x | Local MQTT broker. TLS and per-client username/password. Persistence on |
+| Mosquitto | Edge | Eclipse Mosquitto 2.x | Local MQTT broker, one per plant on that plant's OpsEdge box. Set up by `opsedge setup` (config, TLS certificate, per-client passwords, ACLs), the way bench sets up Redis; no broker settings in the app. Persistence on |
 | Bridge | Edge | Python, `paho-mqtt`, `httpx` | Subscribe to state/alarm/status topics, post batches to Frappe every 1 s or 200 messages, retry with back-off, dedupe by message ID |
 | TimescaleDB | Edge (optional in cloud) | PostgreSQL 16 + TimescaleDB | Raw readings, continuous aggregates, retention, compression |
 | Frappe Factory app | Edge site and OpsCloud | Python, Frappe v15/v16, ERPNext | Domain DocTypes, alarm lifecycle, trips, runs, downtime, summaries, sync outbox, APIs, realtime |
