@@ -23,7 +23,7 @@ def c2(a, b):
     return f'<span class="c"><div class="t1">{a}</div><div class="m">{b}</div></span>'
 def co(name, active, crumbs, actions, body):
     write(name, page(name.replace('.dc.html', ''), shell(active, header(crumbs, actions), f'<div class="body" style="overflow:auto">{body}</div>', scope='company'), {"$preview": {"width": 1440, "height": 900}}))
-PL = {'Koyo 1': 'Main.dc.html', 'Oil mill': 'OilMill.dc.html', 'Rice mill': 'RiceMill.dc.html', 'Poultry farm': 'PoultryFarm.dc.html', 'Plant B': None, 'Plant D': None}
+PL = {'Koyo 1': 'Main.dc.html', 'Oil mill': 'OilMill.dc.html', 'Rice mill': 'RiceMill.dc.html', 'Poultry farm': 'PoultryFarm.dc.html', 'Plant B': 'PlantB.dc.html', 'Plant D': 'PlantD.dc.html'}
 def plant_link(p):
     h = PL.get(p)
     return f'<a href="{h}" onclick="event.stopPropagation()">{p}</a>' if h else f'<span>{p}</span>'

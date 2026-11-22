@@ -403,7 +403,7 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 14 | Plant settings · connector | Edge or ThingsBoard, MQTT, live interval, TimescaleDB retention | Manager, System Manager |
 | 15 | Plant settings · commands | The three switches, all off in release 1 | Manager |
 | 16 | New plant · choose industry | Four-step wizard; step 2 picks a Process Template (water, rice milling, edible oil, poultry farm, blank) | Manager, System Manager |
-| 17–18 | Plant · rice mill, oil mill, poultry farm | The same plant screen drawn from the rice milling, edible oil and poultry symbol packs; each has its own layout editor | Supervisor |
+| 17–18 | Plant · Plant B, Plant D, rice mill, oil mill, poultry farm | The same plant screen drawn from the rice milling, edible oil and poultry symbol packs; each has its own layout editor | Supervisor |
 | 19–20 | Kiosk · sign in, line view | Tablet at the line: tap your Frappe user, then your PIN; filler tiles, trip banner, big reason buttons, rejects, samples | Operator, Quality Inspector |
 | 21–22 | Dashboard, app menu | Company home: factory metrics (works standalone) and manufacturing metrics from ERPNext. App menu: Apps on this site, Open kiosk, Switch to Desk, help, theme, settings, log out | Manager, owner |
 | 23–25 | Settings · ERPNext, API and webhooks, Kiosks | Link ERPNext on this site or another; integration users and webhooks for other ERPs; kiosk profiles with assigned users, allowed actions and registered tablet | Factory Manager, System Manager |

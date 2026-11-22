@@ -3,8 +3,8 @@ from ff import *
 plants = [
   ('K1', 'Koyo 1', 'Sachet water · Koyo · pilot', 'Tripped', 'Lead interlock stopped filling at 08:14. Recovery 2 of 7 steps done.', '1,743 bags this shift', 'Main.dc.html'),
   ('OM', 'Oil mill', 'Edible oil · Ibadan · sample', 'Alert', 'Expeller EX-3 tripped on overload. EX-1 and EX-2 carry the line at 67 %.', '6.1 t oil this shift', 'OilMill.dc.html'),
-  ('PB', 'Plant B', 'Bottled water · sample', 'Alert', 'RO salt rejection under the alert limit. Production continues.', '14,200 bottles today', '#'),
-  ('PD', 'Plant D', 'Sachet water · sample', 'Offline', 'No data for 3 h. The plant keeps recording and syncs when the link returns.', 'Last seen 05:34', '#'),
+  ('PB', 'Plant B', 'Bottled water · sample', 'Alert', 'RO salt rejection under the alert limit. Production continues.', '14,200 bottles today', 'PlantB.dc.html'),
+  ('PD', 'Plant D', 'Sachet water · sample', 'Offline', 'No data for 3 h. The plant keeps recording and syncs when the link returns.', 'Last seen 05:34', 'PlantD.dc.html'),
   ('RM', 'Rice mill', 'Rice milling · Kano · sample', 'Running', 'All 16 machines running. Head rice yield 64.5 %.', '21.6 t milled this shift', 'RiceMill.dc.html'),
   ('PF', 'Poultry farm', 'Layer farm · Ogun · sample', 'Alert', 'House H3 at 31.8 °C with all tunnel fans on. Lay rate 84 % in H3.', '9,870 eggs today · 329 trays', 'PoultryFarm.dc.html'),
 ]

@@ -2,7 +2,7 @@
 
 Frappe Factory screen designs, built on frappe-ui. Live, clickable version: [Frappe Factory — screens](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz). Board sources are in [design/boards](design/boards); the scripts that generate them are in [design/build](design/build).
 
-Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked; everything else works standalone. The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. The rice mill, oil mill and poultry farm show the same plant screen drawn from other industry symbol packs, and each plant has its own layout editor. Every board is linked: the sidebar, app menu, settings navigation, breadcrumbs and kiosk buttons all open the matching board. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
+Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked; everything else works standalone. The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. Plant B (bottled water through ThingsBoard), Plant D (edge offline, last values shown), the rice mill, oil mill and poultry farm show the same plant screen drawn from other industry symbol packs, and each plant has its own layout editor. Every board is linked: the sidebar, app menu, settings navigation, breadcrumbs and kiosk buttons all open the matching board. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
 
 Every desktop screen uses one Sidebar component. At the top is the app menu (brand and user), opening Apps on this site, Open kiosk, Switch to Desk, help, theme, settings and log out, as in Frappe CRM and Helpdesk. Below it come the company items, or, inside a plant, the plant switcher and plant items. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. Floor kiosks are a 1180 × 820 tablet with no sidebar, by design, in three views: line, maintenance and quality. Every kiosk sign-in is a Frappe user plus that user's PIN.
 
@@ -202,54 +202,70 @@ Units: a sachet is 50 cl and a bag is 20 sachets (10 L). Each Koyo filler is rat
 
 ![Kiosk · decide a held lot](images/screens/44-KioskDecide.png)
 
-### Other industries on the same app: rice, oil, poultry
+### Every other plant: bottled water, sachet water offline, rice, oil, poultry
 
-## 45 · Plant · Rice mill
+## 45 · Plant · Plant B bottled water (ThingsBoard)
 
-![Plant · Rice mill](images/screens/45-RiceMill.png)
+![Plant · Plant B bottled water (ThingsBoard)](images/screens/45-PlantB.png)
 
-## 46 · Plant · Oil mill
+## 46 · Plant · Plant D sachet water (offline)
 
-![Plant · Oil mill](images/screens/46-OilMill.png)
+![Plant · Plant D sachet water (offline)](images/screens/46-PlantD.png)
 
-## 47 · Plant · Poultry farm (layers)
+## 47 · Plant · Rice mill
 
-![Plant · Poultry farm (layers)](images/screens/47-PoultryFarm.png)
+![Plant · Rice mill](images/screens/47-RiceMill.png)
+
+## 48 · Plant · Oil mill
+
+![Plant · Oil mill](images/screens/48-OilMill.png)
+
+## 49 · Plant · Poultry farm (layers)
+
+![Plant · Poultry farm (layers)](images/screens/49-PoultryFarm.png)
 
 ### Plant setup · every plant layout is editable
 
-## 48 · Devices and tags
+## 50 · Devices and tags
 
-![Devices and tags](images/screens/48-Devices.png)
+![Devices and tags](images/screens/50-Devices.png)
 
-## 49 · Layout editor · Koyo 1 water
+## 51 · Layout editor · Koyo 1 water
 
-![Layout editor · Koyo 1 water](images/screens/49-LayoutEditor.png)
+![Layout editor · Koyo 1 water](images/screens/51-LayoutEditor.png)
 
-## 50 · Layout editor · rice mill
+## 52 · Layout editor · Plant B
 
-![Layout editor · rice mill](images/screens/50-LayoutRice.png)
+![Layout editor · Plant B](images/screens/52-LayoutPlantB.png)
 
-## 51 · Layout editor · oil mill
+## 53 · Layout editor · Plant D
 
-![Layout editor · oil mill](images/screens/51-LayoutOil.png)
+![Layout editor · Plant D](images/screens/53-LayoutPlantD.png)
 
-## 52 · Layout editor · poultry farm
+## 54 · Layout editor · rice mill
 
-![Layout editor · poultry farm](images/screens/52-LayoutPoultry.png)
+![Layout editor · rice mill](images/screens/54-LayoutRice.png)
 
-## 53 · Symbol library · industry packs
+## 55 · Layout editor · oil mill
 
-![Symbol library · industry packs](images/screens/53-Symbols.png)
+![Layout editor · oil mill](images/screens/55-LayoutOil.png)
 
-## 54 · Alarm definitions
+## 56 · Layout editor · poultry farm
 
-![Alarm definitions](images/screens/54-AlarmDefs.png)
+![Layout editor · poultry farm](images/screens/56-LayoutPoultry.png)
 
-## 55 · Plant settings · connector
+## 57 · Symbol library · industry packs
 
-![Plant settings · connector](images/screens/55-Settings.png)
+![Symbol library · industry packs](images/screens/57-Symbols.png)
 
-## 56 · Plant settings · commands
+## 58 · Alarm definitions
 
-![Plant settings · commands](images/screens/56-SettingsCommands.png)
+![Alarm definitions](images/screens/58-AlarmDefs.png)
+
+## 59 · Plant settings · connector
+
+![Plant settings · connector](images/screens/59-Settings.png)
+
+## 60 · Plant settings · commands
+
+![Plant settings · commands](images/screens/60-SettingsCommands.png)

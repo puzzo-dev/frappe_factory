@@ -336,7 +336,7 @@ def _item(href, icon, label, active, cnt='', red=False, layout=False):
     c = f'<span class="cnt{" red" if red else ""}">{cnt}</span>' if cnt else ''
     return f'<a class="si{on}" href="{href}"{cur}>{ic(icon)}<span class="lbl">{label}</span>{c}</a>'
 
-def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_href='Main.dc.html', counts=None, menu_open=False, layout_href='LayoutEditor.dc.html'):
+def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_href='Main.dc.html', counts=None, menu_open=False, layout_href='LayoutEditor.dc.html', foot=None):
     """One sidebar component for every desktop screen. Top: the app menu (brand + user), as in Frappe CRM and Helpdesk.
     scope='company' on company screens; scope='plant' inside a plant, with a plant switcher under the app menu."""
     if scope == 'company':
@@ -354,7 +354,7 @@ def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_h
         out.append(_item(href, icon, label, active, cnt, label == 'Interlock trips' and trip_red))
     out.append('</div><div class="slabel">Setup</div><div class="sgrp">')
     out += [_item(layout_href if l == 'Layouts' else h, i, l, active, layout=(l == 'Layouts')) for h, i, l in SETUP_NAV]
-    out.append('</div><div class="side-foot"><span class="dot g"></span>Edge online · synced 1m ago</div></nav>')
+    out.append('</div><div class="side-foot">' + (foot or '<span class="dot g"></span>Edge online · synced 1m ago') + '</div></nav>')
     return '\n'.join(out)
 
 def app_menu(left=8, top=50):

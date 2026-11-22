@@ -224,7 +224,7 @@ Links in: `Plant Floor Widget.symbol` → HMI Symbol (a pinned version), and `Pl
 
 A machine with no symbol yet is placed as **Generic machine**: a labelled box that shows state colour and up to three values, swapped for a drawn symbol later. A company can also upload its own SVG; it is cleaned as below and shared by all that company's plants.
 
-**Process Template** (proposed, needs approval). One record per industry bundles a symbol pack, asset types, tag templates, alarm definitions, downtime reasons, KPIs and a starter layout. Adding a plant starts from a template, so a rice mill gets a working setup on day one. I-Varse ships Water and beverage, Rice milling, Edible oil, Poultry farm and Blank; a company can save any plant as its own template. Each template carries its units of count (for example sachet and bag of 20, or egg and tray of 30). A plant gets its own copy of the starter layout, edited in that plant's layout editor; editing the template's layout changes new plants only.
+**Process Template** (approved 22 Nov 2026). One record per industry bundles a symbol pack, asset types, tag templates, alarm definitions, downtime reasons, KPIs and a starter layout. Adding a plant starts from a template, so a rice mill gets a working setup on day one. I-Varse ships Water and beverage, Rice milling, Edible oil, Poultry farm and Blank; a company can save any plant as its own template. Each template carries its units of count (for example sachet and bag of 20, or egg and tray of 30). A plant gets its own copy of the starter layout, edited in that plant's layout editor; editing the template's layout changes new plants only.
 
 ## ERPNext link and other ERPs
 

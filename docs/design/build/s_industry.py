@@ -23,7 +23,7 @@ def pipe(d, run=True):
     flow = f'<path d="{d}" fill="none" stroke="var(--ink-gray-6)" stroke-width="1.5" class="flow" stroke-linejoin="round"/>' if run else ''
     return base + flow
 
-def plant_screen(name, ini, href, area, status, pins, mimic_svg, legend_note, alarms, runway, shift, layout_href='LayoutEditor.dc.html', more_counts=None):
+def plant_screen(name, ini, href, area, status, pins, mimic_svg, legend_note, alarms, runway, shift, layout_href='LayoutEditor.dc.html', more_counts=None, live='<span class="dot g"></span>Live · 2 s', foot=None):
     st_word, st_bd, st_bg, st_border, st_msg = status
     pin_html = ''.join(
         f'<div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:4px;{"border-color:var(--outline-amber-3)" if w else ""}"><span class="qs" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{n}</span><span class="tab" style="font-size:20px;font-weight:600;color:{"var(--ink-amber-7)" if w else "var(--ink-gray-9)"}">{v} <small style="font-size:13px;font-weight:400;color:var(--ink-gray-5)">{u}</small></span><span class="qs" style="font-size:12px">{m}</span></div>'
@@ -35,7 +35,7 @@ def plant_screen(name, ini, href, area, status, pins, mimic_svg, legend_note, al
         f'<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--ink-gray-7)">{n}</span><span class="tab" style="font-weight:500;color:{"var(--ink-amber-7)" if w else "var(--ink-gray-8)"}">{v}</span></div><span class="bar"><i class="{"a" if w else ""}" style="width:{p}"></i></span></div>'
         for n, v, p, w in runway)
     head = header(crumb(('Plants', 'Plants.dc.html'), (name, href)) .replace('</div>', f'<span class="sep" aria-hidden="true">/</span><button type="button" class="btn ghost" style="font:600 18px Inter,sans-serif;color:var(--ink-gray-9);padding:0 6px">{area}{ic("chev-d")}</button></div>', 1),
-                  f'<span class="bd gray"><span class="dot g"></span>Live · 2 s</span><a href="{layout_href}" class="btn">{ic("pen")}Edit layout</a>')
+                  f'<span class="bd gray">{live}</span><a href="{layout_href}" class="btn">{ic("pen")}Edit layout</a>')
     body = f'''<div class="body">
 <div class="alert" style="align-items:center;background:{st_bg};border-color:{st_border}">{bd(st_word, st_bd)}<span style="font-size:14px;color:var(--ink-gray-8)">{st_msg}</span></div>
 <section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h2">Pinned tags</h2><a href="PinnedTags.dc.html" style="font-size:13px">Edit pinned tags</a></div>
@@ -49,7 +49,7 @@ def plant_screen(name, ini, href, area, status, pins, mimic_svg, legend_note, al
 <section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h2">Runway</h2><span class="qs">time left at current use</span></div>{rw_html}</section></aside>
 </div></div>'''
     counts = {'Alarms': str(len(alarms)), 'Downtime': '1', **(more_counts or {})}
-    return page(name, shell(href, head, body, plant=(ini, name), plant_href=href, counts=counts, layout_href=layout_href), {"$preview": {"width": 1440, "height": 900}})
+    return page(name, shell(href, head, body, plant=(ini, name), plant_href=href, counts=counts, layout_href=layout_href, foot=foot), {"$preview": {"width": 1440, "height": 900}})
 
 # ------------------------------------------------------------------ Rice mill
 y1, y2 = 30, 250
@@ -202,3 +202,71 @@ write('PoultryFarm.dc.html', plant_screen(
   [('2', 'oklch(0.723 0.152 71.82)', 'H3 temperature high', '31.8 °C · alert at 30 · since 08:05'), ('3', 'oklch(0.723 0.152 71.82)', 'Feed bin FB-1 low', '18 % · mixer batch 4 of 6 running')],
   [('Feed in bin', '7 h', '18%', True), ('Maize in silo', '4.2 days', '42%', False), ('Egg trays', '2.5 days', '50%', False), ('Diesel', '52 h', '48%', False)],
   [('Eggs this shift', '9,870', '329 trays of 30'), ('Mortality today', '3 birds', '0.02 % of the flock'), ('Feed used today', '1.1 t', 'of 1.7 t planned')], 'LayoutPoultry.dc.html', {'Quality holds': '1'}))
+
+# ------------------------------------------------------------------ Plant B (bottled water, data through ThingsBoard)
+LBL = '<rect x="8" y="10" width="32" height="28" rx="3" fill="var(--surface-base)" stroke="var(--ink-gray-6)" stroke-width="1.5"/><rect x="14" y="17" width="20" height="14" rx="1" fill="var(--ink-gray-6)"/><text x="24" y="27" text-anchor="middle" font-size="7" font-weight="700" fill="#fff">LBL</text>'
+pb = ''.join([
+  pipe('M75 60 H100 M135 60 H180 M235 60 H260 M315 60 H340 M395 60 H420 M475 60 H520 M575 60 H600 M655 60 H680'),
+  pipe('M735 60 H800 V280 H760'),
+  pipe('M700 280 H660 M600 280 H560 M500 280 H460 M400 280 H360'),
+  pipe('M492 72 V150 H555'),
+])
+pb += ''.join([
+  put(S.tank_v(0.71), 20, 30, 'T1 · raw', '71 %'),
+  put(S.pump(True), 100, 30, 'P-101', '6.2 m³/h'),
+  put(S.mmf(), 180, 30, 'MMF-101', 'ΔP 0.4 bar'),
+  put(S.cart(), 260, 30, 'CF-201', '5 µm'),
+  put(S.pump(True), 340, 30, 'HP pump', '13.1 bar'),
+  put(S.ro(), 420, 30, 'RO-1', 'rejection 96.1 %', warn='amber'),
+  put(S.tank_v(0.58), 520, 30, 'T2 · permeate', '58 %'),
+  put(S.uv(), 600, 30, 'UV-301', '94 %'),
+  put(S.pump(True), 680, 30, 'P-301', '3.0 m³/h'),
+  put(I.bottle_filler(), 700, 250, 'Rinse · fill · cap', '2,950 bottles/h'),
+  put(I.conveyor(), 600, 250, 'Conveyor'),
+  put(LBL, 500, 250, 'Labeller', '99.6 % good'),
+  put(I.bagger(), 400, 250, 'Shrink wrapper', 'packs of 12'),
+  f'<text x="330" y="284" text-anchor="end" font-size="11" fill="var(--ink-gray-6)">Packs of 12 → store</text>',
+  f'<text x="562" y="154" text-anchor="start" font-size="10" fill="var(--ink-gray-5)">concentrate to drain · recovery 58 %</text>',
+])
+pb_svg = f'<svg viewBox="0 0 860 400" width="100%" role="img" aria-label="Bottled water line: raw tank, feed pump, media filter, cartridge filter, high-pressure pump, RO, permeate tank, UV, transfer pump, rinse-fill-cap monoblock, conveyor, labeller and shrink wrapper. RO salt rejection is low." style="display:block">{pb}</svg>'
+
+write('PlantB.dc.html', plant_screen(
+  'Plant B', 'PB', 'PlantB.dc.html', 'Treatment and bottling',
+  ('Alert', 'amber', 'var(--surface-amber-2)', 'var(--outline-amber-3)', 'RO-1 salt rejection is 96.1 %, under the 97 % alert. Permeate is still in spec, so bottling continues. Plan a membrane clean (MNT-0080, 2 days overdue).'),
+  [('Bottles today', '14,200', 'bottles', '1,183 packs of 12 + 4 · 75 cl', False), ('RO salt rejection', '96.1', '%', 'Alert under 97', True), ('Permeate conductivity', '14', 'µS/cm', 'Spec under 20', False),
+   ('Turbidity', '0.12', 'NTU', 'Trip at 1', False), ('Filler rate', '2,950', 'bottles/h', 'Rated 3,000', False), ('Treated water T2', '58', '%', '5.8 of 10 m³', False)],
+  pb_svg, 'Bottling v4 · data through ThingsBoard, 5 s',
+  [('3', 'oklch(0.723 0.152 71.82)', 'RO salt rejection low', '96.1 % · alert under 97 · since 06:55')],
+  [('Preforms and caps', '2.1 days', '52%', False), ('Labels', '3.4 days', '68%', False), ('Shrink film', '19 h', '22%', True), ('Diesel', '61 h', '55%', False)],
+  [('Bottles this shift', '9,860', '821 packs of 12 + 8'), ('Uptime this shift', '94%', '1 stop · power dip 7 min'), ('Production run', 'RUN-0790', 'Bottled water 75 cl')], 'LayoutPlantB.dc.html', live='<span class="dot g"></span>Live · 5 s via ThingsBoard', foot='<span class="dot g"></span>ThingsBoard · synced 5 s ago'))
+
+# ------------------------------------------------------------------ Plant D (sachet water, edge offline since 05:34)
+pd = ''.join([
+  pipe('M75 60 H100 M135 60 H180 M235 60 H260 M315 60 H340 M395 60 H440 M495 60 H520 M575 60 H600', run=False),
+  pipe('M655 60 H700 V230 H95', run=False),
+  ''.join(pipe(f'M{95+i*110} 230 V250', run=False) for i in range(6)),
+])
+pd += ''.join([
+  put(S.tank_v(0.62), 20, 30, 'T1 · raw', '62 % at 05:34'),
+  put(S.pump(False), 100, 30, 'P-101', '—'),
+  put(S.mmf(), 180, 30, 'MMF-101', '—'),
+  put(S.cart(), 260, 30, 'CF-201', '—'),
+  put(S.ro(), 340, 30, 'RO-1', '—'),
+  put(S.analyser(), 440, 30, 'AT-401 lead', '1.4 µg/L at 05:34'),
+  put(S.uv(), 520, 30, 'UV-301', '—'),
+  put(S.tank_v(0.48), 600, 30, 'T2 · permeate', '48 % at 05:34'),
+] + [put(S.filler(False), 65 + i*110, 250, f'F{i+1}', 'no data') for i in range(6)])
+pd_svg = (f'<div style="position:relative"><svg viewBox="0 0 860 400" width="100%" role="img" aria-label="Sachet water line at Plant D, drawn with its last values from 05:34: raw tank, pump, media and cartridge filters, RO, lead analyser, UV, permeate tank and six fillers. No live data." style="display:block;opacity:.55">{pd}</svg>'
+          f'<div style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 18px;border-radius:12px;background:var(--surface-elevation-2);box-shadow:var(--shadow-2xl);text-align:center">'
+          f'<span style="font-weight:600;color:var(--ink-gray-9)">No live data since 05:34</span><span class="qs" style="max-width:320px;line-height:1.5">The edge box at Plant D stopped reporting. It keeps recording locally and sends the gap when the link returns. Values shown are the last received.</span>'
+          f'<span style="display:flex;gap:8px;margin-top:4px">{btn("Edge health","cpu")}<a href="Devices.dc.html" class="btn ghost">Devices</a></span></div></div>')
+
+write('PlantD.dc.html', plant_screen(
+  'Plant D', 'PD', 'PlantD.dc.html', 'Treatment and filling',
+  ('Offline', 'gray', 'var(--surface-gray-1)', 'var(--outline-gray-2)', 'No data for 3 h 12 min. Last heartbeat 05:34 over Starlink; the edge kept 4 G as backup but it shows no signal. The site supervisor was told on WhatsApp at 05:44.'),
+  [('Lead · AT-401', '1.4', 'µg/L', 'at 05:34 · trip at 8', False), ('Bags so far', '—', '', 'last count 1,120 at 05:34', False), ('Raw water T1', '62', '%', 'at 05:34', False),
+   ('Treated water T2', '48', '%', 'at 05:34', False), ('Diesel', '35', '%', 'at 05:34', False), ('Edge buffer', '3 h 12 min', '', 'waiting to sync', True)],
+  pd_svg, 'Sachet line v2 · 6 fillers · last values, not live',
+  [('2', 'oklch(0.723 0.152 71.82)', 'Edge box offline', 'no heartbeat since 05:34 · told Kunle A.')],
+  [('Raw water T1', '— at 05:34', '62%', False), ('Sachet film', '— at 05:34', '40%', False), ('Diesel', '— at 05:34', '35%', True)],
+  [('Bags this shift', '—', 'last count 1,120 bags at 05:34'), ('Uptime this shift', 'Unknown', 'until the gap syncs'), ('Production run', 'RUN-0409', 'Pure water · 50 cl sachet')], 'LayoutPlantD.dc.html', live='<span class="dot o"></span>Offline since 05:34', foot='<span class="dot o"></span>Edge offline since 05:34'))
