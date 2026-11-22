@@ -32,16 +32,16 @@ def general():
 
 # ---------------- Users and roles
 def users():
-    roles = [('Factory Manager', 2), ('Floor Supervisor', 3), ('Quality Inspector', 2), ('Maintenance Engineer', 2), ('Maintenance Technician', 2), ('Machine Operator', 9)]
+    roles = [('Factory Manager', 2), ('Floor Supervisor', 3), ('Quality Inspector', 2), ('Maintenance Technician', 2), ('Machine Operator', 9)]
+    api_note = '<div class="qs" style="line-height:1.5">API keys are Frappe\'s own, on each User record. A key works as its user, with the same roles and plants: a Floor Supervisor\'s key sees their floor, a Factory Manager\'s sees every plant.</div>'
     rc = ''.join(f'<span class="chip" style="height:26px"><span class="k">{r}</span>{n}</span>' for r, n in roles)
     UC = 'grid-template-columns:minmax(0,1.3fr) minmax(0,1.3fr) 96px 92px 20px'
-    us = [('TB', 'Tunde B.', 'tunde.b@koyo.ng', 'Factory Manager, System Manager · owns API keys', 'All 6 plants', ('PIN set', 'green')),
+    us = [('TB', 'Tunde B.', 'tunde.b@koyo.ng', 'Factory Manager, System Manager', 'All 6 plants', ('PIN set', 'green')),
           ('MA', 'Musa A.', 'musa.a@koyo1.ng', 'Floor Supervisor', 'Koyo 1', ('PIN set', 'green')),
           ('BN', 'Bola N.', 'bola.n@koyo1.ng', 'Floor Supervisor', 'Koyo 1', ('PIN set', 'green')),
           ('GO', 'Grace O.', 'grace.o@koyo1.ng', 'Quality Inspector', 'Koyo 1', ('PIN set', 'green')),
-          ('ST', 'Segun T.', 'segun.t@koyo.ng', 'Maintenance Engineer', 'All 6 plants', ('PIN set', 'green')),
           ('IK', 'Ibrahim K.', 'ibrahim.k@koyo1.ng', 'Maintenance Technician', 'Koyo 1', ('PIN set', 'green')),
-          ('KE', 'Kemi E.', 'kemi.e@koyo1.ng', 'Machine Operator, Maintenance Engineer', 'Koyo 1', ('PIN set', 'green')),
+          ('KE', 'Kemi E.', 'kemi.e@koyo1.ng', 'Machine Operator', 'Koyo 1', ('PIN set', 'green')),
           ('YB', 'Yusuf B.', 'yusuf.b@koyo1.ng', 'Machine Operator', 'Koyo 1', ('No PIN yet', 'amber')),
           ('AF', 'Amaka F.', 'amaka.f@koyo.ng', 'Floor Supervisor, Quality Inspector', 'Poultry farm', ('PIN set', 'green'))]
     ur = ''.join(f'<div class="lr" style="{UC};margin:0;cursor:default;min-height:48px"><span style="display:flex;align-items:center;gap:8px;min-width:0"><span class="av">{a}</span><span class="c"><div class="t1">{n}</div><div class="m tab">{e}</div></span></span><span class="c qs" style="color:var(--ink-gray-7)">{r}</span><span class="c qs">{p}</span><span>{bd(*b)}</span><span style="color:var(--ink-gray-4);display:flex">{ic("more","i s35")}</span></div>' for a, n, e, r, p, b in us)
@@ -50,10 +50,11 @@ def users():
 <div style="display:flex;flex-wrap:wrap;gap:6px">{rc}</div>
 <div style="display:flex;gap:8px;align-items:center"><span class="in muted" style="width:240px">{ic("search")}<span class="grow">Search users</span></span><span class="chip"><span class="k">Plant</span>All</span><span class="chip"><span class="k">Role</span>All</span></div>
 <div class="list" style="margin:0"><div class="lh" style="{UC};margin:0"><span>User</span><span>Roles</span><span>Plants</span><span>Kiosk PIN</span><span></span></div>{ur}</div>
+{api_note}
 {section('Rules', [
   row('Restart and QA release need different people', 'The Quality Inspector who releases a line cannot also restart it as Floor Supervisor.', SW_ON),
   row('Release with deviation needs a Factory Manager', 'A second signature, from someone who is not the inspector.', SW_ON),
-  row('Who edits process flows and layouts', 'Factory Manager, acting as Floor Engineer, and Maintenance Engineer. A Machine Operator can also hold Maintenance Engineer when maintenance is part of their job.', f'<span class="in out" style="width:180px"><span class="grow">2 roles</span>{ic("chev-d","i s35")}</span>'),
+  row('Who edits process flows and layouts', 'Factory Manager, acting as Floor Engineer, and Machine Operator. Everyone else can read them.', f'<span class="in out" style="width:180px"><span class="grow">2 roles</span>{ic("chev-d","i s35")}</span>'),
 ])}
 </div>'''
 
