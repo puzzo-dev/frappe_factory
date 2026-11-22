@@ -15,6 +15,8 @@ body{margin:0}
 .ff{height:100vh;overflow:hidden;display:flex;background:var(--surface-base);color:var(--ink-gray-8);font-family:Inter,InterVar,system-ui,sans-serif;font-size:14px;letter-spacing:.02em;line-height:1.35;-webkit-font-smoothing:antialiased}
 .ff *{box-sizing:border-box}
 .ff a{color:var(--ink-blue-link);text-decoration:none}
+.ff a.btn{color:var(--ink-gray-8)}
+.ff a.btn.solid{color:var(--ink-base)}
 svg.i{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .tab{font-variant-numeric:tabular-nums}
@@ -180,7 +182,13 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .chip .k{color:var(--ink-gray-5)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .grid-bg{background-image:radial-gradient(var(--outline-gray-2) 1px,transparent 1px);background-size:16px 16px}
-@media (prefers-reduced-motion: reduce){.ff *{animation:none!important;transition:none!important}}
+.flow{stroke-dasharray:4 9;animation:ffflow 1.2s linear infinite}
+@keyframes ffflow{to{stroke-dashoffset:-26}}
+.spin{transform-box:fill-box;transform-origin:center;animation:ffspin 1.3s linear infinite}
+@keyframes ffspin{to{transform:rotate(360deg)}}
+.shake{animation:ffshake .25s ease-in-out infinite alternate}
+@keyframes ffshake{to{transform:translateX(1px)}}
+@media (prefers-reduced-motion: reduce){.ff *,.flow,.spin,.shake{animation:none!important;transition:none!important}}
 </style>
 </helmet>
 <div class="ff"><nav class="side" aria-label="Plant">

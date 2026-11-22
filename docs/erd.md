@@ -6,7 +6,7 @@ Nov 22, 2026 · I-Varse Technologies NG
 
 Tag is the hub: devices produce tags, and alarms, meters and commands are defined on them. Production and downtime hang off ERPNext Work Orders.
 
-![ERD: 19 Frappe Factory DocTypes, 4 ERPNext DocTypes](images/erd.png)
+![ERD: 20 Frappe Factory DocTypes, 4 ERPNext DocTypes](images/erd.png)
 
 The diagram shows the main chain; HMI Symbol and its two child tables are in the reference below (Plant Floor Widget and Plant Asset link to it).
 

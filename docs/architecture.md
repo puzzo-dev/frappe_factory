@@ -295,7 +295,7 @@ Durations are left open until the pilot site's PLC and protocol are confirmed.
 
 ## Screens and decisions
 
-The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Tabs, Dialog, SettingsDialog) as 16 boards in the [screen designs](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz), each a 1440 × 900 laptop screen. See [screens.md](screens.md) for a picture of each. Each screen still gets its empty, loading, error and offline states when built. The kiosk login and the tablet layouts are not drawn yet.
+The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Tabs, Dialog, SettingsDialog) as 21 boards in the [screen designs](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz), each a 1440 × 900 laptop screen. See [screens.md](screens.md) for a picture of each. Each screen still gets its empty, loading, error and offline states when built. Every desktop screen uses the same Sidebar component: a company version on Plants and New plant, a plant version inside a plant. The kiosk has no sidebar by design.
 
 | # | Screen | What it holds | Main user |
 | --- | --- | --- | --- |
@@ -315,6 +315,9 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 13 | Alarm definitions | List plus edit dialog: limit, deadband, delays, priority, cause, action, who is told | Manager |
 | 14 | Plant settings · connector | Edge or ThingsBoard, MQTT, live interval, TimescaleDB retention | Manager, System Manager |
 | 15 | Plant settings · commands | The three switches, all off in release 1 | Manager |
+| 16 | New plant · choose industry | Four-step wizard; step 2 picks a Process Template (water, rice milling, edible oil, blank) | Manager, System Manager |
+| 17–18 | Plant · rice mill, oil mill | The same plant screen drawn from the rice milling and edible oil symbol packs | Supervisor |
+| 19–20 | Kiosk · sign in, line view | Tablet at the line: tap your name and PIN; filler tiles, trip banner, big reason buttons, rejects, samples | Operator, Quality Inspector |
 
 **Decisions (22 Nov 2026)**
 

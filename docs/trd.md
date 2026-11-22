@@ -212,7 +212,18 @@ Links in: `Plant Floor Widget.symbol` → HMI Symbol (a pinned version), and `Pl
 
 **Security.** An uploaded SVG is untrusted. On save the server parses it with `defusedxml` and keeps only an allowlist of SVG elements and attributes: no `script`, no `foreignObject`, no `on*` event attributes, no external `href` or `xlink:href`, no `style` with `url()` or `@import`, no embedded raster images. Maximum 200 KB. Only Factory Manager and System Manager can upload.
 
-**First set.** About 40 symbols in ISA-101 style, drawn in-house during the design phase, starting with the Koyo line: borehole pump, tanks, sand and carbon filter vessels, RO skid, dosing and remineralization unit, lead analyser, three-way divert valve, UV unit, filler (with head count), generator, fuel tank and meters.
+**Symbol packs.** Symbols ship as packs, one per industry, plus a general pack every plant gets. HMI Symbol gains a `pack` field. Release 1 ships four packs, about 37 symbols, ISA-101 style and drawn in-house:
+
+| Pack | Symbols |
+| --- | --- |
+| General (every plant) | Tanks, silo, centrifugal pump, valves, diverter, bucket elevator, belt and screw conveyors, cyclone, fan, bagger, analyser, level and flow instruments, generator |
+| Water and beverage | Sachet filler, media and cartridge filters, RO array, UV unit, ion exchange, dosing pump |
+| Rice milling | Pre-cleaner, destoner, husker, paddy separator, whitener, grader, color sorter, dryer |
+| Edible oil | Cooker, expeller, filter press, neutralizer and bleacher (agitated vessel), deodorizer, heat exchanger, bottle filler |
+
+A machine with no symbol yet is placed as **Generic machine**: a labelled box that shows state colour and up to three values, swapped for a drawn symbol later. A company can also upload its own SVG; it is cleaned as below and shared by all that company's plants.
+
+**Process Template** (proposed, needs approval). One record per industry bundles a symbol pack, asset types, tag templates, alarm definitions, downtime reasons, KPIs and a starter layout. Adding a plant starts from a template, so a rice mill gets a working setup on day one. I-Varse ships Water and beverage, Rice milling, Edible oil and Blank; a company can save any plant as its own template.
 
 ## Notifications
 

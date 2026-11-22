@@ -1,71 +1,91 @@
 # Screens
 
-Frappe Factory screen designs, built on frappe-ui. Live, clickable version: [Frappe Factory — screens](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz). The board sources are in [design/boards](design/boards) and the scripts that generate them in [design/build](design/build).
+Frappe Factory screen designs, built on frappe-ui. Live, clickable version: [Frappe Factory — screens](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz). Board sources are in [design/boards](design/boards); the scripts that generate them are in [design/build](design/build).
 
-Every screen shows the same moment: Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; Plants B, C and D are sample data. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
+The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. The rice mill and oil mill show the same plant screen drawn from other industry symbol packs. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
 
-Each board is a 1440 × 900 laptop screen. The sidebar stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header.
+Every desktop screen uses one Sidebar component: the company version on Plants and New plant, the plant version inside a plant. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. The floor kiosk is a 1180 × 820 tablet with no sidebar, by design.
 
-## 0 · Plants
+## 0 · Plants (home)
 
-![0 · Plants](images/screens/00-Plants.png)
+![Plants (home)](images/screens/00-Plants.png)
 
-## 1 · Plant (live)
+## 1 · New plant · choose industry
 
-![1 · Plant (live)](images/screens/01-Main.png)
+![New plant · choose industry](images/screens/01-AddPlant.png)
 
-## 2 · Alarms
+## 2 · Plant · Koyo 1 (live)
 
-![2 · Alarms](images/screens/02-Alarms.png)
+![Plant · Koyo 1 (live)](images/screens/02-Main.png)
 
-## 3 · Interlock trip recovery
+## 3 · Alarms
 
-![3 · Interlock trip recovery](images/screens/03-Trip.png)
+![Alarms](images/screens/03-Alarms.png)
 
-## 4 · Production runs
+## 4 · Interlock trip recovery
 
-![4 · Production runs](images/screens/04-Runs.png)
+![Interlock trip recovery](images/screens/04-Trip.png)
 
-## 5 · Run detail
+## 5 · Production runs
 
-![5 · Run detail](images/screens/05-RunDetail.png)
+![Production runs](images/screens/05-Runs.png)
 
-## 6 · Downtime
+## 6 · Run detail
 
-![6 · Downtime](images/screens/06-Downtime.png)
+![Run detail](images/screens/06-RunDetail.png)
 
-## 7 · Resources
+## 7 · Downtime
 
-![7 · Resources](images/screens/07-Resources.png)
+![Downtime](images/screens/07-Downtime.png)
 
-## 8 · Trends
+## 8 · Resources
 
-![8 · Trends](images/screens/08-Trends.png)
+![Resources](images/screens/08-Resources.png)
 
-## 9 · Shift handover
+## 9 · Trends
 
-![9 · Shift handover](images/screens/09-Handover.png)
+![Trends](images/screens/09-Trends.png)
 
-## 10 · Devices and tags
+## 10 · Shift handover
 
-![10 · Devices and tags](images/screens/10-Devices.png)
+![Shift handover](images/screens/10-Handover.png)
 
-## 11 · Layout editor
+## 11 · Kiosk · sign in with PIN
 
-![11 · Layout editor](images/screens/11-LayoutEditor.png)
+![Kiosk · sign in with PIN](images/screens/11-KioskLogin.png)
 
-## 12 · Symbol library
+## 12 · Kiosk · line view
 
-![12 · Symbol library](images/screens/12-Symbols.png)
+![Kiosk · line view](images/screens/12-KioskLine.png)
 
-## 13 · Alarm definitions
+## 13 · Plant · Rice mill
 
-![13 · Alarm definitions](images/screens/13-AlarmDefs.png)
+![Plant · Rice mill](images/screens/13-RiceMill.png)
 
-## 14 · Plant settings · connector
+## 14 · Plant · Oil mill
 
-![14 · Plant settings · connector](images/screens/14-Settings.png)
+![Plant · Oil mill](images/screens/14-OilMill.png)
 
-## 15 · Plant settings · commands
+## 15 · Devices and tags
 
-![15 · Plant settings · commands](images/screens/15-SettingsCommands.png)
+![Devices and tags](images/screens/15-Devices.png)
+
+## 16 · Layout editor
+
+![Layout editor](images/screens/16-LayoutEditor.png)
+
+## 17 · Symbol library · industry packs
+
+![Symbol library · industry packs](images/screens/17-Symbols.png)
+
+## 18 · Alarm definitions
+
+![Alarm definitions](images/screens/18-AlarmDefs.png)
+
+## 19 · Plant settings · connector
+
+![Plant settings · connector](images/screens/19-Settings.png)
+
+## 20 · Plant settings · commands
+
+![Plant settings · commands](images/screens/20-SettingsCommands.png)
