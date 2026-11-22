@@ -54,7 +54,7 @@ def users():
 {section('Rules', [
   row('Restart and QA release need different people', 'The Quality Inspector who releases a line cannot also restart it as Floor Supervisor.', SW_ON),
   row('Release with deviation needs a Factory Manager', 'A second signature, from someone who is not the inspector.', SW_ON),
-  row('Who edits process flows and layouts', 'Factory Manager, acting as Floor Engineer, and Machine Operator. Everyone else can read them.', f'<span class="in out" style="width:180px"><span class="grow">2 roles</span>{ic("chev-d","i s35")}</span>'),
+  row('Who edits process flows and layouts', 'The Factory Manager edits directly. Other roles only through a Frappe Workflow on Process Flow or Plant Floor Layout; with none set, they can only read.', f'<a href="AssetFlow.dc.html" class="btn">Workflow: 1 active</a>'),
 ])}
 </div>'''
 

@@ -228,9 +228,15 @@ A machine with no symbol yet is placed as **Generic machine**: a labelled box th
 
 ## Process flow (feeds into)
 
-Approved 22 Nov 2026. Each Plant Asset lists the assets it feeds, which gives every plant a directed graph of how product moves. Each plant's flow is its own set of records, created and edited by the Factory Manager (acting as Floor Engineer) or a Machine Operator; other roles can read it.
+Approved 22 Nov 2026. Each plant has one live `Process Flow` that lists which asset feeds which, giving the plant a directed graph of how product moves.
 
-**Data.** Child table `Plant Asset Feed` on Plant Asset: `to_asset` (Link Plant Asset, same plant only), `medium` (Select: product, water, air, feed), `is_return` (Check), `from_port` and `to_port` (Data, optional, the symbol ports a pipe joins). Instruments on a line, such as AT-401, are not nodes: they carry `on_link` pointing at the link they measure. Utilities such as generators stay out of the flow.
+**Who can change it.** The same rule covers `Process Flow` and `Plant Floor Layout`.
+
+- The Factory Manager (who also acts as Floor Engineer) edits and publishes directly.
+- Every role below the Factory Manager can only change them through a Frappe `Workflow` on that DocType. Workflow is part of Frappe itself, so this also works without ERPNext. A Machine Operator, for example, saves a draft and moves it to Pending approval; the Factory Manager approves it, and the change becomes the plant's live flow or layout as a new version.
+- With no active Workflow on the DocType, or none whose transitions name the user's role, those roles can only read. A `has_permission` hook enforces this: write is `True` for Factory Manager, and for other roles only when an active Workflow gives their role a transition.
+
+**Data.** `Process Flow` (Regular, one live version per plant): `plant`, `version`, `workflow_state`, `links` (child table `Process Flow Link`: `from_asset` and `to_asset` (Link Plant Asset, same plant only), `medium` (Select: product, water, air, feed), `is_return` (Check), `from_port` and `to_port` (Data, optional, the symbol ports a pipe joins), `instrument` (Link Plant Asset, optional, for an instrument on that line such as AT-401)). Instruments are not nodes. Utilities such as generators stay out of the flow.
 
 **Rules.**
 

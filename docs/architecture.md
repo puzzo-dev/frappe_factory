@@ -222,8 +222,8 @@ The five existing roles stay, plus one for maintenance and one for integrations.
 | Role | Can do | Cannot do |
 | --- | --- | --- |
 | Factory Manager (also acts as Floor Engineer) | Everything in their sites; configure alarms, layouts, process flows, retention; approve trip restarts | System settings, connector secrets (System Manager only) |
-| Floor Supervisor | Start/stop runs, give downtime reasons, acknowledge and shelve alarms, sign off trip recovery | Change Alarm Definitions or layouts |
-| Machine Operator | See their line, record counts and rejects, acknowledge alarms on their line; report faults; create and edit process flows and layouts, as part of the operator's job | Shelve alarms, submit Machine Stops |
+| Floor Supervisor | Start/stop runs, give downtime reasons, acknowledge and shelve alarms, sign off trip recovery; propose layout and flow changes through a Workflow, if one is set | Change Alarm Definitions; change layouts or flows directly |
+| Machine Operator | See their line, record counts and rejects, acknowledge alarms on their line; report faults; propose changes to process flows and layouts through a Workflow, only when one is set (otherwise read only) | Shelve alarms, submit Machine Stops |
 | Quality Inspector | Quality Inspections, lab values in trip recovery, hold a batch | Production or alarm settings |
 | Storekeeper | Refill Entries, resource readings, stock links | Production and alarms |
 | Maintenance Technician (new) | Asset history, work on downtime, acknowledge equipment alarms; uses the Maintenance kiosk view (jobs, faults, spare parts) | Production counts |
@@ -410,7 +410,7 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 27 | Quality hold | Held lots split by time, tests from the template, sample results, QA decision per lot, close with the inspector's Frappe user + PIN | Quality Inspector, Factory Manager |
 | 28–29 | Kiosk · maintenance, quality | Maintenance: equipment tiles, my jobs, equipment alarms. Quality: live analysers, held lots, routine checks, QA release | Maintenance Technician, Quality Inspector |
 | 30–56 | Company lists, settings, kiosk actions, plant lists, layout editors | Alarms, trips, production, downtime, holds, maintenance and reports across all plants; General, Users and roles, Process templates, WhatsApp, ThingsBoard; My settings with the kiosk PIN; kiosk record a sample, log rejects, report a fault, request a spare part, decide a lot; plant trip and hold lists, past handovers, pinned tags; hold template editor; a layout editor for every plant | All roles |
-| 57 | Process flow | Each asset's Feeds into as a graph and a list, checks for loops and dead ends, Generate layout | Factory Manager, Machine Operator |
+| 57 | Process flow | Each asset's Feeds into as a graph and a list, checks for loops and dead ends, Generate layout | Factory Manager; other roles through a Workflow |
 
 **Decisions (22 Nov 2026)**
 

@@ -80,8 +80,8 @@ Links to ERPNext DocTypes are never in these base DocTypes, because a Link to Wo
 | --- | --- | --- | --- |
 | Process Template | Regular | `template_name`, `industry`, `version`, `machine_unit`, `pack_unit`, `pack_size`, `stock_uom`, `rated_speed`, `symbol_pack`, `layout` (JSON), `assets` (JSON), `kiosk_views` | → HMI Symbol (via layout), → Quality Hold Template, → Alarm Definition (copied into the plant) |
 | Plant (new field) | — | `process_template`, `template_version` | → Process Template |
-| Plant Asset Feed | Child of Plant Asset (approved 22 Nov 2026) | `to_asset`, `medium`, `is_return`, `from_port`, `to_port` | → Plant Asset (same plant) |
-| Plant Asset (new field) | — | `feeds_into` (table of Plant Asset Feed), `on_link` for instruments on a line | → Plant Asset |
+| Process Flow | Regular, one live version per plant (approved 22 Nov 2026) | `plant`, `version`, `workflow_state`, `links` (table) | → Plant |
+| Process Flow Link | Child of Process Flow | `from_asset`, `to_asset`, `medium`, `is_return`, `from_port`, `to_port`, `instrument` | → Plant Asset (same plant) |
 
 **Quality**
 
