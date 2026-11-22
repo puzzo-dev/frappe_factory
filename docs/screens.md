@@ -4,7 +4,7 @@ Frappe Factory screen designs, built on frappe-ui. Live, clickable version: [Fra
 
 Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked; everything else works standalone. The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. Plant B (bottled water through ThingsBoard), Plant D (edge offline, last values shown), the rice mill, oil mill and poultry farm show the same plant screen drawn from other industry symbol packs, and each plant has its own layout editor. Every board is linked: the sidebar, app menu, settings navigation, breadcrumbs and kiosk buttons all open the matching board. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
 
-Every desktop screen uses one Sidebar component. At the top is the app menu (brand and user), opening Apps on this site, Open kiosk, Switch to Desk, help, theme, settings and log out, as in Frappe CRM and Helpdesk. Below it come the company items, or, inside a plant, the plant switcher and plant items. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. Floor kiosks are a 1180 × 820 tablet with no sidebar, by design, in three views: line, maintenance and quality. Every kiosk sign-in is a Frappe user plus that user's PIN.
+Every desktop screen uses one Sidebar component. At the top is the app menu (brand and user), opening Apps on this site, Open kiosk, Switch to Desk, help, theme, settings and log out, as in Frappe CRM and Helpdesk. Below it come the company items, or, inside a plant, the plant switcher and plant items. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. Floor kiosks are a 1180 × 820 tablet with no sidebar, by design, in three views: line, maintenance and quality. A kiosk sign-in is the user's own Frappe login; the Kiosk Profile assignment decides who may open it.
 
 Units: a sachet is 50 cl and a bag is 20 sachets (10 L). Each Koyo filler is rated at 2,000 sachets (100 bags) an hour, to be confirmed on site. Machine rates and rejects are in sachets, output and plans in bags, and held product in both.
 
@@ -25,10 +25,6 @@ Units: a sachet is 50 cl and a bag is 20 sachets (10 L). Each Koyo filler is rat
 ## 3 · New plant · choose industry
 
 ![New plant · choose industry](images/screens/03-AddPlant.png)
-
-## 4 · My settings · kiosk PIN
-
-![My settings · kiosk PIN](images/screens/04-MySettings.png)
 
 ### Across all plants
 
@@ -160,15 +156,15 @@ Units: a sachet is 50 cl and a bag is 20 sachets (10 L). Each Koyo filler is rat
 
 ![Past shift handovers](images/screens/34-HandoverHistory.png)
 
-### Floor kiosks · full screen like ERPNext POS · line, maintenance and quality views · Frappe user + PIN
+### Floor kiosks · full screen like ERPNext POS · line, maintenance and quality views · Frappe login
 
 ## 35 · Kiosk · open session
 
 ![Kiosk · open session](images/screens/35-KioskOpen.png)
 
-## 36 · Kiosk · sign in with Frappe user + PIN
+## 36 · Kiosk · log in with Frappe
 
-![Kiosk · sign in with Frappe user + PIN](images/screens/36-KioskLogin.png)
+![Kiosk · log in with Frappe](images/screens/36-KioskLogin.png)
 
 ## 37 · Kiosk · line view (filling and packing)
 

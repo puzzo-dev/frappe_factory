@@ -369,14 +369,17 @@ def app_menu(left=8, top=50):
         return f'<div class="mi{" on" if on else ""}"{ck}>{icon}<span>{label}</span>{r}</div>'
     app = lambda c, t: f'<span style="width:18px;height:18px;border-radius:4px;background:{c};color:#fff;display:grid;place-items:center;font-size:9px;font-weight:700">{t}</span>'
     sep = '<div style="height:1px;background:var(--outline-gray-1);margin:4px -4px"></div>'
-    main = (mi(ic('grid'), 'Apps', ic('chev-r', 'i s35'), click='toggleApps') + mi(ic('cpu'), 'Open kiosk', ic('ext', 'i s35'), href='KioskOpen.dc.html') + sep +
-            mi(ic('settings'), 'App settings', href='CompanyGeneral.dc.html') + mi(ic('users'), 'My settings', href='MySettings.dc.html') + sep +
-            mi(ic('info'), 'Help and docs') + mi(ic('moon'), 'Toggle theme') + mi(ic('shield'), 'About') + sep + mi(ic('arrow-r'), 'Log out', href='KioskLogin.dc.html'))
+    prof = ('<div style="display:flex;align-items:center;gap:10px;padding:8px 8px 6px"><span class="av" style="width:28px;height:28px;flex:0 0 28px;font-size:11px">TB</span>'
+            '<span style="display:flex;flex-direction:column;min-width:0;line-height:1.2"><span style="font-weight:500;color:var(--ink-gray-9);font-size:14px">Tunde B.</span><span class="qs" style="font-size:12px">tunde.b@koyo.ng</span></span></div>')
+    main = (prof + mi(ic('users'), 'Profile', ic('ext', 'i s35')) + mi(ic('bell'), 'Notifications', '<span class="bd gray" style="height:18px;font-size:11px">3</span>') +
+            mi(ic('moon'), 'Theme', '<span style="font-size:12px">Light</span>') + sep +
+            mi(ic('grid'), 'Apps', ic('chev-r', 'i s35'), click='toggleApps') + mi(ic('cpu'), 'Open kiosk', ic('ext', 'i s35'), href='KioskOpen.dc.html') + mi(ic('settings'), 'App settings', href='CompanyGeneral.dc.html') + sep +
+            mi(ic('info'), 'Help and docs') + mi(ic('shield'), 'About') + sep + mi(ic('arrow-r'), 'Log out', href='KioskLogin.dc.html'))
     sub = (f'<div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Switch app</div>' +
            mi(app('oklch(0.205 0 0)', 'FF'), 'Frappe Factory', ic('check', 'i s35'), href='Dashboard.dc.html') + mi(app('oklch(0.45 0 0)', 'D'), 'Desk') + mi(app('oklch(0.55 0.16 252)', 'E'), 'ERPNext') + mi(app('oklch(0.6 0.15 150)', 'C'), 'CRM') +
            mi(app('oklch(0.6 0.17 300)', 'H'), 'Helpdesk') + mi(app('oklch(0.55 0.15 30)', 'W'), 'WhatsApp'))
-    return (f'<div class="pop appmenu" role="menu" aria-label="App menu" style="left:{left}px;top:{top}px;width:212px">{main}</div>'
-            f'<sc-if value="{{{{appsOpen}}}}" hint-placeholder-val="{{{{ false }}}}"><div class="pop appmenu" role="menu" aria-label="Switch app" style="left:{left + 216}px;top:{top}px;width:200px">{sub}</div></sc-if>')
+    return (f'<div class="pop appmenu" role="menu" aria-label="App menu" style="left:{left}px;top:{top}px;width:232px">{main}</div>'
+            f'<sc-if value="{{{{appsOpen}}}}" hint-placeholder-val="{{{{ false }}}}"><div class="pop appmenu" role="menu" aria-label="Switch app" style="left:{left + 236}px;top:{top}px;width:200px">{sub}</div></sc-if>')
 
 def _menu_block(default_open=False):
     mark = '<i data-ff-menu-default hidden></i>' if default_open else ''

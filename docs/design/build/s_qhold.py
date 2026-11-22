@@ -33,7 +33,7 @@ tests = f'''<section style="display:flex;flex-direction:column;gap:12px"><div st
 <div><span class="qs">How many</span><div style="color:var(--ink-gray-8);margin-top:2px">3 sachets per lot from different fillers, plus 1 to the outside lab</div></div></div>
 <div class="list"><div class="lh" style="{SC}"><span>Sample</span><span>Taken</span><span>Test and lot</span><span>Result</span><span>Status</span></div>{sr}</div></section>'''
 
-close = f'''<section class="card" style="display:flex;align-items:center;justify-content:space-between;gap:16px"><div style="display:flex;flex-direction:column;gap:4px"><span style="font-weight:500;color:var(--ink-gray-8)">Close the hold</span><span class="qs">Needs a decision on every lot, signed by a Quality Inspector: their Frappe user plus their PIN. Any release with deviation also needs Tunde B. as Factory Manager.</span></div><button type="button" class="btn solid" disabled>Close hold</button></section>'''
+close = f'''<section class="card" style="display:flex;align-items:center;justify-content:space-between;gap:16px"><div style="display:flex;flex-direction:column;gap:4px"><span style="font-weight:500;color:var(--ink-gray-8)">Close the hold</span><span class="qs">Needs a decision on every lot, made by a logged-in Quality Inspector. Any release with deviation also needs Tunde B. as Factory Manager.</span></div><button type="button" class="btn solid" disabled>Close hold</button></section>'''
 
 main = f'<div style="flex:1;min-width:0;overflow:auto"><div class="body" style="max-width:900px;margin:0 auto">{banner}{lots_html}{tests}{close}</div></div>'
 
