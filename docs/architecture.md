@@ -374,6 +374,7 @@ A quality fault stops the line twice over: the PLC stops it, and only a Quality 
 | Sachet water (Koyo) | Lead over the trip limit at AT-401 | Two lab results under 3 µg/L at SP-1, at least 10 min apart | Sachets filled since the last passing check, counted in sachets and bags; T4 and T5 water |
 | Edible oil | Deodorizer temperature or vacuum out of band | Free fatty acid and peroxide value on refined oil | Refined oil and bottles since the last good check |
 | Rice milling | Metal detector or magnet reject, color sorter fault | Visual check, broken %, foreign matter on a sample per bag lot | Bags since the last good check |
+| Poultry farm (layers) | House above 30 °C for 30 min (alarm rule), feed or water fault | Shell, weight and cleanliness check on a tray from each hour's eggs | Eggs from that house since the last good check, in trays of 30 |
 
 **Roles.** QA is the Quality Inspector role. On a trip they own the lab samples and the QA release; on a hold they own the tests and decisions. A Factory Manager approves any release with deviation. The supervisor never overrides QA; if QA keeps the line stopped, it escalates to the Factory Manager.
 
@@ -401,14 +402,15 @@ The screens are designed in frappe-ui (Sidebar + PageHeader shell, List rows, Ta
 | 13 | Alarm definitions | List plus edit dialog: limit, deadband, delays, priority, cause, action, who is told | Manager |
 | 14 | Plant settings · connector | Edge or ThingsBoard, MQTT, live interval, TimescaleDB retention | Manager, System Manager |
 | 15 | Plant settings · commands | The three switches, all off in release 1 | Manager |
-| 16 | New plant · choose industry | Four-step wizard; step 2 picks a Process Template (water, rice milling, edible oil, blank) | Manager, System Manager |
-| 17–18 | Plant · rice mill, oil mill | The same plant screen drawn from the rice milling and edible oil symbol packs | Supervisor |
+| 16 | New plant · choose industry | Four-step wizard; step 2 picks a Process Template (water, rice milling, edible oil, poultry farm, blank) | Manager, System Manager |
+| 17–18 | Plant · rice mill, oil mill, poultry farm | The same plant screen drawn from the rice milling, edible oil and poultry symbol packs; each has its own layout editor | Supervisor |
 | 19–20 | Kiosk · sign in, line view | Tablet at the line: tap your Frappe user, then your PIN; filler tiles, trip banner, big reason buttons, rejects, samples | Operator, Quality Inspector |
 | 21–22 | Dashboard, app menu | Company home: factory metrics (works standalone) and manufacturing metrics from ERPNext. App menu: Apps on this site, Open kiosk, Switch to Desk, help, theme, settings, log out | Manager, owner |
 | 23–25 | Settings · ERPNext, API and webhooks, Kiosks | Link ERPNext on this site or another; integration users and webhooks for other ERPs; kiosk profiles with assigned users, allowed actions and registered tablet | Factory Manager, System Manager |
 | 26 | Kiosk · open session | Like ERPNext POS opening: pick an assigned kiosk, shift and run, then full screen | Floor Supervisor |
 | 27 | Quality hold | Held lots split by time, tests from the template, sample results, QA decision per lot, close with the inspector's Frappe user + PIN | Quality Inspector, Factory Manager |
 | 28–29 | Kiosk · maintenance, quality | Maintenance: equipment tiles, my jobs, equipment alarms. Quality: live analysers, held lots, routine checks, QA release | Maintenance Technician, Quality Inspector |
+| 30–56 | Company lists, settings, kiosk actions, plant lists, layout editors | Alarms, trips, production, downtime, holds, maintenance and reports across all plants; General, Users and roles, Process templates, WhatsApp, ThingsBoard; My settings with the kiosk PIN; kiosk record a sample, log rejects, report a fault, request a spare part, decide a lot; plant trip and hold lists, past handovers, pinned tags; hold template editor; a layout editor for every plant | All roles |
 
 **Decisions (22 Nov 2026)**
 

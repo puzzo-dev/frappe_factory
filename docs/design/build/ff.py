@@ -174,6 +174,8 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
+.ff a.mi{color:var(--ink-gray-8)}
+.ff a.mi:hover{background:var(--surface-gray-2)}
 .mi .i{color:var(--ink-gray-6)}
 .toast{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--surface-gray-9);color:var(--ink-base);box-shadow:var(--shadow-xl);font-size:14px}
 .sel-bar{display:flex;align-items:center;gap:8px;height:40px;padding:0 6px 0 12px;border-radius:12px;background:var(--surface-base);box-shadow:var(--shadow-2xl);font-size:14px}
@@ -278,8 +280,8 @@ def ic(name, cls='i', style=''):
 PLANT_NAV = [
     ('Main.dc.html', 'factory', 'Plant', ''),
     ('Alarms.dc.html', 'bell', 'Alarms', '4'),
-    ('Trip.dc.html', 'octagon', 'Interlock trips', '1'),
-    ('QualityHold.dc.html', 'shield', 'Quality holds', '1'),
+    ('TripList.dc.html', 'octagon', 'Interlock trips', '1'),
+    ('HoldList.dc.html', 'shield', 'Quality holds', '1'),
     ('Runs.dc.html', 'play', 'Production runs', ''),
     ('Downtime.dc.html', 'clock', 'Downtime', '3'),
     ('Resources.dc.html', 'droplet', 'Resources', ''),
@@ -297,26 +299,26 @@ SETUP_NAV = [
 COMPANY_NAV = [
     ('Dashboard.dc.html', 'gauge', 'Dashboard', ''),
     ('Plants.dc.html', 'grid', 'Plants', ''),
-    ('#alarms', 'bell', 'Alarms', '6'),
-    ('#trips', 'octagon', 'Interlock trips', '1'),
-    ('#prod', 'play', 'Production', ''),
-    ('#downtime', 'clock', 'Downtime', ''),
-    ('#quality', 'shield', 'Quality holds', '1'),
-    ('#maint', 'wrench', 'Maintenance', ''),
-    ('#reports', 'bars', 'Reports', ''),
+    ('CoAlarms.dc.html', 'bell', 'Alarms', '11'),
+    ('CoTrips.dc.html', 'octagon', 'Interlock trips', '1'),
+    ('CoProduction.dc.html', 'play', 'Production', ''),
+    ('CoDowntime.dc.html', 'clock', 'Downtime', ''),
+    ('CoHolds.dc.html', 'shield', 'Quality holds', '2'),
+    ('CoMaint.dc.html', 'wrench', 'Maintenance', ''),
+    ('CoReports.dc.html', 'bars', 'Reports', ''),
 ]
 COMPANY_SETUP = [
     ('AddPlant.dc.html', 'factory', 'Plants and sites'),
     ('CompanyKiosks.dc.html', 'cpu', 'Kiosks'),
     ('Symbols.dc.html', 'shapes', 'Symbol library'),
-    ('#templates', 'layers', 'Process templates'),
-    ('#users', 'users', 'Users and roles'),
+    ('CompanyTemplates.dc.html', 'layers', 'Process templates'),
+    ('CompanyUsers.dc.html', 'users', 'Users and roles'),
     ('CompanyERPNext.dc.html', 'link', 'Integrations'),
 ]
 
 def _head(badge=None, title=None, sub=None, open_=False):
     st = ' style="background:var(--surface-elevation-3);box-shadow:var(--shadow-sm)"' if open_ else ''
-    return ('<button type="button" class="side-head"' + st + ' aria-haspopup="menu"><span class="logo" aria-hidden="true" style="background:var(--surface-gray-10)">FF</span>'
+    return ('<button type="button" class="side-head"' + st + ' aria-haspopup="menu" onclick="location.href=\'' + ('Dashboard.dc.html' if open_ else 'DashboardMenu.dc.html') + '\'"><span class="logo" aria-hidden="true" style="background:var(--surface-gray-10)">FF</span>'
             '<span style="display:flex;flex-direction:column;min-width:0;flex:1"><span style="font-weight:500;color:var(--ink-gray-9);line-height:1.1">Frappe Factory</span>'
             '<span style="font-size:13px;color:var(--ink-gray-7);margin-top:3px;line-height:1.1">Tunde B.</span></span>' + ic('chev-d', 'i', 'color:var(--ink-gray-5)') + '</button>')
 
@@ -325,13 +327,16 @@ def _plant_switch(badge, name):
             f'<span style="width:20px;height:20px;border-radius:5px;background:var(--surface-gray-3);color:var(--ink-gray-8);display:grid;place-items:center;font-size:10px;font-weight:600">{badge}</span>'
             f'<span class="lbl" style="font-weight:500;color:var(--ink-gray-8)">{name}</span>' + ic('chevs', 'i', 'color:var(--ink-gray-5)') + '</button>')
 
-def _item(href, icon, label, active, cnt='', red=False):
-    on = ' on' if href == active else ''
+ALIAS = {'Trip.dc.html': 'TripList.dc.html', 'QualityHold.dc.html': 'HoldList.dc.html', 'Handover.dc.html': 'Handover.dc.html', 'HandoverHistory.dc.html': 'Handover.dc.html', 'SettingsCommands.dc.html': 'Settings.dc.html', 'PinnedTags.dc.html': None,
+         'LayoutRice.dc.html': 'LAYOUT', 'LayoutOil.dc.html': 'LAYOUT', 'LayoutPoultry.dc.html': 'LAYOUT', 'LayoutEditor.dc.html': 'LAYOUT', 'QHTemplate.dc.html': 'CompanyTemplates.dc.html'}
+def _item(href, icon, label, active, cnt='', red=False, layout=False):
+    a = ALIAS.get(active, active)
+    on = ' on' if (href == a or (layout and a == 'LAYOUT')) else ''
     cur = ' aria-current="page"' if on else ''
     c = f'<span class="cnt{" red" if red else ""}">{cnt}</span>' if cnt else ''
     return f'<a class="si{on}" href="{href}"{cur}>{ic(icon)}<span class="lbl">{label}</span>{c}</a>'
 
-def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_href='Main.dc.html', counts=None, menu_open=False):
+def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_href='Main.dc.html', counts=None, menu_open=False, layout_href='LayoutEditor.dc.html'):
     """One sidebar component for every desktop screen. Top: the app menu (brand + user), as in Frappe CRM and Helpdesk.
     scope='company' on company screens; scope='plant' inside a plant, with a plant switcher under the app menu."""
     if scope == 'company':
@@ -339,7 +344,7 @@ def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_h
         out += [_item(h, i, l, active, c, l == 'Interlock trips') for h, i, l, c in COMPANY_NAV]
         out.append('</div><div class="slabel">Setup</div><div class="sgrp">')
         out += [_item(h, i, l, active) for h, i, l in COMPANY_SETUP]
-        out.append('</div><div class="side-foot"><span class="dot g"></span>5 plants · ERPNext linked</div></nav>')
+        out.append('</div><div class="side-foot"><span class="dot g"></span>6 plants · ERPNext linked</div></nav>')
         return '\n'.join(out)
     out = ['<nav class="side" aria-label="Plant">', _head(open_=menu_open), _plant_switch(plant[0], plant[1]),
            '<div class="slabel" style="margin-top:4px">Operate</div><div class="sgrp">']
@@ -348,21 +353,23 @@ def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_h
         if counts is not None: cnt = counts.get(label, '')
         out.append(_item(href, icon, label, active, cnt, label == 'Interlock trips' and trip_red))
     out.append('</div><div class="slabel">Setup</div><div class="sgrp">')
-    out += [_item(h, i, l, active) for h, i, l in SETUP_NAV]
+    out += [_item(layout_href if l == 'Layouts' else h, i, l, active, layout=(l == 'Layouts')) for h, i, l in SETUP_NAV]
     out.append('</div><div class="side-foot"><span class="dot g"></span>Edge online · synced 1m ago</div></nav>')
     return '\n'.join(out)
 
 def app_menu(left=8, top=50):
     """The open app menu (frappe-ui Dropdown) with the Apps submenu, as in Frappe CRM."""
-    def mi(icon, label, right='', on=False, extra=''):
+    def mi(icon, label, right='', on=False, extra='', href=None):
         r = f'<span style="margin-left:auto;display:flex;color:var(--ink-gray-5)">{right}</span>' if right else ''
+        if href:
+            return f'<a class="mi{" on" if on else ""}" href="{href}" style="font-size:14px;text-decoration:none{extra}">{icon}<span>{label}</span>{r}</a>'
         return f'<div class="mi{" on" if on else ""}" style="font-size:14px{extra}">{icon}<span>{label}</span>{r}</div>'
     app = lambda c, t: f'<span style="width:18px;height:18px;border-radius:4px;background:{c};color:#fff;display:grid;place-items:center;font-size:9px;font-weight:700">{t}</span>'
     sep = '<div style="height:1px;background:var(--outline-gray-1);margin:4px -4px"></div>'
-    main = (mi(ic('grid'), 'Apps', ic('chev-r', 'i s35'), on=True) + mi(ic('cpu'), 'Open kiosk', ic('ext', 'i s35')) + mi(ic('layout'), 'Switch to Desk', ic('ext', 'i s35')) + sep +
-            mi(ic('info'), 'Help and docs') + mi(ic('moon'), 'Toggle theme') + mi(ic('settings'), 'Settings') + mi(ic('shield'), 'About') + sep + mi(ic('arrow-r'), 'Log out'))
+    main = (mi(ic('grid'), 'Apps', ic('chev-r', 'i s35'), on=True) + mi(ic('cpu'), 'Open kiosk', ic('ext', 'i s35'), href='KioskOpen.dc.html') + mi(ic('layout'), 'Switch to Desk', ic('ext', 'i s35')) + sep +
+            mi(ic('info'), 'Help and docs') + mi(ic('moon'), 'Toggle theme') + mi(ic('users'), 'My settings', href='MySettings.dc.html') + mi(ic('settings'), 'Settings', href='CompanyGeneral.dc.html') + mi(ic('shield'), 'About') + sep + mi(ic('arrow-r'), 'Log out'))
     sub = (f'<div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Apps on this site</div>' +
-           mi(app('oklch(0.205 0 0)', 'FF'), 'Frappe Factory', ic('check', 'i s35')) + mi(app('oklch(0.55 0.16 252)', 'E'), 'ERPNext') + mi(app('oklch(0.6 0.15 150)', 'C'), 'CRM') +
+           mi(app('oklch(0.205 0 0)', 'FF'), 'Frappe Factory', ic('check', 'i s35'), href='Dashboard.dc.html') + mi(app('oklch(0.55 0.16 252)', 'E'), 'ERPNext') + mi(app('oklch(0.6 0.15 150)', 'C'), 'CRM') +
            mi(app('oklch(0.6 0.17 300)', 'H'), 'Helpdesk') + mi(app('oklch(0.55 0.15 30)', 'W'), 'WhatsApp'))
     return (f'<div class="pop" role="menu" style="left:{left}px;top:{top}px;width:212px;z-index:5">{main}</div>'
             f'<div class="pop" role="menu" style="left:{left + 216}px;top:{top}px;width:200px;z-index:5">{sub}</div>')

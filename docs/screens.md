@@ -2,11 +2,13 @@
 
 Frappe Factory screen designs, built on frappe-ui. Live, clickable version: [Frappe Factory — screens](https://claude.ai/artifact/8NiCgasgTHvjFr3z7civXz). Board sources are in [design/boards](design/boards); the scripts that generate them are in [design/build](design/build).
 
-Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked; everything else works standalone. The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. The rice mill and oil mill show the same plant screen drawn from other industry symbol packs. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
+Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked; everything else works standalone. The main story is Koyo 1 at 08:46 on 22 Nov, 32 minutes after the lead interlock tripped. Koyo 1 is the real pilot; every other plant is sample data. The rice mill, oil mill and poultry farm show the same plant screen drawn from other industry symbol packs, and each plant has its own layout editor. Every board is linked: the sidebar, app menu, settings navigation, breadcrumbs and kiosk buttons all open the matching board. Tag addresses and protocols on Devices and tags are sample values until the PLC protocol is chosen.
 
 Every desktop screen uses one Sidebar component. At the top is the app menu (brand and user), opening Apps on this site, Open kiosk, Switch to Desk, help, theme, settings and log out, as in Frappe CRM and Helpdesk. Below it come the company items, or, inside a plant, the plant switcher and plant items. It stays fixed and only scrolls if its own items outgrow the screen; the page body scrolls under a fixed header. Desktop boards are 1440 × 900. Floor kiosks are a 1180 × 820 tablet with no sidebar, by design, in three views: line, maintenance and quality. Every kiosk sign-in is a Frappe user plus that user's PIN.
 
 Units: a sachet is 50 cl and a bag is 20 sachets (10 L). Each Koyo filler is rated at 2,000 sachets (100 bags) an hour, to be confirmed on site. Machine rates and rejects are in sachets, output and plans in bags, and held product in both.
+
+### Company
 
 ## 0 · Dashboard · factory and manufacturing
 
@@ -24,106 +26,230 @@ Units: a sachet is 50 cl and a bag is 20 sachets (10 L). Each Koyo filler is rat
 
 ![New plant · choose industry](images/screens/03-AddPlant.png)
 
-## 4 · Settings · ERPNext
+## 4 · My settings · kiosk PIN
 
-![Settings · ERPNext](images/screens/04-CompanyERPNext.png)
+![My settings · kiosk PIN](images/screens/04-MySettings.png)
 
-## 5 · Settings · API and webhooks
+### Across all plants
 
-![Settings · API and webhooks](images/screens/05-CompanyAPI.png)
+## 5 · Alarms · all plants
 
-## 6 · Settings · Kiosks and assigned users
+![Alarms · all plants](images/screens/05-CoAlarms.png)
 
-![Settings · Kiosks and assigned users](images/screens/06-CompanyKiosks.png)
+## 6 · Interlock trips · all plants
 
-## 7 · Plant · Koyo 1 (live)
+![Interlock trips · all plants](images/screens/06-CoTrips.png)
 
-![Plant · Koyo 1 (live)](images/screens/07-Main.png)
+## 7 · Production · all plants · needs ERPNext
 
-## 8 · Alarms
+![Production · all plants · needs ERPNext](images/screens/07-CoProduction.png)
 
-![Alarms](images/screens/08-Alarms.png)
+## 8 · Downtime · all plants
 
-## 9 · Interlock trip recovery
+![Downtime · all plants](images/screens/08-CoDowntime.png)
 
-![Interlock trip recovery](images/screens/09-Trip.png)
+## 9 · Quality holds · all plants
 
-## 10 · Quality hold (QA decides held product)
+![Quality holds · all plants](images/screens/09-CoHolds.png)
 
-![Quality hold (QA decides held product)](images/screens/10-QualityHold.png)
+## 10 · Maintenance · all plants
 
-## 11 · Production runs · needs ERPNext
+![Maintenance · all plants](images/screens/10-CoMaint.png)
 
-![Production runs · needs ERPNext](images/screens/11-Runs.png)
+## 11 · Reports
 
-## 12 · Run detail · needs ERPNext
+![Reports](images/screens/11-CoReports.png)
 
-![Run detail · needs ERPNext](images/screens/12-RunDetail.png)
+### Company settings
 
-## 13 · Downtime
+## 12 · Settings · General
 
-![Downtime](images/screens/13-Downtime.png)
+![Settings · General](images/screens/12-CompanyGeneral.png)
 
-## 14 · Resources
+## 13 · Settings · Users and roles
 
-![Resources](images/screens/14-Resources.png)
+![Settings · Users and roles](images/screens/13-CompanyUsers.png)
 
-## 15 · Trends
+## 14 · Settings · Kiosks and assigned users
 
-![Trends](images/screens/15-Trends.png)
+![Settings · Kiosks and assigned users](images/screens/14-CompanyKiosks.png)
 
-## 16 · Shift handover
+## 15 · Settings · Process templates
 
-![Shift handover](images/screens/16-Handover.png)
+![Settings · Process templates](images/screens/15-CompanyTemplates.png)
 
-## 17 · Kiosk · open session
+## 16 · Quality hold template editor
 
-![Kiosk · open session](images/screens/17-KioskOpen.png)
+![Quality hold template editor](images/screens/16-QHTemplate.png)
 
-## 18 · Kiosk · sign in with Frappe user + PIN
+## 17 · Settings · ERPNext
 
-![Kiosk · sign in with Frappe user + PIN](images/screens/18-KioskLogin.png)
+![Settings · ERPNext](images/screens/17-CompanyERPNext.png)
 
-## 19 · Kiosk · line view (filling and packing)
+## 18 · Settings · API and webhooks
 
-![Kiosk · line view (filling and packing)](images/screens/19-KioskLine.png)
+![Settings · API and webhooks](images/screens/18-CompanyAPI.png)
 
-## 20 · Kiosk · maintenance view
+## 19 · Settings · WhatsApp
 
-![Kiosk · maintenance view](images/screens/20-KioskMaint.png)
+![Settings · WhatsApp](images/screens/19-CompanyWhatsApp.png)
 
-## 21 · Kiosk · quality view
+## 20 · Settings · ThingsBoard
 
-![Kiosk · quality view](images/screens/21-KioskQA.png)
+![Settings · ThingsBoard](images/screens/20-CompanyTB.png)
 
-## 22 · Plant · Rice mill
+### Inside a plant
 
-![Plant · Rice mill](images/screens/22-RiceMill.png)
+## 21 · Plant · Koyo 1 (live)
 
-## 23 · Plant · Oil mill
+![Plant · Koyo 1 (live)](images/screens/21-Main.png)
 
-![Plant · Oil mill](images/screens/23-OilMill.png)
+## 22 · Alarms
 
-## 24 · Devices and tags
+![Alarms](images/screens/22-Alarms.png)
 
-![Devices and tags](images/screens/24-Devices.png)
+## 23 · Interlock trips · Koyo 1
 
-## 25 · Layout editor
+![Interlock trips · Koyo 1](images/screens/23-TripList.png)
 
-![Layout editor](images/screens/25-LayoutEditor.png)
+## 24 · Interlock trip recovery
 
-## 26 · Symbol library · industry packs
+![Interlock trip recovery](images/screens/24-Trip.png)
 
-![Symbol library · industry packs](images/screens/26-Symbols.png)
+## 25 · Quality holds · Koyo 1
 
-## 27 · Alarm definitions
+![Quality holds · Koyo 1](images/screens/25-HoldList.png)
 
-![Alarm definitions](images/screens/27-AlarmDefs.png)
+## 26 · Quality hold (QA decides held product)
 
-## 28 · Plant settings · connector
+![Quality hold (QA decides held product)](images/screens/26-QualityHold.png)
 
-![Plant settings · connector](images/screens/28-Settings.png)
+## 27 · Edit pinned tags
 
-## 29 · Plant settings · commands
+![Edit pinned tags](images/screens/27-PinnedTags.png)
 
-![Plant settings · commands](images/screens/29-SettingsCommands.png)
+### Production
+
+## 28 · Production runs · needs ERPNext
+
+![Production runs · needs ERPNext](images/screens/28-Runs.png)
+
+## 29 · Run detail · needs ERPNext
+
+![Run detail · needs ERPNext](images/screens/29-RunDetail.png)
+
+## 30 · Downtime
+
+![Downtime](images/screens/30-Downtime.png)
+
+## 31 · Resources
+
+![Resources](images/screens/31-Resources.png)
+
+### Analysis and shifts
+
+## 32 · Trends
+
+![Trends](images/screens/32-Trends.png)
+
+## 33 · Shift handover
+
+![Shift handover](images/screens/33-Handover.png)
+
+## 34 · Past shift handovers
+
+![Past shift handovers](images/screens/34-HandoverHistory.png)
+
+### Floor kiosks · full screen like ERPNext POS · line, maintenance and quality views · Frappe user + PIN
+
+## 35 · Kiosk · open session
+
+![Kiosk · open session](images/screens/35-KioskOpen.png)
+
+## 36 · Kiosk · sign in with Frappe user + PIN
+
+![Kiosk · sign in with Frappe user + PIN](images/screens/36-KioskLogin.png)
+
+## 37 · Kiosk · line view (filling and packing)
+
+![Kiosk · line view (filling and packing)](images/screens/37-KioskLine.png)
+
+## 38 · Kiosk · log rejects
+
+![Kiosk · log rejects](images/screens/38-KioskRejects.png)
+
+## 39 · Kiosk · maintenance view
+
+![Kiosk · maintenance view](images/screens/39-KioskMaint.png)
+
+## 40 · Kiosk · report a fault
+
+![Kiosk · report a fault](images/screens/40-KioskFault.png)
+
+## 41 · Kiosk · request a spare part
+
+![Kiosk · request a spare part](images/screens/41-KioskSpare.png)
+
+## 42 · Kiosk · quality view
+
+![Kiosk · quality view](images/screens/42-KioskQA.png)
+
+## 43 · Kiosk · record a sample
+
+![Kiosk · record a sample](images/screens/43-KioskSample.png)
+
+## 44 · Kiosk · decide a held lot
+
+![Kiosk · decide a held lot](images/screens/44-KioskDecide.png)
+
+### Other industries on the same app: rice, oil, poultry
+
+## 45 · Plant · Rice mill
+
+![Plant · Rice mill](images/screens/45-RiceMill.png)
+
+## 46 · Plant · Oil mill
+
+![Plant · Oil mill](images/screens/46-OilMill.png)
+
+## 47 · Plant · Poultry farm (layers)
+
+![Plant · Poultry farm (layers)](images/screens/47-PoultryFarm.png)
+
+### Plant setup · every plant layout is editable
+
+## 48 · Devices and tags
+
+![Devices and tags](images/screens/48-Devices.png)
+
+## 49 · Layout editor · Koyo 1 water
+
+![Layout editor · Koyo 1 water](images/screens/49-LayoutEditor.png)
+
+## 50 · Layout editor · rice mill
+
+![Layout editor · rice mill](images/screens/50-LayoutRice.png)
+
+## 51 · Layout editor · oil mill
+
+![Layout editor · oil mill](images/screens/51-LayoutOil.png)
+
+## 52 · Layout editor · poultry farm
+
+![Layout editor · poultry farm](images/screens/52-LayoutPoultry.png)
+
+## 53 · Symbol library · industry packs
+
+![Symbol library · industry packs](images/screens/53-Symbols.png)
+
+## 54 · Alarm definitions
+
+![Alarm definitions](images/screens/54-AlarmDefs.png)
+
+## 55 · Plant settings · connector
+
+![Plant settings · connector](images/screens/55-Settings.png)
+
+## 56 · Plant settings · commands
+
+![Plant settings · commands](images/screens/56-SettingsCommands.png)

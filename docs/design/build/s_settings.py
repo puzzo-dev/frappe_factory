@@ -15,7 +15,9 @@ def nav(active):
         for n, i in items:
             on = n == active
             st = 'background:var(--surface-elevation-3);box-shadow:var(--shadow-sm);color:var(--ink-gray-8)' if on else 'color:var(--ink-gray-7)'
-            o += f'<span style="display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;{st}">{ic(i)}{n}</span>'
+            h = {'Connector': 'Settings.dc.html', 'Commands': 'SettingsCommands.dc.html', 'Downtime reasons': 'Downtime.dc.html', 'People and roles': 'CompanyUsers.dc.html', 'WhatsApp': 'CompanyWhatsApp.dc.html'}.get(n)
+            tag = f'a href="{h}"' if h else 'span'
+            o += f'<{tag} style="display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;text-decoration:none;{st}">{ic(i)}{n}</{tag.split()[0]}>'
         o += '</div>'
     return o
 

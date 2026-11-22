@@ -175,6 +175,8 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
+.ff a.mi{color:var(--ink-gray-8)}
+.ff a.mi:hover{background:var(--surface-gray-2)}
 .mi .i{color:var(--ink-gray-6)}
 .toast{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--surface-gray-9);color:var(--ink-base);box-shadow:var(--shadow-xl);font-size:14px}
 .sel-bar{display:flex;align-items:center;gap:8px;height:40px;padding:0 6px 0 12px;border-radius:12px;background:var(--surface-base);box-shadow:var(--shadow-2xl);font-size:14px}
@@ -192,11 +194,15 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 
 .kb{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:10px;font:500 16px Inter,sans-serif;cursor:pointer;background:var(--surface-gray-2);color:var(--ink-gray-8)}
 .kb.solid{background:var(--surface-gray-10);color:var(--ink-base)}
+a.kb{text-decoration:none}
+.ff a.kb{color:var(--ink-gray-8)}
+.ff a.kb.solid{color:var(--ink-base)}
+.kb[disabled]{opacity:.5;cursor:not-allowed}
 .kb svg.i{width:20px;height:20px;flex-basis:20px}
 .key{height:64px;border-radius:12px;border:1px solid var(--outline-gray-2);background:var(--surface-base);font:500 24px Inter,sans-serif;color:var(--ink-gray-9);display:grid;place-items:center}
 </style>
 </helmet>
-<div class="ff" style="flex-direction:column;font-size:16px"><header style="height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--outline-gray-1)">
+<div style="position:relative;height:100vh"><div class="ff" style="flex-direction:column;font-size:16px"><header style="height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--outline-gray-1)">
 <div style="display:flex;align-items:center;gap:12px"><span class="logo" style="width:36px;height:36px;flex-basis:36px">K1</span><span style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:600;color:var(--ink-gray-9)">Filling hall · F1 – F5</span><span class="qs">Koyo 1 · tablet T-02 · session KS-0221</span></span></div>
 <div style="display:flex;align-items:center;gap:20px"><span class="tab" style="font-size:20px;font-weight:600;color:var(--ink-gray-9)">08:46</span><span class="bd gray" style="height:24px;font-size:13px"><span class="dot g"></span>Online</span><span class="qs" style="font-size:14px">Nobody signed in</span></div></header>
 <div style="flex:1;display:grid;grid-template-columns:minmax(0,1fr) 400px;min-height:0">
@@ -210,8 +216,9 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 <span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">KE</span><div style="text-align:center;display:flex;flex-direction:column;gap:2px"><div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kemi E.</div><div class="qs tab" style="font-size:14px">kemi.e@koyo1.ng · Machine Operator</div><div style="font-size:14px;color:var(--ink-gray-7);margin-top:6px">Enter your 6-digit PIN</div></div>
 <div style="display:flex;gap:12px"><span style="width:16px;height:16px;border-radius:50%;background:var(--ink-gray-9)"></span><span style="width:16px;height:16px;border-radius:50%;background:var(--ink-gray-9)"></span><span style="width:16px;height:16px;border-radius:50%;border:2px solid var(--outline-gray-3)"></span><span style="width:16px;height:16px;border-radius:50%;border:2px solid var(--outline-gray-3)"></span><span style="width:16px;height:16px;border-radius:50%;border:2px solid var(--outline-gray-3)"></span><span style="width:16px;height:16px;border-radius:50%;border:2px solid var(--outline-gray-3)"></span></div>
 <div style="display:grid;grid-template-columns:repeat(3,72px);gap:12px"><span class="key">1</span><span class="key">2</span><span class="key">3</span><span class="key">4</span><span class="key">5</span><span class="key">6</span><span class="key">7</span><span class="key">8</span><span class="key">9</span><span class="key" style="font-size:15px;color:var(--ink-gray-6)">Clear</span><span class="key">0</span><span class="key" style="color:var(--ink-gray-6)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg></span></div>
+<a href="KioskLine.dc.html" class="kb solid" style="width:240px">Sign in</a>
 <span class="qs" style="font-size:13px;text-align:center;line-height:1.5">5 wrong PINs lock this user on every kiosk for 15 min. Signs out after 10 min without a tap.</span></div>
-</div></div>
+</div></div></div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1180, "height": 820}}'>
 class Component extends DCLogic {

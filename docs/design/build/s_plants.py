@@ -6,6 +6,7 @@ plants = [
   ('PB', 'Plant B', 'Bottled water · sample', 'Alert', 'RO salt rejection under the alert limit. Production continues.', '14,200 bottles today', '#'),
   ('PD', 'Plant D', 'Sachet water · sample', 'Offline', 'No data for 3 h. The plant keeps recording and syncs when the link returns.', 'Last seen 05:34', '#'),
   ('RM', 'Rice mill', 'Rice milling · Kano · sample', 'Running', 'All 16 machines running. Head rice yield 64.5 %.', '21.6 t milled this shift', 'RiceMill.dc.html'),
+  ('PF', 'Poultry farm', 'Layer farm · Ogun · sample', 'Alert', 'House H3 at 31.8 °C with all tunnel fans on. Lay rate 84 % in H3.', '9,870 eggs today · 329 trays', 'PoultryFarm.dc.html'),
 ]
 look = {
   'Tripped': ('s-red', 'var(--outline-red-3)', '#fff'),
@@ -26,6 +27,6 @@ for ini, name, meta, st, note, foot, href in plants:
 cards += f'<a href="AddPlant.dc.html" class="btn ghost" style="height:auto;min-height:160px;flex-direction:column;border:1px dashed var(--outline-gray-2);border-radius:12px;color:var(--ink-gray-6)">{ic("plus")}Add plant</a>'
 
 head = header(f'<div class="crumb"><span class="cur">Plants</span></div>', f'<div class="seg"><span class="on">Cards</span><span>Table</span></div>')
-body = f'''<div class="body"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;align-items:baseline;gap:8px"><h2 class="h2">Your plants</h2><span class="qs">5 plants · open one to see it live</span></div><span class="in muted" style="width:240px">{ic("search")}<span class="grow">Search plants</span></span></div>
+body = f'''<div class="body"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;align-items:baseline;gap:8px"><h2 class="h2">Your plants</h2><span class="qs">6 plants · open one to see it live</span></div><span class="in muted" style="width:240px">{ic("search")}<span class="grow">Search plants</span></span></div>
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">{cards}</div></div>'''
 write('Plants.dc.html', page('Plants', shell('Plants.dc.html', head, body, scope='company'), {"$preview": {"width": 1440, "height": 900}}))

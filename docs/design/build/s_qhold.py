@@ -1,7 +1,7 @@
 """Quality hold: QA decides what happens to product made around a fault. Opened by TRIP-0007."""
 from ff import *
 
-head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Quality holds','#'),('QH-0031',None)),
+head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Quality holds','HoldList.dc.html'),('QH-0031',None)),
   f'{bd("On hold","amber")}{btn("Report","file","ghost")}{btn(icon="more",kind="ghost",attrs="More")}')
 
 banner = f'''<div class="alert amber" style="border-color:var(--outline-amber-3);background:var(--surface-amber-2)"><span class="ai">{ic('shield')}</span>

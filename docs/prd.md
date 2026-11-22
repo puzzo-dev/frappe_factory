@@ -126,6 +126,7 @@ Stories are grouped by epic. IDs are used in the TRD, the tests and the screen d
 | US-707 | As a Factory Manager, I want one dashboard for factory and manufacturing so that I see the whole operation | Factory metrics always; Manufacturing metrics (work orders, completions, shortages, quality, plan) appear when ERPNext is linked |
 | US-708 | As a Maintenance Technician, I want a kiosk view for my area so that I see equipment faults and my jobs without a desk | Maintenance view shows equipment status, my open jobs, equipment alarms to acknowledge, fault reports and spare-part requests. It never resets an interlock |
 | US-709 | As a Quality Inspector, I want a kiosk view in the lab so that I respond to quality faults fast | Quality view shows live quality analysers, the open hold and its lots, routine checks due, sample entry and QA release. Every entry is signed with the Frappe user and PIN |
+| US-710 | As a poultry farm manager, I want my feed mill, layer houses and egg room in the same app so that I watch climate, feed, water and eggs together | Poultry farm template: house temperature, humidity, ammonia, fans and pads per house; feed bin and water runway; eggs counted in eggs and trays of 30; lay rate and mortality; its own layout editor |
 
 **E8 · Quality assurance**
 

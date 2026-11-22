@@ -8,6 +8,7 @@ head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Symb
 packs = [
   ('Rice milling', 'Built-in pack · 8', [(n, f()) for n, f in I.RICE], 'Husker'),
   ('Edible oil', 'Built-in pack · 7', [(n, f()) for n, f in I.OIL], None),
+  ('Poultry farm', 'Built-in pack · 12', [(n, f()) for n, f in I.POULTRY], None),
   ('General: handling and utilities', 'Built-in · in every plant · 15',
    [(n, f()) for n, f in I.GENERAL] + [('Vertical tank', S.tank_v(0.6)), ('Centrifugal pump', S.pump(True)), ('Two-way valve', S.valve()),
     ('Diverter, 3-way', S.valve3()), ('Analyser', S.analyser()), ('Level', S.level()), ('Flow meter', S.flow()), ('Generator', S.generator())], None),
@@ -24,8 +25,8 @@ for title, meta, items, sel in packs:
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px">{"".join(card(n, sv, n == sel) for n, sv in items)}</div></section>'''
 
 grid = f'''<div style="flex:1;min-width:0;overflow:auto"><div class="body" style="gap:22px">
-<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;gap:8px;align-items:center"><span class="in muted" style="width:220px">{ic("search")}<span class="grow">Search 37 symbols</span></span>
-<div class="seg"><span class="on">All</span><span>Built-in</span><span>Your company</span></div></div><span class="chip"><span class="k">Pack</span>All 4</span></div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;gap:8px;align-items:center"><span class="in muted" style="width:220px">{ic("search")}<span class="grow">Search 49 symbols</span></span>
+<div class="seg"><span class="on">All</span><span>Built-in</span><span>Your company</span></div></div><span class="chip"><span class="k">Pack</span>All 5</span></div>
 <div class="alert" style="background:var(--surface-gray-1);border-color:var(--outline-gray-1)"><span style="color:var(--ink-gray-6);display:flex">{ic("info")}</span><span style="font-size:13px;line-height:1.5;color:var(--ink-gray-7)">A plant uses the general symbols plus its industry pack. Anything missing: upload an SVG, or place a <b style="font-weight:500">Generic machine</b> (a labelled box with state colour and up to three values) and swap it for a drawn symbol later. Your company's symbols are shared by all its plants.</span></div>
 {sections}
 </div></div>'''

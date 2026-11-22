@@ -6,6 +6,8 @@ NAV = [
   ('Floor', [('Kiosks', 'cpu'), ('Process templates', 'layers')]),
   ('Integrations', [('ERPNext', None), ('API and webhooks', 'link'), ('WhatsApp', 'msg'), ('ThingsBoard', 'radio')]),
 ]
+HREF = {'General': 'CompanyGeneral.dc.html', 'Users and roles': 'CompanyUsers.dc.html', 'Kiosks': 'CompanyKiosks.dc.html', 'Process templates': 'CompanyTemplates.dc.html',
+        'ERPNext': 'CompanyERPNext.dc.html', 'API and webhooks': 'CompanyAPI.dc.html', 'WhatsApp': 'CompanyWhatsApp.dc.html', 'ThingsBoard': 'CompanyTB.dc.html'}
 def nav(active):
     o = ''
     for g, items in NAV:
@@ -14,7 +16,7 @@ def nav(active):
             on = n == active
             st = 'background:var(--surface-elevation-3);box-shadow:var(--shadow-sm);color:var(--ink-gray-8)' if on else 'color:var(--ink-gray-7)'
             icon = ic(i) if i else '<span style="width:16px;height:16px;border:1.5px solid var(--ink-gray-6);border-radius:3px;display:grid;place-items:center;font-size:9px;font-weight:700;color:var(--ink-gray-6)">E</span>'
-            o += f'<span style="display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;{st}">{icon}{n}</span>'
+            o += f'<a href="{HREF[n]}" style="display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;text-decoration:none;{st}">{icon}{n}</a>'
         o += '</div>'
     return o
 

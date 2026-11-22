@@ -3,18 +3,18 @@ from ff import *
 import math
 
 head = header('<div class="crumb"><span class="cur">Dashboard</span></div>',
-  f'<span class="chip"><span class="k">Plants</span>All 5</span><div class="seg"><span class="on">Today</span><span>This week</span><span>This month</span></div>{btn("Export","download","ghost")}')
+  f'<span class="chip"><span class="k">Plants</span>All 6</span><div class="seg"><span class="on">Today</span><span>This week</span><span>This month</span></div>{btn("Export","download","ghost")}')
 
 def kpi(k, v, d, ink=''):
     st = f';color:{ink}' if ink else ''
     return f'<div class="card kpi"><span class="k">{k}</span><span class="v" style="font-size:20px{st}">{v}</span><span class="d">{d}</span></div>'
 
-plants = [('Rice mill', 88, 96), ('Plant B', 82, 91), ('Koyo 1', 70, 70), ('Oil mill', 61, 73)]
+plants = [('Rice mill', 88, 96), ('Plant B', 82, 91), ('Poultry farm', 79, 75), ('Koyo 1', 70, 70), ('Oil mill', 61, 73)]
 def hbars():
     rows = ''
     for n, oee, att in plants:
-        rows += f'''<div style="display:grid;grid-template-columns:84px minmax(0,1fr) 44px;align-items:center;gap:10px;height:28px;font-size:13px"><span style="color:var(--ink-gray-7)">{n}</span><span style="height:12px;background:var(--surface-gray-2);border-radius:3px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:{oee}%;border-radius:3px;background:var(--ink-gray-7)"></i><i style="position:absolute;left:80%;top:-3px;bottom:-3px;width:1.5px;background:var(--ink-gray-9)"></i></span><span class="tab r" style="display:flex;color:var(--ink-gray-9);font-weight:500">{oee}%</span></div>'''
-    rows += '<div style="display:grid;grid-template-columns:84px minmax(0,1fr) 44px;align-items:center;gap:10px;height:28px;font-size:13px;color:var(--ink-gray-5)"><span>Plant D</span><span>Offline since 05:34</span><span class="r" style="display:flex">—</span></div>'
+        rows += f'''<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;align-items:center;gap:10px;height:28px;font-size:13px"><span style="color:var(--ink-gray-7)">{n}</span><span style="height:12px;background:var(--surface-gray-2);border-radius:3px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:{oee}%;border-radius:3px;background:var(--ink-gray-7)"></i><i style="position:absolute;left:80%;top:-3px;bottom:-3px;width:1.5px;background:var(--ink-gray-9)"></i></span><span class="tab r" style="display:flex;color:var(--ink-gray-9);font-weight:500">{oee}%</span></div>'''
+    rows += '<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;align-items:center;gap:10px;height:28px;font-size:13px;color:var(--ink-gray-5)"><span>Plant D</span><span>Offline since 05:34</span><span class="r" style="display:flex">—</span></div>'
     return rows
 
 def lines():
@@ -55,10 +55,10 @@ for t, m, p, done, plan, u, due, (st, sc) in wos:
 body = f'''<div class="body">
 <section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;align-items:baseline;gap:8px"><h2 class="h2">Factory</h2><span class="qs">Live from the plants · works without ERPNext</span></div>
 <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
-{kpi('OEE', '74%', '4 live plants · target 80%')}
+{kpi('OEE', '74%', '5 live plants · target 80%')}
 {kpi('Plan attainment', '81%', 'Good output against plan so far')}
-{kpi('Unplanned downtime', '2 h 06 min', '9 stops · 3 need a reason')}
-{kpi('Open alarms', '6', '1 priority 1 · acknowledged')}
+{kpi('Unplanned downtime', '2 h 15 min', '9 stops · 3 need a reason')}
+{kpi('Open alarms', '11', '1 priority 1 · 6 not acknowledged')}
 {kpi('Interlock trips', '1', 'Koyo 1 · 32 min', 'var(--ink-red-7)')}
 </div>
 <div style="display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.3fr) minmax(0,1fr);gap:12px">

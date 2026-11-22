@@ -1,4 +1,4 @@
-"""Plant screens for two other industries, drawn from the same symbol library and the same
+"""Plant screens for three other industries (rice, oil, poultry), drawn from the same symbol library and the same
 plant-screen template as Koyo 1: proof that the app is not tied to water."""
 from ff import *
 import symbols as S
@@ -23,7 +23,7 @@ def pipe(d, run=True):
     flow = f'<path d="{d}" fill="none" stroke="var(--ink-gray-6)" stroke-width="1.5" class="flow" stroke-linejoin="round"/>' if run else ''
     return base + flow
 
-def plant_screen(name, ini, href, area, status, pins, mimic_svg, legend_note, alarms, runway, shift):
+def plant_screen(name, ini, href, area, status, pins, mimic_svg, legend_note, alarms, runway, shift, layout_href='LayoutEditor.dc.html', more_counts=None):
     st_word, st_bd, st_bg, st_border, st_msg = status
     pin_html = ''.join(
         f'<div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:4px;{"border-color:var(--outline-amber-3)" if w else ""}"><span class="qs" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{n}</span><span class="tab" style="font-size:20px;font-weight:600;color:{"var(--ink-amber-7)" if w else "var(--ink-gray-9)"}">{v} <small style="font-size:13px;font-weight:400;color:var(--ink-gray-5)">{u}</small></span><span class="qs" style="font-size:12px">{m}</span></div>'
@@ -35,21 +35,21 @@ def plant_screen(name, ini, href, area, status, pins, mimic_svg, legend_note, al
         f'<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--ink-gray-7)">{n}</span><span class="tab" style="font-weight:500;color:{"var(--ink-amber-7)" if w else "var(--ink-gray-8)"}">{v}</span></div><span class="bar"><i class="{"a" if w else ""}" style="width:{p}"></i></span></div>'
         for n, v, p, w in runway)
     head = header(crumb(('Plants', 'Plants.dc.html'), (name, href)) .replace('</div>', f'<span class="sep" aria-hidden="true">/</span><button type="button" class="btn ghost" style="font:600 18px Inter,sans-serif;color:var(--ink-gray-9);padding:0 6px">{area}{ic("chev-d")}</button></div>', 1),
-                  f'<span class="bd gray"><span class="dot g"></span>Live · 2 s</span><a href="LayoutEditor.dc.html" class="btn">{ic("pen")}Edit layout</a>')
+                  f'<span class="bd gray"><span class="dot g"></span>Live · 2 s</span><a href="{layout_href}" class="btn">{ic("pen")}Edit layout</a>')
     body = f'''<div class="body">
 <div class="alert" style="align-items:center;background:{st_bg};border-color:{st_border}">{bd(st_word, st_bd)}<span style="font-size:14px;color:var(--ink-gray-8)">{st_msg}</span></div>
-<section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h2">Pinned tags</h2><a href="#" style="font-size:13px">Edit pinned tags</a></div>
+<section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h2">Pinned tags</h2><a href="PinnedTags.dc.html" style="font-size:13px">Edit pinned tags</a></div>
 <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px">{pin_html}</div></section>
 <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start">
 <section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div style="display:flex;gap:8px;align-items:baseline"><h2 class="h2">Layout</h2><span class="qs">{legend_note}</span></div>
 <div style="display:flex;gap:14px" class="qs"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:50%;background:var(--ink-gray-6)"></i>Running</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink-gray-5)"></i>Stopped</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink-red-7)"></i>Fault</span></div></div>
 <div class="card" style="background:var(--surface-gray-1);padding:12px">{mimic_svg}</div>
 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">{"".join(f'<div class="kpi"><span class="k">{k}</span><span class="v" style="font-size:18px">{v}</span><span class="d">{d}</span></div>' for k, v, d in shift)}</div></section>
-<aside style="display:flex;flex-direction:column;gap:24px"><section><div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px"><h2 class="h2">Active alarms</h2><a href="#" style="font-size:13px">View all</a></div>{al_html}</section>
+<aside style="display:flex;flex-direction:column;gap:24px"><section><div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px"><h2 class="h2">Active alarms</h2><a href="CoAlarms.dc.html" style="font-size:13px">View all</a></div>{al_html}</section>
 <section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h2">Runway</h2><span class="qs">time left at current use</span></div>{rw_html}</section></aside>
 </div></div>'''
-    counts = {'Alarms': str(len(alarms)), 'Downtime': '1'}
-    return page(name, shell(href, head, body, plant=(ini, name), plant_href=href, counts=counts), {"$preview": {"width": 1440, "height": 900}})
+    counts = {'Alarms': str(len(alarms)), 'Downtime': '1', **(more_counts or {})}
+    return page(name, shell(href, head, body, plant=(ini, name), plant_href=href, counts=counts, layout_href=layout_href), {"$preview": {"width": 1440, "height": 900}})
 
 # ------------------------------------------------------------------ Rice mill
 y1, y2 = 30, 250
@@ -94,7 +94,7 @@ write('RiceMill.dc.html', plant_screen(
   rice_svg, 'Rice mill v2 · 16 symbols from the rice milling pack',
   [('3', 'oklch(0.723 0.152 71.82)', 'Whitener W-2 load high', '96 % · since 07:58'), ('3', 'oklch(0.723 0.152 71.82)', 'Silo S-2 nearly full', '92 % · switch intake to S-1')],
   [('Paddy in silos', '9.5 h', '62%', False), ('50 kg bags', '1.8 days', '45%', False), ('Diesel', '33 h', '24%', True)],
-  [('Milled rice this shift', '21.6 t', 'of 30 t planned'), ('Uptime this shift', '96%', '1 stop · 9 min'), ('Production run', 'RUN-0233', 'Parboiled long grain')]))
+  [('Milled rice this shift', '21.6 t', 'of 30 t planned'), ('Uptime this shift', '96%', '1 stop · 9 min'), ('Production run', 'RUN-0233', 'Parboiled long grain')], 'LayoutRice.dc.html'))
 
 # ------------------------------------------------------------------ Oil mill
 y1, y2 = 30, 250
@@ -136,4 +136,69 @@ write('OilMill.dc.html', plant_screen(
   oil_svg, 'Oil mill v1 · 16 symbols from the edible oil pack',
   [('2', 'oklch(0.556 0.198 26.552)', 'Expeller EX-3 overload trip', '48 A against 40 A · 07:41'), ('3', 'oklch(0.723 0.152 71.82)', 'Seed feed below plan', '2.7 of 4.1 t/h · since 07:42')],
   [('Seed in silo', '1.9 days', '70%', False), ('Bleaching earth', '26 h', '30%', True), ('1 L bottles', '3.2 days', '64%', False)],
-  [('Oil this shift', '6.1 t', 'of 8.4 t planned'), ('Uptime this shift', '88%', 'EX-3 down 1 h 05 min'), ('Production run', 'RUN-0118', 'Refined soybean oil')]))
+  [('Oil this shift', '6.1 t', 'of 8.4 t planned'), ('Uptime this shift', '88%', 'EX-3 down 1 h 05 min'), ('Production run', 'RUN-0118', 'Refined soybean oil')], 'LayoutOil.dc.html'))
+
+# ------------------------------------------------------------------ Poultry farm (layers)
+HX = [20, 230, 440, 650]; HY, HW, HH = 136, 190, 116
+houses = [('H1', '5,000 birds', '24.6 °C', 'RH 62 % · NH₃ 8 ppm', 'Lay 91 %', 'ok'),
+          ('H2', '5,000 birds', '25.1 °C', 'RH 64 % · NH₃ 9 ppm', 'Lay 89 %', 'ok'),
+          ('H3', '4,960 birds', '31.8 °C', 'RH 71 % · NH₃ 14 ppm', 'Lay 84 %', 'hot'),
+          ('H4', 'Empty', 'Cleaning', 'Flock out 14 Nov', 'Next flock 1 Dec', 'off')]
+def house(x, tag, birds, temp, env, lay, st):
+    run = st != 'off'
+    edge = 'var(--ink-amber-7)' if st == 'hot' else 'var(--ink-gray-6)'
+    tcol = 'var(--ink-amber-7)' if st == 'hot' else ('var(--ink-gray-5)' if st == 'off' else 'var(--ink-gray-9)')
+    o = f'<rect x="{x}" y="{HY}" width="{HW}" height="{HH}" rx="6" fill="var(--surface-base)" stroke="{edge}" stroke-width="{2 if st=="hot" else 1.5}"/>'
+    o += f'<text x="{x+10}" y="{HY+18}" font-size="12" font-weight="600" fill="var(--ink-gray-9)">{tag}</text><text x="{x+32}" y="{HY+18}" font-size="10" fill="var(--ink-gray-5)">{birds}</text>'
+    o += f'<text x="{x+HW-10}" y="{HY+18}" text-anchor="end" font-size="12" font-weight="600" fill="{tcol}">{temp}</text>'
+    o += f'<g transform="translate({x+4} {HY+30}) scale(0.9)">{I.cooling_pad(run and st=="hot")}</g>'
+    o += f'<g transform="translate({x+48} {HY+22}) scale(1.9 0.8)">{I.feeder_line(run)}</g>'
+    o += f'<g transform="translate({x+48} {HY+52}) scale(1.9 0.8)">{I.drinker_line(run)}</g>'
+    o += f'<g transform="translate({x+HW-26} {HY+28}) scale(0.48)">{I.exhaust_fan(run)}</g><g transform="translate({x+HW-26} {HY+54}) scale(0.48)">{I.exhaust_fan(run and st=="hot")}</g>'
+    o += f'<text x="{x+10}" y="{HY+HH-22}" font-size="10" fill="var(--ink-gray-6)">{env}</text><text x="{x+10}" y="{HY+HH-8}" font-size="10" fill="var(--ink-gray-6)">{lay}</text>'
+    fans = '6 of 6 fans · pad on' if st == 'hot' else ('fans off' if st == 'off' else '2 of 6 fans')
+    o += f'<text x="{x+HW-10}" y="{HY+HH-8}" text-anchor="end" font-size="10" fill="{"var(--ink-amber-7)" if st=="hot" else "var(--ink-gray-5)"}">{fans}</text>'
+    if st == 'hot':
+        o += f'<g transform="translate({x+HW-8} {HY-8})"><polygon points="7,0 14,7 7,14 0,7" fill="oklch(0.723 0.152 71.82)"/><text x="7" y="10.5" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">2</text></g>'
+    return o
+poul = ''.join([
+  pipe('M75 50 H100 M135 50 H180 M235 50 H262 M318 50 H340'),
+  pipe('M383 44 H410 V110 H560'),
+  pipe('M115 110 H410'),
+  pipe('M560 110 H745', run=False),
+  ''.join(pipe(f'M{x+95} 110 V{HY}') for x in HX[:3]),
+  pipe(f'M{HX[3]+95} 110 V{HY}', run=False),
+  pipe('M548 50 H600 M630 50 H680 M712 50 H780 V123 H105'),
+  ''.join(pipe(f'M{x+120} 123 V{HY}') for x in HX[:3]),
+  ''.join(pipe(f'M{x+95} {HY+HH} V312') for x in HX[:3]),
+  pipe('M115 312 H560'),
+  pipe('M620 312 H650 M710 312 H740'),
+])
+poul += ''.join(house(x, *h) for x, h in zip(HX, houses))
+poul += ''.join([
+  put(I.silo(0.42), 20, 20, 'Maize silo', '42 %', s=1.15),
+  put(I.bucket_elevator(), 85, 20, 'E-1', s=1.15),
+  put(I.hammer_mill(), 165, 20, 'Hammer mill', '1.8 t/h', s=1.15),
+  put(I.ribbon_mixer(), 245, 20, 'Mixer', 'batch 4 of 6', s=1.15),
+  put(I.silo(0.18), 330, 14, 'Feed bin FB-1', '18 %', s=1.15, warn='amber'),
+  put(S.tank_v(0.66), 490, 20, 'Water T1', '66 %', s=1.15),
+  put(S.dosing(), 575, 20, 'Medicator', 'vitamins', s=1.15),
+  put(S.pump(True), 655, 20, 'P-1', '3.1 m³/h', s=1.15),
+  put(I.egg_grader(), 560, 282, 'Egg grader', '3,240 eggs/h', s=1.25),
+  put(I.egg_packer(), 650, 282, 'Packer', 'trays of 30', s=1.25),
+  put(I.cold_room(), 740, 282, 'Cold room', '12 °C', s=1.25),
+  f'<text x="800" y="113" text-anchor="start" font-size="10" fill="var(--ink-gray-5)">feed</text>',
+  f'<text x="800" y="127" text-anchor="start" font-size="10" fill="var(--ink-gray-5)">water</text>',
+  f'<text x="440" y="306" text-anchor="middle" font-size="10" fill="var(--ink-gray-5)">egg belts to the cross conveyor</text>',
+])
+poultry_svg = f'<svg viewBox="0 0 860 390" width="100%" role="img" aria-label="Layer farm: maize silo, elevator, hammer mill, mixer and feed bin feed four layer houses by auger; water tank, medicator and pump feed the drinker lines; egg belts run to the grader, packer and cold room. House H3 is hot at 31.8 °C; H4 is empty for cleaning." style="display:block">{poul}</svg>'
+
+write('PoultryFarm.dc.html', plant_screen(
+  'Poultry farm', 'PF', 'PoultryFarm.dc.html', 'Layer houses and egg room',
+  ('Alert', 'amber', 'var(--surface-amber-2)', 'var(--outline-amber-3)', 'House H3 is at 31.8 °C with all 6 tunnel fans and the cooling pad on. Heat stress cuts lay rate: check the pad pump and drinker flow.'),
+  [('Eggs so far today', '9,870', 'eggs', '329 trays of 30', False), ('Lay rate', '88.4', '%', '14,960 birds in lay', False), ('H3 temperature', '31.8', '°C', 'Alert above 30', True),
+   ('H3 ammonia', '14', 'ppm', 'Alert above 25', False), ('Feed per bird', '112', 'g/day', 'Band 105–120', False), ('Water per bird', '228', 'ml/day', 'About 2× feed', False)],
+  poultry_svg, 'Layer farm v1 · 22 symbols from the poultry pack',
+  [('2', 'oklch(0.723 0.152 71.82)', 'H3 temperature high', '31.8 °C · alert at 30 · since 08:05'), ('3', 'oklch(0.723 0.152 71.82)', 'Feed bin FB-1 low', '18 % · mixer batch 4 of 6 running')],
+  [('Feed in bin', '7 h', '18%', True), ('Maize in silo', '4.2 days', '42%', False), ('Egg trays', '2.5 days', '50%', False), ('Diesel', '52 h', '48%', False)],
+  [('Eggs this shift', '9,870', '329 trays of 30'), ('Mortality today', '3 birds', '0.02 % of the flock'), ('Feed used today', '1.1 t', 'of 1.7 t planned')], 'LayoutPoultry.dc.html', {'Quality holds': '1'}))

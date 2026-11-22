@@ -1,6 +1,6 @@
 from ff import *
 
-head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Shift handover','#'),('Morning to afternoon',None)),
+head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Shift handover','HandoverHistory.dc.html'),('Morning to afternoon',None)),
   f'{bd("Draft","gray")}<span class="qs">Saved 08:44</span><button type="button" class="btn solid">Submit handover</button>')
 
 def fig(k, v, d, ink=''):
@@ -71,7 +71,7 @@ panel = f'''<aside class="panel"><div style="padding:16px;display:flex;flex-dire
 </div>
 <div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3 class="h3">Crew</h3><span class="qs">6 of 7 clocked in</span></div>{cl}<span class="qs">From Shift Attendance Summary · biometric clock</span></div>
 <div style="display:flex;flex-direction:column;gap:8px"><h3 class="h3">Last handover</h3>
-<a href="#" class="inset" style="display:flex;flex-direction:column;gap:4px;color:inherit"><span style="font-size:13px;color:var(--ink-gray-8);font-weight:500">Night to morning · Ibrahim K.</span><span class="ps">F9 jaw heater failing, swapped at 05:32. Two short stops on F3 and F7 not coded.</span><span class="qs">Accepted by Musa A. · 06:04</span></a></div>
+<a href="HandoverHistory.dc.html" class="inset" style="display:flex;flex-direction:column;gap:4px;color:inherit"><span style="font-size:13px;color:var(--ink-gray-8);font-weight:500">Night to morning · Ibrahim K.</span><span class="ps">F9 jaw heater failing, swapped at 05:32. Two short stops on F3 and F7 not coded.</span><span class="qs">Accepted by Musa A. · 06:04</span></a></div>
 </div></aside>'''
 
 write('Handover.dc.html', page('Shift handover', shell('Handover.dc.html', head, f'<div style="display:flex;flex:1;min-height:0">{main}{panel}</div>'), {"$preview": {"width": 1440, "height": 900}}))

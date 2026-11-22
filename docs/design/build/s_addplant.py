@@ -26,6 +26,7 @@ templates = [
   ('Sachet and bottled water', 'Borehole to RO, UV, lead or quality interlocks, fillers', strip([S.tank_v(0.6), S.pump(True), S.ro(), S.uv(), S.filler(True)]), 'Koyo 1, Plant B', False),
   ('Rice milling', 'Paddy intake to drying, husking, whitening, sorting, bagging', strip([I.silo(0.6), I.husker(), I.whitener(), I.color_sorter(), I.bagger()]), 'Rice mill', True),
   ('Edible oil', 'Seed cleaning, cooking, pressing, refining, bottling', strip([I.cooker(), I.expeller(), I.filter_press(), I.column(), I.bottle_filler()]), 'Oil mill', False),
+  ('Poultry farm', 'Feed mill, layer or broiler houses, climate, water, eggs', strip([I.hammer_mill(), I.poultry_house(), I.exhaust_fan(), I.egg_grader(), I.cold_room()]), 'Poultry farm', False),
   ('Start blank', 'General symbols only; add your own machines', strip([S.tank_v(0.5), I.conveyor(), I.fan(), '<rect x="6" y="12" width="36" height="24" rx="3" fill="var(--surface-base)" stroke="var(--ink-gray-6)" stroke-width="1.5" stroke-dasharray="3 2"/><text x="24" y="27" text-anchor="middle" font-size="7" fill="var(--ink-gray-6)">machine</text>']), '', False),
 ]
 tc = ''
@@ -51,7 +52,7 @@ body = f'''<div class="body" style="max-width:1040px;margin:0 auto;width:100%;ga
 <div style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start">
 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">{tc}</div>
 <section class="card" style="display:flex;flex-direction:column;gap:6px"><h3 class="h3">Rice milling sets up</h3><div class="divy">{gl}</div>
-<p class="qs" style="margin:6px 0 0">Templates are records (Process Template). I-Varse ships these four; a company can save any plant as its own template.</p></section>
+<p class="qs" style="margin:6px 0 0">Templates are records (Process Template). I-Varse ships these five; a company can save any plant as its own template.</p></section>
 </div>
 <div style="display:flex;justify-content:space-between;padding-top:16px;border-top:1px solid var(--outline-gray-1)">{btn("Back","arrow-l")}<button type="button" class="btn solid">Continue</button></div>
 </div>'''

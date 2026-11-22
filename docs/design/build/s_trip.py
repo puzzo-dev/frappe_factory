@@ -100,7 +100,7 @@ steps = '<ol style="list-style:none;margin:0;padding:0">' + ''.join([
   step(7, 'todo', 'Restart the line', 'Floor Supervisor', s6),
 ]) + '</ol>'
 
-head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Interlock trips','#'),('TRIP-0007',None)),
+head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Interlock trips','TripList.dc.html'),('TRIP-0007',None)),
   f'{bd("Tripped · 32 min","s-red")}{btn("Report","file","ghost")}{btn(icon="more",kind="ghost",attrs="More")}')
 
 banner = f'''<div class="alert red" style="border-color:var(--outline-red-3);background:var(--surface-red-2)"><span class="ai">{ic('octagon')}</span>

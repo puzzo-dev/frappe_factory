@@ -212,7 +212,7 @@ Links in: `Plant Floor Widget.symbol` → HMI Symbol (a pinned version), and `Pl
 
 **Security.** An uploaded SVG is untrusted. On save the server parses it with `defusedxml` and keeps only an allowlist of SVG elements and attributes: no `script`, no `foreignObject`, no `on*` event attributes, no external `href` or `xlink:href`, no `style` with `url()` or `@import`, no embedded raster images. Maximum 200 KB. Only Factory Manager and System Manager can upload.
 
-**Symbol packs.** Symbols ship as packs, one per industry, plus a general pack every plant gets. HMI Symbol gains a `pack` field. Release 1 ships four packs, about 37 symbols, ISA-101 style and drawn in-house:
+**Symbol packs.** Symbols ship as packs, one per industry, plus a general pack every plant gets. HMI Symbol gains a `pack` field. Release 1 ships five packs, about 49 symbols, ISA-101 style and drawn in-house:
 
 | Pack | Symbols |
 | --- | --- |
@@ -220,10 +220,11 @@ Links in: `Plant Floor Widget.symbol` → HMI Symbol (a pinned version), and `Pl
 | Water and beverage | Sachet filler, media and cartridge filters, RO array, UV unit, ion exchange, dosing pump |
 | Rice milling | Pre-cleaner, destoner, husker, paddy separator, whitener, grader, color sorter, dryer |
 | Edible oil | Cooker, expeller, filter press, neutralizer and bleacher (agitated vessel), deodorizer, heat exchanger, bottle filler |
+| Poultry farm | Layer house, feeder line, drinker line, tunnel fan, cooling pad, brooder, hammer mill, ribbon mixer, egg conveyor, egg grader, egg packer, cold room |
 
 A machine with no symbol yet is placed as **Generic machine**: a labelled box that shows state colour and up to three values, swapped for a drawn symbol later. A company can also upload its own SVG; it is cleaned as below and shared by all that company's plants.
 
-**Process Template** (proposed, needs approval). One record per industry bundles a symbol pack, asset types, tag templates, alarm definitions, downtime reasons, KPIs and a starter layout. Adding a plant starts from a template, so a rice mill gets a working setup on day one. I-Varse ships Water and beverage, Rice milling, Edible oil and Blank; a company can save any plant as its own template.
+**Process Template** (proposed, needs approval). One record per industry bundles a symbol pack, asset types, tag templates, alarm definitions, downtime reasons, KPIs and a starter layout. Adding a plant starts from a template, so a rice mill gets a working setup on day one. I-Varse ships Water and beverage, Rice milling, Edible oil, Poultry farm and Blank; a company can save any plant as its own template. Each template carries its units of count (for example sachet and bag of 20, or egg and tray of 30). A plant gets its own copy of the starter layout, edited in that plant's layout editor; editing the template's layout changes new plants only.
 
 ## ERPNext link and other ERPs
 
