@@ -174,7 +174,7 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
-.ffx{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.ff{position:relative}.lr{position:relative}.rowlink{position:absolute;inset:0;z-index:0;border-radius:inherit}.lr a:not(.rowlink),.lr button{position:relative;z-index:1}.menu-scrim{position:absolute;inset:0;z-index:30;cursor:default}.appmenu{z-index:31}label.overlay,label.scrim{cursor:default}
 .ffx:checked + .ffov{display:none !important}
 label.overlay,label.scrim{cursor:default}
 label.btn{cursor:pointer}
@@ -314,16 +314,12 @@ COMPANY_NAV = [
 ]
 COMPANY_SETUP = [
     ('AddPlant.dc.html', 'factory', 'Plants and sites'),
-    ('CompanyKiosks.dc.html', 'cpu', 'Kiosks'),
     ('Symbols.dc.html', 'shapes', 'Symbol library'),
-    ('CompanyTemplates.dc.html', 'layers', 'Process templates'),
-    ('CompanyUsers.dc.html', 'users', 'Users and roles'),
-    ('CompanyERPNext.dc.html', 'link', 'Integrations'),
 ]
 
 def _head(badge=None, title=None, sub=None, open_=False):
     st = ' style="background:var(--surface-elevation-3);box-shadow:var(--shadow-sm)"' if open_ else ''
-    return ('<button type="button" class="side-head"' + st + ' aria-haspopup="menu" onclick="location.href=\'' + ('Dashboard.dc.html' if open_ else 'DashboardMenu.dc.html') + '\'"><span class="logo" aria-hidden="true" style="background:var(--surface-gray-10)">FF</span>'
+    return ('<button type="button" class="side-head"' + st + ' aria-haspopup="menu" aria-label="App menu and app switcher" onClick="{{toggleMenu}}"><span class="logo" aria-hidden="true" style="background:var(--surface-gray-10)">FF</span>'
             '<span style="display:flex;flex-direction:column;min-width:0;flex:1"><span style="font-weight:500;color:var(--ink-gray-9);line-height:1.1">Frappe Factory</span>'
             '<span style="font-size:13px;color:var(--ink-gray-7);margin-top:3px;line-height:1.1">Tunde B.</span></span>' + ic('chev-d', 'i', 'color:var(--ink-gray-5)') + '</button>')
 
@@ -350,7 +346,7 @@ def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_h
         out.append('</div><div class="slabel">Setup</div><div class="sgrp">')
         out += [_item(h, i, l, active) for h, i, l in COMPANY_SETUP]
         out.append('</div><div class="side-foot"><span class="dot g"></span>6 plants · ERPNext linked</div></nav>')
-        return '\n'.join(out)
+        return '\n'.join(out) + _menu_block(menu_open)
     out = ['<nav class="side" aria-label="Plant">', _head(open_=menu_open), _plant_switch(plant[0], plant[1]),
            '<div class="slabel" style="margin-top:4px">Operate</div><div class="sgrp">']
     for href, icon, label, cnt in PLANT_NAV:
@@ -360,24 +356,32 @@ def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_h
     out.append('</div><div class="slabel">Setup</div><div class="sgrp">')
     out += [_item(layout_href if l == 'Layouts' else h, i, l, active, layout=(l == 'Layouts')) for h, i, l in SETUP_NAV]
     out.append('</div><div class="side-foot">' + (foot or '<span class="dot g"></span>Edge online · synced 1m ago') + '</div></nav>')
-    return '\n'.join(out)
+    return '\n'.join(out) + _menu_block(menu_open)
 
 def app_menu(left=8, top=50):
-    """The open app menu (frappe-ui Dropdown) with the Apps submenu, as in Frappe CRM."""
-    def mi(icon, label, right='', on=False, extra='', href=None):
+    """The app menu (frappe-ui Dropdown) from the sidebar head: the app switcher (Apps) and App settings.
+    Plant settings are not here; they open from each plant's sidebar."""
+    def mi(icon, label, right='', on=False, href=None, click=None):
         r = f'<span style="margin-left:auto;display:flex;color:var(--ink-gray-5)">{right}</span>' if right else ''
         if href:
-            return f'<a class="mi{" on" if on else ""}" href="{href}" style="font-size:14px;text-decoration:none{extra}">{icon}<span>{label}</span>{r}</a>'
-        return f'<div class="mi{" on" if on else ""}" style="font-size:14px{extra}">{icon}<span>{label}</span>{r}</div>'
+            return f'<a class="mi{" on" if on else ""}" href="{href}" style="font-size:14px;text-decoration:none">{icon}<span>{label}</span>{r}</a>'
+        ck = f' onClick="{{{{{click}}}}}" role="menuitem" style="font-size:14px;cursor:pointer"' if click else ' style="font-size:14px"'
+        return f'<div class="mi{" on" if on else ""}"{ck}>{icon}<span>{label}</span>{r}</div>'
     app = lambda c, t: f'<span style="width:18px;height:18px;border-radius:4px;background:{c};color:#fff;display:grid;place-items:center;font-size:9px;font-weight:700">{t}</span>'
     sep = '<div style="height:1px;background:var(--outline-gray-1);margin:4px -4px"></div>'
-    main = (mi(ic('grid'), 'Apps', ic('chev-r', 'i s35'), on=True) + mi(ic('cpu'), 'Open kiosk', ic('ext', 'i s35'), href='KioskOpen.dc.html') + mi(ic('layout'), 'Switch to Desk', ic('ext', 'i s35')) + sep +
-            mi(ic('info'), 'Help and docs') + mi(ic('moon'), 'Toggle theme') + mi(ic('users'), 'My settings', href='MySettings.dc.html') + mi(ic('settings'), 'Settings', href='CompanyGeneral.dc.html') + mi(ic('shield'), 'About') + sep + mi(ic('arrow-r'), 'Log out'))
-    sub = (f'<div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Apps on this site</div>' +
-           mi(app('oklch(0.205 0 0)', 'FF'), 'Frappe Factory', ic('check', 'i s35'), href='Dashboard.dc.html') + mi(app('oklch(0.55 0.16 252)', 'E'), 'ERPNext') + mi(app('oklch(0.6 0.15 150)', 'C'), 'CRM') +
+    main = (mi(ic('grid'), 'Apps', ic('chev-r', 'i s35'), click='toggleApps') + mi(ic('cpu'), 'Open kiosk', ic('ext', 'i s35'), href='KioskOpen.dc.html') + sep +
+            mi(ic('settings'), 'App settings', href='CompanyGeneral.dc.html') + mi(ic('users'), 'My settings', href='MySettings.dc.html') + sep +
+            mi(ic('info'), 'Help and docs') + mi(ic('moon'), 'Toggle theme') + mi(ic('shield'), 'About') + sep + mi(ic('arrow-r'), 'Log out', href='KioskLogin.dc.html'))
+    sub = (f'<div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Switch app</div>' +
+           mi(app('oklch(0.205 0 0)', 'FF'), 'Frappe Factory', ic('check', 'i s35'), href='Dashboard.dc.html') + mi(app('oklch(0.45 0 0)', 'D'), 'Desk') + mi(app('oklch(0.55 0.16 252)', 'E'), 'ERPNext') + mi(app('oklch(0.6 0.15 150)', 'C'), 'CRM') +
            mi(app('oklch(0.6 0.17 300)', 'H'), 'Helpdesk') + mi(app('oklch(0.55 0.15 30)', 'W'), 'WhatsApp'))
-    return (f'<div class="pop" role="menu" style="left:{left}px;top:{top}px;width:212px;z-index:5">{main}</div>'
-            f'<div class="pop" role="menu" style="left:{left + 216}px;top:{top}px;width:200px;z-index:5">{sub}</div>')
+    return (f'<div class="pop appmenu" role="menu" aria-label="App menu" style="left:{left}px;top:{top}px;width:212px">{main}</div>'
+            f'<sc-if value="{{{{appsOpen}}}}" hint-placeholder-val="{{{{ false }}}}"><div class="pop appmenu" role="menu" aria-label="Switch app" style="left:{left + 216}px;top:{top}px;width:200px">{sub}</div></sc-if>')
+
+def _menu_block(default_open=False):
+    mark = '<i data-ff-menu-default hidden></i>' if default_open else ''
+    return (f'{mark}<sc-if value="{{{{menuOpen}}}}" hint-placeholder-val="{{{{ {"true" if default_open else "false"} }}}}">'
+            f'<div class="menu-scrim" onClick="{{{{closeMenu}}}}" aria-hidden="true"></div>{app_menu(8, 50)}</sc-if>')
 
 def crumb(*parts):
     """parts: (label, href) pairs; last is current (href None)."""
@@ -392,9 +396,49 @@ def crumb(*parts):
 def header(crumbs, actions=''):
     return f'<header class="ph">{crumbs}<div class="acts">{actions}</div></header>'
 
+import re as _re
+def _balanced_div_end(h, start):
+    """Index just past the </div> that closes the <div ...> starting at start."""
+    depth = 0; i = start
+    for m in _re.finditer(r'<(/?)div\b[^>]*>', h[start:]):
+        depth += -1 if m.group(1) else 1
+        if depth == 0: return start + m.end()
+    raise ValueError('unbalanced div')
+
+def finalize(html):
+    """Make every popup, menu and row work in the canvas prototype (React runtime: no string onclick, no checkbox hack)."""
+    if '/*ff-wired*/' in html: return html
+    a = html.index('<x-dc>'); b = html.rindex('</x-dc>')
+    body = html[a:b]
+    uids = []
+    while True:
+        m = _re.search(r'<input type="checkbox" id="([\w-]+)" class="ffx"[^>]*>', body)
+        if not m: break
+        uid = m.group(1).replace('-', '_'); uids.append(uid)
+        start = body.index('<', m.end())
+        end = _balanced_div_end(body, start)
+        body = body[:m.start()] + f'<sc-if value="{{{{open_{uid}}}}}" hint-placeholder-val="{{{{ true }}}}">' + body[start:end] + '</sc-if>' + body[end:]
+        body = body.replace(f'<label for="{m.group(1)}"', f'<label onClick="{{{{close_{uid}}}}}"')
+    body = body.replace(' onclick="event.stopPropagation()"', '')
+    body = _re.sub(r"(<(\w+)\b[^>]*?) onclick=\"location\.href='([^']+)'\"([^>]*>)", lambda m: f'{m.group(1)}{m.group(4)}<a class="rowlink" href="{m.group(3)}" aria-label="Open"></a>', body)
+    assert 'onclick' not in body.lower().replace('onclick="{{', ''), 'stray onclick'
+    menu_default = 'true' if 'data-ff-menu-default' in body else 'false'
+    vals = ['menuOpen: s.menu ?? ' + menu_default, 'appsOpen: s.apps ?? ' + menu_default,
+            'toggleMenu: () => this.setState({ menu: !(s.menu ?? ' + menu_default + '), apps: false })',
+            'closeMenu: () => this.setState({ menu: false, apps: false })',
+            'toggleApps: () => this.setState({ apps: !(s.apps ?? ' + menu_default + ') })']
+    for u in uids:
+        vals += [f'open_{u}: !s.closed_{u}', f'close_{u}: () => this.setState({{ closed_{u}: true }})']
+    html = html[:a] + body + html[b:]
+    k = 'class Component extends DCLogic {'
+    i = html.index(k) + len(k)
+    inj = ('\n  /*ff-wired*/ renderVals() { const s = this.state || {}; return Object.assign({ ' + ', '.join(vals) + ' }, this.ffBaseVals()); }')
+    rest = html[i:].replace('renderVals()', 'ffBaseVals()', 1)
+    return html[:i] + inj + rest
+
 def page(title, body, props=None, script_vals='return {};', helmet_extra=''):
     props = props or {}
-    return f'''<!doctype html>
+    return finalize(f'''<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -418,7 +462,7 @@ class Component extends DCLogic {{
 </script>
 </body>
 </html>
-'''
+''')
 
 def shell(active, head, content, extra_style='', scope='plant', **kw):
     return f'<div class="ff"{extra_style}>{sidebar(active, scope=scope, **kw)}<main class="main">{head}{content}</main></div>'

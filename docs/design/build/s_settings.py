@@ -73,12 +73,14 @@ def commands_panel():
 def build(name, active, panel):
     bg = plant_bg()
     dlg = f'''{closer("dlg")}<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent"><label for="dlg" class="overlay" aria-label="Close"></label>
-<div class="dialog" role="dialog" aria-label="Plant settings" style="left:50%;top:40px;transform:translateX(-50%);width:1040px;height:820px;display:flex">
+<div class="dialog" role="dialog" aria-label="Koyo 1 plant settings" style="left:auto;right:12px;top:12px;bottom:12px;width:1000px;height:auto;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:10px;height:56px;padding:0 16px 0 20px;border-bottom:1px solid var(--outline-gray-1);flex-shrink:0"><span style="width:28px;height:28px;border-radius:7px;background:var(--surface-gray-3);color:var(--ink-gray-8);display:grid;place-items:center;font-size:12px;font-weight:600">K1</span><span style="display:flex;flex-direction:column;line-height:1.15"><span style="font-weight:600;color:var(--ink-gray-9);font-size:16px">Plant settings · Koyo 1</span><span class="qs" style="font-size:12px">This plant only. App-wide settings are in the app menu.</span></span><span style="margin-left:auto">{close_btn("dlg")}</span></div>
+<div style="flex:1;min-height:0;display:flex">
 <div style="width:220px;flex-shrink:0;background:var(--surface-sidebar);border-right:1px solid var(--outline-gray-1);padding:8px;display:flex;flex-direction:column">
-<div style="display:flex;align-items:center;gap:8px;height:40px;padding:0 6px"><span class="logo" style="width:24px;height:24px;flex-basis:24px;font-size:11px">K1</span><span style="font-weight:500;color:var(--ink-gray-8)">Koyo 1 settings</span></div>{nav(active)}</div>
-<div style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative"><div style="position:absolute;right:16px;top:16px">{close_btn("dlg")}</div>
-<div style="flex:1;overflow:auto;padding:40px 4.4rem 64px">{panel}</div></div>
-</div></div>'''
+<div style="height:4px"></div>{nav(active)}</div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative">
+<div style="flex:1;overflow:auto;padding:32px 4rem 64px">{panel}</div></div>
+</div></div></div>'''
     write(name, page('Plant settings', f'<div style="position:relative">{bg}{dlg}</div>', {"$preview": {"width": 1440, "height": 900}}))
 
 build('Settings.dc.html', 'Connector', connector_panel())

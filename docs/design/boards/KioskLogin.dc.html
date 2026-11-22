@@ -175,7 +175,7 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .pop{position:absolute;background:var(--surface-elevation-2);border-radius:12px;box-shadow:var(--shadow-2xl);padding:4px}
 .mi{display:flex;align-items:center;gap:8px;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink-gray-8)}
 .mi.on{background:var(--surface-gray-3)}
-.ffx{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.ff{position:relative}.lr{position:relative}.rowlink{position:absolute;inset:0;z-index:0;border-radius:inherit}.lr a:not(.rowlink),.lr button{position:relative;z-index:1}.menu-scrim{position:absolute;inset:0;z-index:30;cursor:default}.appmenu{z-index:31}label.overlay,label.scrim{cursor:default}
 .ffx:checked + .ffov{display:none !important}
 label.overlay,label.scrim{cursor:default}
 label.btn{cursor:pointer}
@@ -226,7 +226,8 @@ a.kb{text-decoration:none}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1180, "height": 820}}'>
 class Component extends DCLogic {
-  renderVals() {
+  /*ff-wired*/ renderVals() { const s = this.state || {}; return Object.assign({ menuOpen: s.menu ?? false, appsOpen: s.apps ?? false, toggleMenu: () => this.setState({ menu: !(s.menu ?? false), apps: false }), closeMenu: () => this.setState({ menu: false, apps: false }), toggleApps: () => this.setState({ apps: !(s.apps ?? false) }) }, this.ffBaseVals()); }
+  ffBaseVals() {
     return {};
   }
 }

@@ -99,9 +99,9 @@ def build(name, active, panel):
     from s_dashboard import head as dh, body as db
     bg = shell('Dashboard.dc.html', dh, db, scope='company')
     dlg = f'''{closer("dlg")}<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent"><label for="dlg" class="overlay" aria-label="Close"></label>
-<div class="dialog" role="dialog" aria-label="Settings" style="left:50%;top:32px;transform:translateX(-50%);width:1100px;height:836px;display:flex">
+<div class="dialog" role="dialog" aria-label="App settings" style="left:50%;top:32px;transform:translateX(-50%);width:1100px;height:836px;display:flex">
 <div style="width:220px;flex-shrink:0;background:var(--surface-sidebar);border-right:1px solid var(--outline-gray-1);padding:8px;display:flex;flex-direction:column">
-<div style="display:flex;align-items:center;gap:8px;height:40px;padding:0 6px"><span class="logo" style="width:24px;height:24px;flex-basis:24px;font-size:11px">FF</span><span style="font-weight:500;color:var(--ink-gray-8)">Settings</span></div>{nav(active)}</div>
+<div style="display:flex;align-items:center;gap:8px;height:40px;padding:0 6px"><span class="logo" style="width:24px;height:24px;flex-basis:24px;font-size:11px">FF</span><span style="display:flex;flex-direction:column;line-height:1.15"><span style="font-weight:500;color:var(--ink-gray-8)">App settings</span><span class="qs" style="font-size:12px">Frappe Factory · all plants</span></span></div>{nav(active)}</div>
 <div style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative"><div style="position:absolute;right:16px;top:16px">{close_btn("dlg")}</div>
 <div style="flex:1;overflow:auto;padding:40px 3.5rem 64px">{panel}</div></div></div></div>'''
     write(name, page('Settings', f'<div style="position:relative">{bg}{dlg}</div>', {"$preview": {"width": 1440, "height": 900}}))
