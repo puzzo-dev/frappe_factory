@@ -112,7 +112,7 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .tabs .t{display:inline-flex;align-items:center;gap:6px;height:36px;font-size:14px;color:var(--ink-gray-5);border-bottom:1px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap}
 .tabs .t:hover{color:var(--ink-gray-7)}
 .tabs .t.on{color:var(--ink-gray-9);border-bottom-color:var(--ink-gray-9)}
-.tabs .t .bd{height:16px;font-size:11px}
+.tabs .t .bd{height:16px;font-size:11px}.lyr:hover{background:var(--surface-gray-2)}.lyr.on{background:var(--surface-gray-3)}
 /* Segmented (Tabs subtle) */
 .seg{display:inline-flex;padding:2px;gap:2px;border-radius:8px;background:var(--surface-gray-2)}
 .seg span{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:6px;font-size:13px;color:var(--ink-gray-6);cursor:pointer;white-space:nowrap}
@@ -323,10 +323,17 @@ def _head(badge=None, title=None, sub=None, open_=False):
             '<span style="display:flex;flex-direction:column;min-width:0;flex:1"><span style="font-weight:500;color:var(--ink-gray-9);line-height:1.1">Frappe Factory</span>'
             '<span style="font-size:13px;color:var(--ink-gray-7);margin-top:3px;line-height:1.1">Tunde B.</span></span>' + ic('chev-d', 'i', 'color:var(--ink-gray-5)') + '</button>')
 
+PLANTS_SW = [('K1', 'Koyo 1', 'Sachet water', 'Main.dc.html'), ('PB', 'Plant B', 'Bottled water', 'PlantB.dc.html'), ('PD', 'Plant D', 'Sachet water · offline', 'PlantD.dc.html'),
+             ('OM', 'Oil mill', 'Vegetable oil', 'OilMill.dc.html'), ('RM', 'Rice mill', 'Parboiled rice', 'RiceMill.dc.html'), ('PF', 'Poultry farm', 'Layers and eggs', 'PoultryFarm.dc.html')]
 def _plant_switch(badge, name):
-    return ('<a href="Plants.dc.html" class="si" aria-label="Switch plant" style="height:36px;width:100%;box-sizing:border-box;border:1px solid var(--outline-gray-2);background:var(--surface-base);margin:2px 0 4px;font:inherit;cursor:pointer;text-align:left;text-decoration:none">'
+    btn_ = ('<button type="button" class="si" aria-haspopup="menu" aria-label="Switch plant" onClick="{{toggle_plantsw}}" style="height:36px;width:100%;box-sizing:border-box;border:1px solid var(--outline-gray-2);background:var(--surface-base);margin:2px 0 4px;font:inherit;cursor:pointer;text-align:left">'
             f'<span style="width:20px;height:20px;border-radius:5px;background:var(--surface-gray-3);color:var(--ink-gray-8);display:grid;place-items:center;font-size:10px;font-weight:600">{badge}</span>'
-            f'<span class="lbl" style="font-weight:500;color:var(--ink-gray-8)">{name}</span>' + ic('chevs', 'i', 'color:var(--ink-gray-5)') + '</a>')
+            f'<span class="lbl" style="font-weight:500;color:var(--ink-gray-8)">{name}</span>' + ic('chevs', 'i', 'color:var(--ink-gray-5)') + '</button>')
+    items = ''.join(f'<a class="mi{" on" if n == name else ""}" href="{h}" style="font-size:14px;text-decoration:none;align-items:center;height:auto;min-height:40px;padding-top:4px;padding-bottom:4px"><span style="width:20px;height:20px;border-radius:5px;background:var(--surface-gray-3);color:var(--ink-gray-8);display:grid;place-items:center;font-size:10px;font-weight:600;flex-shrink:0">{bg}</span><span style="display:flex;flex-direction:column;line-height:1.2;min-width:0"><span>{n}</span><span class="qs" style="font-size:12px">{d}</span></span>{ic("check","i s35") if n == name else ""}</a>' for bg, n, d, h in PLANTS_SW)
+    menu = (f'<sc-if value="{{{{is_plantsw__open}}}}" hint-placeholder-val="{{{{ false }}}}"><div class="menu-scrim" onClick="{{{{toggle_plantsw}}}}" aria-hidden="true"></div>'
+            f'<div class="pop appmenu" role="menu" aria-label="Switch plant" style="left:8px;top:92px;width:232px"><div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Switch plant</div>{items}'
+            f'<div style="height:1px;background:var(--outline-gray-1);margin:4px -4px"></div><a class="mi" href="Plants.dc.html" style="font-size:14px;text-decoration:none">{ic("grid")}<span>All plants</span></a></div></sc-if>')
+    return btn_, menu
 
 ALIAS = {'Trip.dc.html': 'TripList.dc.html', 'QualityHold.dc.html': 'HoldList.dc.html', 'Handover.dc.html': 'Handover.dc.html', 'HandoverHistory.dc.html': 'Handover.dc.html', 'SettingsCommands.dc.html': 'Settings.dc.html', 'PinnedTags.dc.html': None,
          'LayoutRice.dc.html': 'LAYOUT', 'LayoutOil.dc.html': 'LAYOUT', 'LayoutPoultry.dc.html': 'LAYOUT', 'LayoutEditor.dc.html': 'LAYOUT', 'QHTemplate.dc.html': 'CompanyTemplates.dc.html'}
@@ -347,7 +354,8 @@ def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_h
         out += [_item(h, i, l, active) for h, i, l in COMPANY_SETUP]
         out.append('</div><div class="side-foot"><span class="dot g"></span>6 plants · ERPNext linked</div></nav>')
         return '\n'.join(out) + _menu_block(menu_open)
-    out = ['<nav class="side" aria-label="Plant">', _head(open_=menu_open), _plant_switch(plant[0], plant[1]),
+    _sw, _swmenu = _plant_switch(plant[0], plant[1])
+    out = ['<nav class="side" aria-label="Plant">', _head(open_=menu_open), _sw,
            '<div class="slabel" style="margin-top:4px">Operate</div><div class="sgrp">']
     for href, icon, label, cnt in PLANT_NAV:
         if href == 'Main.dc.html': href = plant_href
@@ -356,7 +364,7 @@ def sidebar(active, trip_red=True, scope='plant', plant=('K1','Koyo 1'), plant_h
     out.append('</div><div class="slabel">Setup</div><div class="sgrp">')
     out += [_item(layout_href if l == 'Layouts' else h, i, l, active, layout=(l == 'Layouts')) for h, i, l in SETUP_NAV]
     out.append('</div><div class="side-foot">' + (foot or '<span class="dot g"></span>Edge online · synced 1m ago') + '</div></nav>')
-    return '\n'.join(out) + _menu_block(menu_open)
+    return '\n'.join(out) + _menu_block(menu_open) + _swmenu
 
 def app_menu(left=8, top=50):
     """The app menu (frappe-ui Dropdown) from the sidebar head: the app switcher (Apps) and App settings.
@@ -432,6 +440,19 @@ def finalize(html):
             'toggleApps: () => this.setState({ apps: !(s.apps ?? ' + menu_default + ') })']
     for u in uids:
         vals += [f'open_{u}: !s.closed_{u}', f'close_{u}: () => this.setState({{ closed_{u}: true }})']
+    defs = dict(_re.findall(r'data-ffdef="(\w+):([\w-]*)"', body))
+    seen = set()
+    for kind, k, v in _re.findall(r'\{\{(is|set|cls)_([a-z0-9]+)__([\w]+)\}\}', body):
+        if (kind, k, v) in seen: continue
+        seen.add((kind, k, v)); d = defs.get(k, '')
+        cur = f"(s.st_{k} ?? '{d}')"
+        if kind == 'is': vals.append(f"is_{k}__{v}: {cur} === '{v}'")
+        elif kind == 'set': vals.append(f"set_{k}__{v}: () => this.setState({{ st_{k}: '{v}' }})")
+        else: vals.append(f"cls_{k}__{v}: {cur} === '{v}' ? 'on' : ''")
+    for k in sorted(set(_re.findall(r'\{\{toggle_([a-z0-9]+)\}\}', body))):
+        d = defs.get(k, '')
+        vals.append(f"toggle_{k}: () => this.setState({{ st_{k}: (s.st_{k} ?? '{d}') === 'open' ? 'closed' : 'open' }})")
+        if f'is_{k}__open' not in ' '.join(vals): vals.append(f"is_{k}__open: (s.st_{k} ?? '{d}') === 'open'")
     html = html[:a] + body + html[b:]
     k = 'class Component extends DCLogic {'
     i = html.index(k) + len(k)
@@ -518,3 +539,9 @@ def close_btn(uid, label=None):
     if label:
         return f'<label for="{uid}" class="btn" role="button" tabindex="0">{label}</label>'
     return f'<label for="{uid}" class="btn ghost ico" role="button" tabindex="0" aria-label="Close">{ic("x")}</label>'
+
+def stab(key, val, label, cls='t'):
+    """A tab or segmented option switched through component state."""
+    return f'<span class="{cls} {{{{cls_{key}__{val}}}}}" role="tab" onClick="{{{{set_{key}__{val}}}}}" style="cursor:pointer">{label}</span>'
+def sdef(key, val):
+    return f'<i data-ffdef="{key}:{val}" hidden></i>'

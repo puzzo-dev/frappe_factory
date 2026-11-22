@@ -257,6 +257,18 @@ Approved 22 Nov 2026. Each plant has one live `Process Flow` that lists which as
 | Quality hold tracing | A fault at a checkpoint holds product from every filler downstream of it; lots are split per sink |
 | Bottleneck view | OEE per asset along the path shows which machine limits the line |
 
+## Power source and fuel
+
+The app knows whether a plant runs on grid or generator only from a signal; it never guesses. Each plant marks one tag with the role `power_source` in Devices and tags, from the first of these that exists:
+
+1. **Changeover switch (ATS) position.** An auxiliary contact on the ATS or changeover contactor wired to a PLC digital input (Koyo 1: `PLC-1 DI 0.4`). Best and cheapest; recommended for every plant.
+2. **Generator controller.** DeepSea, ComAp or similar over Modbus through the edge: running, generator breaker closed, load, run hours, coolant, oil pressure, and the controller's fuel level input.
+3. **Energy meters on each incomer.** Voltage present on the grid meter, or current on the generator feeder.
+
+With none of these, the Resources page shows the source as "Not measured" and a Floor Supervisor can log changes by hand; those entries are marked manual. Every change of source writes a `Power Source Change` row (plant, from, to, at, detected_by). A change whose gap exceeds the fillers' ride-through also writes a Machine Stop with reason Power dip.
+
+Diesel is a `Utility Tank` on a level tag (Koyo 1: `LT-901` on day tank DT-1). Runway is litres ÷ burn rate over the last 24 h of generator running; refuels are logged against an ERPNext Delivery Note or Stock Entry. Power has its own Plant Floor Layout (Utilities · power) built from the power symbols: grid incomer, energy meter, breaker, ATS, generator, distribution board and day tank. Utilities stay out of the Process Flow.
+
 ## ERPNext link and other ERPs
 
 All ERP calls go through one adapter, so the rest of the app never knows where ERPNext lives. `frappe_factory/erp/base.py` defines `ErpAdapter` with `get_work_order`, `update_job_card`, `make_manufacture_entry`, `make_downtime_entry`, `set_workstation_status`, `make_quality_inspection`, `make_material_request` and `get_bin_qty`. Three implementations:

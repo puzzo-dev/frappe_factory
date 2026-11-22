@@ -67,7 +67,28 @@ cats = [
   ('Packaging', [('Sachet filler', S.filler(True))]),
 ]
 
-def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, layout_name, plant_name, plant_href, ver, live, nsym, issues_txt, side_kw, top=96, pos=('640','140'), feeds='', flow_href='AssetFlow.dc.html'):
+LAYERS = [('live', 'Live values', 'activity', 'Values and states drawn over symbols'), ('labels', 'Labels', 'type', 'Tag names and captions'),
+          ('inst', 'Instruments', 'gauge', 'Analysers, level and flow'), ('equip', 'Equipment', 'shapes', 'Tanks, pumps, valves, machines'),
+          ('pipes', 'Pipes', 'pipe', 'Drawn from Process flow'), ('bg', 'Background', 'layout', 'Areas, walls and the floor image')]
+def layers_panel(sel_tag, sel_type):
+    eye_on = '<svg class="i s35" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'
+    eye_off = '<svg class="i s35" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.9M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'
+    rows = ''
+    for k, n, i, d in LAYERS:
+        child = ''
+        if k == 'equip':
+            child = (f'<sc-if value="{{{{is_layer__equip}}}}" hint-placeholder-val="{{{{ true }}}}"><div style="display:flex;flex-direction:column;gap:1px;padding:2px 0 4px 30px">'
+                     f'<span class="lyo on" style="display:flex;align-items:center;gap:6px;height:28px;padding:0 8px;border-radius:6px;font-size:13px;background:var(--surface-blue-2);color:var(--ink-blue-7);white-space:nowrap">{sel_tag}<span class="qs" style="margin-left:auto;font-size:12px;overflow:hidden;text-overflow:ellipsis">{sel_type.split(" · ")[0]}</span></span>'
+                     f'<span class="qs" style="height:24px;padding:0 8px;font-size:12px;display:flex;align-items:center">and the other symbols in this layer</span></div></sc-if>')
+        rows += (f'<div style="display:flex;flex-direction:column"><div class="lyr {{{{cls_layer__{k}}}}}" style="display:flex;align-items:center;gap:8px;min-height:40px;padding:4px 8px;border-radius:8px;cursor:pointer">'
+                 f'<span onClick="{{{{set_layer__{k}}}}}" style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">{ic(i) if i in IC else ic("layers")}<span style="display:flex;flex-direction:column;line-height:1.2;min-width:0"><span style="font-size:14px;color:var(--ink-gray-8)">{n}</span><span class="qs" style="font-size:12px">{d}</span></span></span>'
+                 f'<button type="button" class="btn ghost ico" aria-label="Show or hide {n}" onClick="{{{{toggle_vis{k}}}}}" style="width:28px;height:28px"><sc-if value="{{{{is_vis{k}__open}}}}" hint-placeholder-val="{{{{ true }}}}">{eye_on}</sc-if><sc-if value="{{{{is_vis{k}__closed}}}}" hint-placeholder-val="{{{{ false }}}}"><span style="color:var(--ink-gray-4);display:flex">{eye_off}</span></sc-if></button>'
+                 f'{sdef("vis"+k, "open")}</div>{child}</div>')
+    return (f'{sdef("layer","equip")}<div style="flex:1;overflow:auto;padding:12px 8px 16px;display:flex;flex-direction:column;gap:2px">{rows}</div>'
+            '<div style="border-top:1px solid var(--outline-gray-1);padding:10px 12px" class="qs">Top of the list draws on top. Hidden layers stay in the layout; they are only hidden while you edit.</div>')
+
+KOYO_LAYOUTS = [('Treatment and filling', 'LayoutEditor.dc.html', 'Process · 21 symbols'), ('Utilities · power', 'LayoutUtilities.dc.html', 'Grid, ATS, generator · 9 symbols')]
+def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, layout_name, plant_name, plant_href, ver, live, nsym, issues_txt, side_kw, top=96, pos=('640','140'), feeds='', flow_href='AssetFlow.dc.html', layouts=None):
     # ---------- palette ----------
     pal = ''
     for c, items in cats:
@@ -76,16 +97,18 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
             pal += f'<div title="{n}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px 6px;border-radius:8px;border:1px solid var(--outline-gray-1);background:var(--surface-base);cursor:grab">{S.box(sv, 36)}<span style="font-size:11px;color:var(--ink-gray-6);text-align:center;line-height:1.2">{n}</span></div>'
         pal += '</div>'
     palette = f'''<div style="flex:0 0 15rem;width:15rem;border-right:1px solid var(--outline-gray-1);display:flex;flex-direction:column;min-height:0;background:var(--surface-base)">
-    <div class="tabs" style="padding:0 12px"><span class="t on">Symbols</span><span class="t">Layers</span></div>
+    <div class="tabs" role="tablist" style="padding:0 12px">{sdef("lt","sym")}{stab("lt","sym","Symbols")}{stab("lt","lay","Layers")}</div>
+    <sc-if value="{{{{is_lt__sym}}}}" hint-placeholder-val="{{{{ true }}}}">
     <div style="padding:12px 12px 8px"><span class="in muted">{ic("search")}<span class="grow">Search {nsym} symbols</span></span></div>
     <div style="flex:1;overflow:auto;padding:0 12px 16px">{pal}</div>
-    <div style="border-top:1px solid var(--outline-gray-1);padding:10px 12px" class="qs">Drag a symbol onto the canvas. <a href="Symbols.dc.html">Open library</a></div></div>'''
+    <div style="border-top:1px solid var(--outline-gray-1);padding:10px 12px" class="qs">Drag a symbol onto the canvas. <a href="Symbols.dc.html">Open library</a></div></sc-if>
+    <sc-if value="{{{{is_lt__lay}}}}" hint-placeholder-val="{{{{ false }}}}">{layers_panel(sel_tag, sel_type)}</sc-if></div>'''
 
     # ---------- inspector ----------
     inspector = f'''<aside class="panel" style="background:var(--surface-base);flex-basis:18rem;width:18rem">
     <div style="padding:14px 16px;display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--outline-gray-1)"><span style="width:36px;height:36px;border-radius:8px;border:1px solid var(--outline-gray-1);display:grid;place-items:center">{S.box(sel_icon, 28)}</span><span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0"><span style="font-weight:600;color:var(--ink-gray-9)">{sel_tag}</span><span class="qs">{sel_type}</span></span>{btn(icon="more",kind="ghost",attrs="More")}</div>
-    <div class="tabs" style="padding:0 16px"><span class="t on">Bindings</span><span class="t">Look</span><span class="t">Position</span></div>
-    <div style="flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
+    <div class="tabs" role="tablist" style="padding:0 16px">{sdef("it","bind")}{stab("it","bind","Bindings")}{stab("it","look","Look")}{stab("it","pos","Position")}</div>
+    <sc-if value="{{{{is_it__bind}}}}" hint-placeholder-val="{{{{ true }}}}"><div style="flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
     {field('Asset', sel(asset), hint='The Plant Asset this symbol stands for.')}
     {field('Label', inp(sel_tag))}
     {field('Feeds into', inp(feeds), hint='From Plant Asset → Feeds into. Pipes are drawn from it.') if feeds else ''}
@@ -98,13 +121,32 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
     <label style="display:flex;align-items:center;gap:8px;height:28px;font-size:14px"><span class="rd"></span>Open trends for its tags</label>
     <label style="display:flex;align-items:center;gap:8px;height:28px;font-size:14px;color:var(--ink-gray-5)"><span class="rd" style="background:var(--surface-gray-1)"></span>Send a command <span class="bd gray sm">Commands off</span></label>
     </div></div>
-    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+    </div></sc-if>
+    <sc-if value="{{{{is_it__look}}}}" hint-placeholder-val="{{{{ false }}}}"><div style="flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
+    {field('Style', sel('From the symbol library'), hint='Colours follow the plant theme; states change them live.')}
+    {field('Label position', sel('Below'))}
+    <label style="display:flex;align-items:center;justify-content:space-between;height:32px;font-size:14px">Show the label<span class="sw on"></span></label>
+    <label style="display:flex;align-items:center;justify-content:space-between;height:32px;font-size:14px">Show live value under the symbol<span class="sw on"></span></label>
+    <label style="display:flex;align-items:center;justify-content:space-between;height:32px;font-size:14px">Flash on alarm<span class="sw on"></span></label>
+    </div></sc-if>
+    <sc-if value="{{{{is_it__pos}}}}" hint-placeholder-val="{{{{ false }}}}"><div style="flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
     {field('X', inp(f'<span class="tab">{pos[0]}</span>'))}{field('Y', inp(f'<span class="tab">{pos[1]}</span>'))}{field('Size', inp('<span class="tab">1.0×</span>'))}{field('Turn', inp('<span class="tab">0°</span>'))}
     </div>
-    </div></aside>'''
+    {field('Layer', sel('Equipment'))}
+    <label style="display:flex;align-items:center;justify-content:space-between;height:32px;font-size:14px">Lock position<span class="sw"></span></label>
+    <span class="qs">Snaps to an 8 px grid. Hold Shift to move freely.</span>
+    </div></sc-if>
+    </aside>'''
 
+    if layouts:
+        opts = ''.join(f'<a class="mi{" on" if n == layout_name else ""}" href="{h}" style="font-size:14px;text-decoration:none"><span>{n}</span><span class="qs" style="margin-left:auto;font-size:12px">{d}</span></a>' for n, h, d in layouts)
+        layout_title = (f'<button type="button" onClick="{{{{toggle_lsw}}}}" class="cur" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-weight:600;color:var(--ink-gray-9)">{layout_name}{ic("chev-d","i s35")}</button>'
+                        f'<sc-if value="{{{{is_lsw__open}}}}" hint-placeholder-val="{{{{ false }}}}"><div class="menu-scrim" onClick="{{{{toggle_lsw}}}}" aria-hidden="true"></div><div class="pop appmenu" role="menu" style="left:420px;top:44px;width:300px"><div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Layouts in {plant_name}</div>{opts}</div></sc-if>')
+    else:
+        layout_title = f'<span class="cur">{layout_name}</span>'
     topbar = f'''<header class="ph" style="padding:8px 16px">
-    <div style="display:flex;align-items:center;gap:8px;min-width:0"><div class="crumb" style="font-size:16px"><a href="{plant_href}">{plant_name}</a><span class="sep">/</span><a href="{plant_href}">Layouts</a><span class="sep">/</span><span class="cur">{layout_name}</span></div>{bd(ver,"gray")}<span class="qs">{live}</span></div>
+    <div style="display:flex;align-items:center;gap:8px;min-width:0"><div class="crumb" style="font-size:16px"><a href="{plant_href}">{plant_name}</a><span class="sep">/</span><a href="{plant_href}">Layouts</a><span class="sep">/</span>{layout_title}</div>{bd(ver,"gray")}<span class="qs">{live}</span></div>
     <div style="display:flex;align-items:center;gap:6px">{btn(icon="undo",kind="ghost",attrs="Undo")}{btn(icon="redo",kind="ghost",attrs="Redo")}
     <span style="width:1px;height:20px;background:var(--outline-gray-2);margin:0 4px"></span>
     {btn(icon="zout",kind="ghost",attrs="Zoom out")}<span class="tab" style="font-size:13px;width:40px;text-align:center;color:var(--ink-gray-7)">100%</span>{btn(icon="zin",kind="ghost",attrs="Zoom in")}
@@ -124,4 +166,4 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
 editor('LayoutEditor.dc.html', cats, canvas_svg, S.pump(True), 'P-401', 'Centrifugal pump · v3', 'P-401 · Fill pump',
        [('running', 'PLC-1 · P-401.RUN', 'bool', True, 'Off'), ('speed', 'PLC-1 · P-401.HZ', 'number · Hz', True, '0.0'), ('fault', '', 'bool', False)],
        'Treatment and filling', 'Koyo 1', 'Main.dc.html', 'Draft · v13', 'Live: v12', 46,
-       '<span style="color:var(--ink-amber-7);display:flex">' + ic("alert-t","i s35") + '</span><span style="color:var(--ink-gray-8)">2 problems</span><span class="qs">P-401 fault · XV-402 not placed</span>', {}, feeds='<span class="chip" style="height:20px">XV-402</span> <span class="chip" style="height:20px">F1 – F10</span>')
+       '<span style="color:var(--ink-amber-7);display:flex">' + ic("alert-t","i s35") + '</span><span style="color:var(--ink-gray-8)">2 problems</span><span class="qs">P-401 fault · XV-402 not placed</span>', {}, layouts=KOYO_LAYOUTS, feeds='<span class="chip" style="height:20px">XV-402</span> <span class="chip" style="height:20px">F1 – F10</span>')

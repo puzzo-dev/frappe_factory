@@ -29,7 +29,10 @@ def fill(html, ctx):
         html = html2
     def rep_if(m):
         return fill(m.group(2), ctx) if get(ctx, m.group(1)) else ''
-    html = re.sub(r'<sc-if value="\{\{([^}]+)\}\}"[^>]*>(.*?)</sc-if>', rep_if, html, flags=re.S)
+    while '<sc-if' in html:
+        h2 = re.sub(r'<sc-if value="\{\{([^}]+)\}\}"[^>]*>((?:(?!<sc-if).)*?)</sc-if>', rep_if, html, flags=re.S)
+        if h2 == html: break
+        html = h2
     html = re.sub(r'\{\{([^}]+)\}\}', lambda m: str(get(ctx, m.group(1)) if get(ctx, m.group(1)) is not None else ''), html)
     return html
 

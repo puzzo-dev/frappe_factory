@@ -43,3 +43,17 @@ def generator():
 
 def box(inner, size=48, label=None):
     return f'<svg width="{size}" height="{size}" viewBox="0 0 48 48" aria-hidden="true" style="display:block">{inner}</svg>'
+
+# ---- Power (utilities)
+def grid_in():
+    return f'<path d="M24 4 L14 22 H34 Z" fill="{W}" stroke="{G6}" stroke-width="1.5"/><path d="M18 22 L14 44 M30 22 L34 44 M16 32 H32 M24 22 V44" stroke="{G6}" stroke-width="1.3" fill="none"/>'
+def meter():
+    return f'<circle cx="24" cy="24" r="14" fill="{W}" stroke="{G6}" stroke-width="1.5"/><text x="24" y="28" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink-gray-8)">kWh</text>'
+def breaker(closed=True):
+    arm = 'M24 30 L24 18' if closed else 'M24 30 L33 19'
+    return f'<path d="M24 4 V16 M24 32 V44" stroke="{G6}" stroke-width="1.5"/><circle cx="24" cy="17" r="2" fill="{G6}"/><circle cx="24" cy="31" r="2" fill="{G6}"/><path d="{arm}" stroke="{G6}" stroke-width="2"/>'
+def ats(on_gen=True):
+    arm = 'M24 30 L15 18' if on_gen else 'M24 30 L33 18'
+    return f'<rect x="4" y="6" width="40" height="36" rx="4" fill="{W}" stroke="{G6}" stroke-width="1.5"/><circle cx="15" cy="16" r="2" fill="{G6}"/><circle cx="33" cy="16" r="2" fill="{G6}"/><circle cx="24" cy="31" r="2" fill="{G6}"/><path d="{arm}" stroke="var(--ink-amber-7)" stroke-width="2"/><text x="24" y="40" text-anchor="middle" font-size="7" fill="var(--ink-gray-6)">ATS</text>'
+def db():
+    return f'<rect x="10" y="6" width="28" height="36" rx="2" fill="{W}" stroke="{G6}" stroke-width="1.5"/><path d="M15 14 H33 M15 20 H33 M15 26 H33 M15 32 H33" stroke="{G4}" stroke-width="1.5"/>'
