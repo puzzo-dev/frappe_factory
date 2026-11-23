@@ -5,8 +5,8 @@ def place(inner, x, y, s=1.0, label=None, sub=None, lx=None):
     lab = ''
     if label:
         cx = 24*s if lx is None else lx
-        lab = f'<text x="{x+cx:.0f}" y="{y+48*s+14:.0f}" text-anchor="middle" font-size="11" font-weight="500" fill="var(--ink-gray-8)">{label}</text>'
-        if sub: lab += f'<text x="{x+cx:.0f}" y="{y+48*s+27:.0f}" text-anchor="middle" font-size="10" fill="var(--ink-gray-5)">{sub}</text>'
+        lab = f'<text x="{x+cx:.0f}" y="{y+48*s+14:.0f}" text-anchor="middle" font-size="12" font-weight="500" fill="var(--ink-gray-8)">{label}</text>'
+        if sub: lab += f'<text x="{x+cx:.0f}" y="{y+48*s+27:.0f}" text-anchor="middle" font-size="10" fill="var(--ink-gray-6)">{sub}</text>'
     return f'<g transform="translate({x} {y}) scale({s})">{inner}</g>{lab}'
 
 P = 'fill="none" stroke="var(--ink-gray-6)" stroke-width="1.5"'
@@ -47,9 +47,9 @@ SEL = '''<g aria-label="Selected P-401">
 <rect x="632.5" y="160.5" width="7" height="7"/><rect x="688.5" y="160.5" width="7" height="7"/>
 <rect x="632.5" y="188.5" width="7" height="7"/><rect x="660.5" y="188.5" width="7" height="7"/><rect x="688.5" y="188.5" width="7" height="7"/></g>
 <circle cx="651" cy="164" r="3.5" fill="var(--ink-blue-7)"/><circle cx="680" cy="151" r="3.5" fill="var(--ink-blue-7)"/>
-<rect x="636" y="206" width="84" height="20" rx="4" fill="var(--ink-blue-7)"/><text x="678" y="220" text-anchor="middle" font-size="11" font-weight="500" fill="#fff">P-401 · pump</text>
+<rect x="636" y="206" width="84" height="20" rx="4" fill="var(--ink-blue-7)"/><text x="678" y="220" text-anchor="middle" font-size="12" font-weight="500" fill="#fff">P-401 · pump</text>
 </g>'''
-warn = '''<g><circle cx="606" cy="118" r="8" fill="var(--surface-amber-2)" stroke="var(--ink-amber-7)"/><text x="606" y="122" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink-amber-7)">!</text></g>'''
+warn = '''<g><circle cx="606" cy="118" r="8" fill="var(--surface-amber-2)" stroke="var(--ink-amber-7)"/><text x="606" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink-amber-7)">!</text></g>'''
 canvas_svg = f'<svg viewBox="0 0 800 440" width="100%" role="img" aria-label="Layout editor canvas, polishing and filling area" style="display:block">{pipes}{syms}{warn}{SEL}</svg>'
 
 def bind(state, tag, typ, ok=True, val=''):
@@ -92,9 +92,9 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
     # ---------- palette ----------
     pal = ''
     for c, items in cats:
-        pal += f'<div style="display:flex;justify-content:space-between;align-items:center;height:28px;padding:0 4px;margin-top:6px;font-size:13px;color:var(--ink-gray-5)"><span>{c}</span><span class="tab" style="font-size:12px">{len(items)}</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">'
+        pal += f'<div style="display:flex;justify-content:space-between;align-items:center;height:28px;padding:0 4px;margin-top:6px;font-size:13px;color:var(--ink-gray-6)"><span>{c}</span><span class="tab" style="font-size:12px">{len(items)}</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">'
         for n, sv in items:
-            pal += f'<div title="{n}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px 6px;border-radius:8px;border:1px solid var(--outline-gray-1);background:var(--surface-base);cursor:grab">{S.box(sv, 36)}<span style="font-size:11px;color:var(--ink-gray-6);text-align:center;line-height:1.2">{n}</span></div>'
+            pal += f'<div title="{n}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px 6px;border-radius:8px;border:1px solid var(--outline-gray-1);background:var(--surface-base);cursor:grab">{S.box(sv, 36)}<span style="font-size:12px;color:var(--ink-gray-6);text-align:center;line-height:1.2">{n}</span></div>'
         pal += '</div>'
     palette = f'''<div style="flex:0 0 15rem;width:15rem;border-right:1px solid var(--outline-gray-1);display:flex;flex-direction:column;min-height:0;background:var(--surface-base)">
     <div class="tabs" role="tablist" style="padding:0 12px">{sdef("lt","sym")}{stab("lt","sym","Symbols")}{stab("lt","lay","Layers")}</div>
@@ -119,7 +119,7 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
     <div style="display:flex;flex-direction:column;gap:2px">
     <label style="display:flex;align-items:center;gap:8px;height:28px;font-size:14px"><span class="rd on"></span>Open the faceplate</label>
     <label style="display:flex;align-items:center;gap:8px;height:28px;font-size:14px"><span class="rd"></span>Open trends for its tags</label>
-    <label style="display:flex;align-items:center;gap:8px;height:28px;font-size:14px;color:var(--ink-gray-5)"><span class="rd" style="background:var(--surface-gray-1)"></span>Send a command <span class="bd gray sm">Commands off</span></label>
+    <label style="display:flex;align-items:center;gap:8px;height:28px;font-size:14px;color:var(--ink-gray-6)"><span class="rd" style="background:var(--surface-gray-1)"></span>Send a command <span class="bd gray sm">Commands off</span></label>
     </div></div>
     </div></sc-if>
     <sc-if value="{{{{is_it__look}}}}" hint-placeholder-val="{{{{ false }}}}"><div style="flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
@@ -142,7 +142,7 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
     if layouts:
         opts = ''.join(f'<a class="mi{" on" if n == layout_name else ""}" href="{h}" style="font-size:14px;text-decoration:none"><span>{n}</span><span class="qs" style="margin-left:auto;font-size:12px">{d}</span></a>' for n, h, d in layouts)
         layout_title = (f'<button type="button" onClick="{{{{toggle_lsw}}}}" class="cur" style="all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-weight:600;color:var(--ink-gray-9)">{layout_name}{ic("chev-d","i s35")}</button>'
-                        f'<sc-if value="{{{{is_lsw__open}}}}" hint-placeholder-val="{{{{ false }}}}"><div class="menu-scrim" onClick="{{{{toggle_lsw}}}}" aria-hidden="true"></div><div class="pop appmenu" role="menu" style="left:420px;top:44px;width:300px"><div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Layouts in {plant_name}</div>{opts}</div></sc-if>')
+                        f'<sc-if value="{{{{is_lsw__open}}}}" hint-placeholder-val="{{{{ false }}}}"><div class="menu-scrim" onClick="{{{{toggle_lsw}}}}" aria-hidden="true"></div><div class="pop appmenu" role="menu" style="left:420px;top:44px;width:300px"><div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-6)">Layouts in {plant_name}</div>{opts}</div></sc-if>')
     else:
         layout_title = f'<span class="cur">{layout_name}</span>'
     topbar = f'''<header class="ph" style="padding:8px 16px">
@@ -157,7 +157,7 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
     <span class="btn ico" style="background:var(--surface-gray-3)" title="Select">{ic("pointer")}</span><span class="btn ico ghost" title="Pipe">{ic("pipe")}</span><span class="btn ico ghost" title="Text">{ic("type")}</span><span class="btn ico ghost" title="Move canvas">{ic("move")}</span></div>'''
     issues = f'''<div style="position:absolute;left:16px;bottom:20px;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;background:var(--surface-elevation-2);box-shadow:var(--shadow-2xl);font-size:13px">{issues_txt}<button type="button" style="border:0;background:none;padding:0;font:inherit;color:var(--ink-blue-7);cursor:pointer">Show</button></div>'''
 
-    canvas = f'<div class="grid-bg" style="flex:1;min-width:0;position:relative;background-color:var(--surface-gray-1);overflow:hidden"><div style="position:absolute;left:32px;right:32px;top:{top}px">{canvas_svg}</div>{tools}{issues}</div>'
+    canvas = f'<div class="grid-bg" style="flex:1;min-width:0;position:relative;background-color:var(--surface-gray-1);overflow:hidden"><div style="position:absolute;left:32px;right:32px;top:50%;transform:translateY(-46%)">{canvas_svg}</div>{tools}{issues}</div>'
 
     html = f'<div class="ff">{sidebar(fname, **side_kw)}<div style="flex:1;min-width:0;display:flex;flex-direction:column">{topbar}<div style="display:flex;flex:1;min-height:0">{palette}{canvas}{inspector}</div></div></div>'
     write(fname, page('Layout editor · ' + layout_name, html, {"$preview": {"width": 1440, "height": 900}}))
@@ -166,4 +166,4 @@ def editor(fname, cats, canvas_svg, sel_icon, sel_tag, sel_type, asset, binds, l
 editor('LayoutEditor.dc.html', cats, canvas_svg, S.pump(True), 'P-401', 'Centrifugal pump · v3', 'P-401 · Fill pump',
        [('running', 'PLC-1 · P-401.RUN', 'bool', True, 'Off'), ('speed', 'PLC-1 · P-401.HZ', 'number · Hz', True, '0.0'), ('fault', '', 'bool', False)],
        'Treatment and filling', 'Koyo 1', 'Main.dc.html', 'Draft · v13', 'Live: v12', 46,
-       '<span style="color:var(--ink-amber-7);display:flex">' + ic("alert-t","i s35") + '</span><span style="color:var(--ink-gray-8)">2 problems</span><span class="qs">P-401 fault · XV-402 not placed</span>', {}, layouts=KOYO_LAYOUTS, feeds='<span class="chip" style="height:20px">XV-402</span> <span class="chip" style="height:20px">F1 – F10</span>')
+       '<span style="color:var(--ink-amber-8);display:flex">' + ic("alert-t","i s35") + '</span><span style="color:var(--ink-gray-8)">2 problems</span><span class="qs">P-401 fault · XV-402 not placed</span>', {}, layouts=KOYO_LAYOUTS, feeds='<span class="chip" style="height:20px">XV-402</span> <span class="chip" style="height:20px">F1 – F10</span>')

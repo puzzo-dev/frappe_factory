@@ -112,9 +112,9 @@ def whatsapp():
 # ---------------- ThingsBoard
 def tb():
     PC = 'grid-template-columns:minmax(0,1fr) 150px 150px 100px'
-    pl = [('Koyo 1', 'Edge box, direct', 'MQTT · 2 s', ('Live', 'green')), ('Plant B', 'ThingsBoard', 'Rule chain · 5 s', ('Live', 'green')),
-          ('Plant D', 'Edge box, direct', 'MQTT · 2 s', ('Offline 3 h', 'gray')), ('Oil mill', 'Edge box, direct', 'MQTT · 2 s', ('Live', 'green')),
-          ('Rice mill', 'Edge box, direct', 'MQTT · 2 s', ('Live', 'green')), ('Poultry farm', 'Edge box, direct', 'MQTT · 10 s', ('Live', 'green'))]
+    pl = [('Koyo 1', 'Edge box · uplink', 'MQTT · 2 s', ('Live', 'green')), ('Plant B', 'ThingsBoard', 'Rule chain · 5 s', ('Live', 'green')),
+          ('Plant D', 'Edge box · uplink', 'MQTT · 2 s', ('Offline 3 h', 'gray')), ('Oil mill', 'Edge box · uplink', 'MQTT · 2 s', ('Live', 'green')),
+          ('Rice mill', 'Edge box · uplink', 'MQTT · 2 s', ('Live', 'green')), ('Poultry farm', 'Edge box · uplink', 'MQTT · 10 s', ('Live', 'green'))]
     pr = ''.join(f'<div class="lr" style="{PC};margin:0;cursor:default"><span class="t1">{a}</span><span class="qs" style="color:var(--ink-gray-7)">{b}</span><span class="qs tab">{c}</span><span>{bd(*d)}</span></div>' for a, b, c, d in pl)
     return f'''{title('ThingsBoard', 'Optional. A plant can send its data through an existing ThingsBoard instead of an edge box; the screens look the same either way.')}
 <div style="display:flex;flex-direction:column;gap:24px;padding-top:20px">

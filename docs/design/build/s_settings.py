@@ -13,7 +13,7 @@ PANEL_FILE = {'General': 'SettingsGeneral.dc.html', 'Shifts': 'SettingsShifts.dc
 def nav(active):
     o = ''
     for g, items in NAV:
-        o += f'<div style="display:flex;align-items:center;height:28px;padding:0 8px;font-size:14px;color:var(--ink-gray-5);margin-top:8px">{g}</div><div style="display:flex;flex-direction:column;gap:2px">'
+        o += f'<div style="display:flex;align-items:center;height:28px;padding:0 8px;font-size:14px;color:var(--ink-gray-6);margin-top:8px">{g}</div><div style="display:flex;flex-direction:column;gap:2px">'
         for n, i in items:
             on = n == active
             st = 'background:var(--surface-elevation-3);box-shadow:var(--shadow-sm);color:var(--ink-gray-8)' if on else 'color:var(--ink-gray-7)'
@@ -77,7 +77,7 @@ def commands_panel():
 def build(name, active, panel):
     bg = plant_bg()
     dlg = f'''{closer("dlg")}<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent"><label for="dlg" class="overlay" aria-label="Close"></label>
-<div class="dialog" role="dialog" aria-label="Koyo 1 plant settings" style="left:50%;top:40px;transform:translateX(-50%);width:1040px;height:820px;display:flex;flex-direction:column">
+<div class="dialog" role="dialog" aria-label="Koyo 1 plant settings" style="left:50%;top:40px;transform:translateX(-50%);width:1040px;max-height:820px;display:flex;flex-direction:column">
 <div style="display:flex;align-items:center;gap:10px;height:56px;padding:0 16px 0 20px;border-bottom:1px solid var(--outline-gray-1);flex-shrink:0"><span style="width:28px;height:28px;border-radius:7px;background:var(--surface-gray-3);color:var(--ink-gray-8);display:grid;place-items:center;font-size:12px;font-weight:600">K1</span><span style="display:flex;flex-direction:column;line-height:1.15"><span style="font-weight:600;color:var(--ink-gray-9);font-size:16px">Plant settings · Koyo 1</span><span class="qs" style="font-size:12px">This plant only. App-wide settings are in the app menu.</span></span><span style="margin-left:auto">{close_btn("dlg")}</span></div>
 <div style="flex:1;min-height:0;display:flex">
 <div style="width:220px;flex-shrink:0;background:var(--surface-sidebar);border-right:1px solid var(--outline-gray-1);padding:8px;display:flex;flex-direction:column">
@@ -136,9 +136,10 @@ def retention_panel():
 
 def notify_panel():
     C = 'grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) 64px 84px 64px'
-    rt = [('Priority 1 alarms', 'Floor Supervisor on shift, Factory Manager', '✓', '✓', '✓'), ('Priority 2 alarms', 'Floor Supervisor on shift', '✓', '✓', ''),
-          ('Priority 3 alarms', 'Floor Supervisor on shift', '✓', '', ''), ('Quality holds', 'Quality Inspector, Floor Supervisor', '✓', '✓', ''),
-          ('Maintenance requests', 'Maintenance Technician', '✓', '✓', ''), ('Stock below reorder', 'Storekeeper', '✓', '', '✓')]
+    Y = ic('check', 'i s35')
+    rt = [('Priority 1 alarms', 'Floor Supervisor on shift, Factory Manager', Y, Y, Y), ('Priority 2 alarms', 'Floor Supervisor on shift', Y, Y, ''),
+          ('Priority 3 alarms', 'Floor Supervisor on shift', Y, '', ''), ('Quality holds', 'Quality Inspector, Floor Supervisor', Y, Y, ''),
+          ('Maintenance requests', 'Maintenance Technician', Y, Y, ''), ('Stock below reorder', 'Storekeeper', Y, '', Y)]
     return ptitle('Notifications', 'Who at Koyo 1 is told about what. Alarms stay on the Alarms page until acknowledged; these only deliver them.') + wrap(
       simple_list(C, ['Event', 'Sent to', 'Bell', 'WhatsApp', 'Email'], rt),
       section('Escalation', [row('Unacknowledged alarms escalate', 'To the Floor Supervisor, then the Factory Manager, using each Alarm definition\'s response time.', SWON),

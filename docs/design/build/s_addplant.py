@@ -13,7 +13,7 @@ def steps():
         elif st == 'now':
             mk = f'<span style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--ink-gray-9);display:grid;place-items:center;font-size:12px;font-weight:600">{i}</span>'
         else:
-            mk = f'<span style="width:22px;height:22px;border-radius:50%;background:var(--surface-gray-2);color:var(--ink-gray-5);display:grid;place-items:center;font-size:12px">{i}</span>'
+            mk = f'<span style="width:22px;height:22px;border-radius:50%;background:var(--surface-gray-2);color:var(--ink-gray-6);display:grid;place-items:center;font-size:12px">{i}</span>'
         col = 'var(--ink-gray-9)' if st != 'todo' else 'var(--ink-gray-5)'
         out.append(f'<div style="display:flex;align-items:center;gap:8px">{mk}<span style="font-size:14px;font-weight:{"600" if st=="now" else "400"};color:{col}">{n}</span></div>')
     return '<div style="display:flex;align-items:center;gap:12px">' + '<span style="flex:0 0 32px;height:1px;background:var(--outline-gray-2)"></span>'.join(out) + '</div>'
@@ -44,7 +44,7 @@ gets = [('Symbol pack', 'Rice milling, 8 symbols, plus the 15 general ones'),
         ('Downtime reasons', '22: roll change, screen blinding, choke, power dip'),
         ('KPIs', 'Head rice yield, broken %, milling recovery, kWh per tonne'),
         ('Starter layout', 'A milling line you rearrange to match your floor')]
-gl = ''.join(f'<div style="display:grid;grid-template-columns:124px minmax(0,1fr);gap:8px;padding:8px 0;font-size:13px;line-height:1.45"><span style="color:var(--ink-gray-5)">{a}</span><span style="color:var(--ink-gray-8)">{b}</span></div>' for a, b in gets)
+gl = ''.join(f'<div style="display:grid;grid-template-columns:124px minmax(0,1fr);gap:8px;padding:8px 0;font-size:13px;line-height:1.45"><span style="color:var(--ink-gray-6)">{a}</span><span style="color:var(--ink-gray-8)">{b}</span></div>' for a, b in gets)
 
 body = f'''<div class="body" style="max-width:1040px;margin:0 auto;width:100%;gap:24px">
 {steps()}

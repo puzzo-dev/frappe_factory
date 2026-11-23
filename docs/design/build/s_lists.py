@@ -10,7 +10,7 @@ def kpis(*ks):
     return f'<section style="display:grid;grid-template-columns:repeat({len(ks)},minmax(0,1fr));gap:12px">{"".join(kpi(*k) for k in ks)}</section>'
 def prio(p):
     c = RED if p == '1' else AMB
-    return f'<svg width="18" height="18" viewBox="0 0 18 18" aria-label="Priority {p}"><polygon points="9,0 18,9 9,18 0,9" fill="{c}"/><text x="9" y="13" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">{p}</text></svg>'
+    return f'<svg width="18" height="18" viewBox="0 0 18 18" aria-label="Priority {p}"><polygon points="9,0 18,9 9,18 0,9" fill="{c}"/><text x="9" y="13" text-anchor="middle" font-size="10" font-weight="600" fill="{'#fff' if p == '1' else 'oklch(0.21 0 0)'}">{p}</text></svg>'
 PLANTS = ['All 6', 'Koyo 1', 'Plant B', 'Plant D', 'Oil mill', 'Rice mill', 'Poultry farm']
 def toolbar(search, extra='', note=''):
     return f'''<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;gap:8px;align-items:center"><span class="in muted" style="width:220px">{ic("search")}<span class="grow">{search}</span></span><span class="chip"><span class="k">Plant</span>All 6</span>{extra}</div><span class="qs">{note}</span></div>'''
@@ -41,7 +41,7 @@ alarms = [('1', 'AT-401 Lead trip', '9.4 µg/L · interlock IL-01', 'Koyo 1', '0
           ('3', 'Silo S-2 nearly full', '92 % · switch intake to S-1', 'Rice mill', '07:20', ('Acknowledged', 'gray'), 'Halima S.', 'RiceMill.dc.html'),
           ('3', 'RO salt rejection low', '96.1 % · alert under 97', 'Plant B', '06:55', ('Acknowledged', 'gray'), 'Chidi O.', None),
           ('3', 'Diesel runway under 48 h', '41 h left', 'Koyo 1', '06:10', ('Acknowledged', 'gray'), 'Musa A.', 'Resources.dc.html')]
-ar = [row(AC, [f'<span style="display:flex">{prio(p)}</span>', c2(t, m), plant_link(pl), f'<span class="tab">{s}</span>', f'<span style="display:flex;gap:6px;align-items:center">{bd(*st)}<span class="qs">{w}</span></span>', btn('Acknowledge', kind='xs') if st[0] == 'Active' else '<span></span>'], href) for p, t, m, pl, s, st, w, href in alarms]
+ar = [row(AC, [f'<span style="display:flex">{prio(p)}</span>', c2(t, m), plant_link(pl), f'<span class="tab">{s}</span>', f'<span style="display:flex;gap:6px;align-items:center">{bd(*st)}<span class="qs" style="white-space:nowrap">{w}</span></span>', btn('Acknowledge', kind='xs') if st[0] == 'Active' else '<span></span>'], href) for p, t, m, pl, s, st, w, href in alarms]
 co('CoAlarms.dc.html', 'CoAlarms.dc.html', crumb(('Alarms', None)), f'{btn("Export","download","ghost")}',
    kpis(('Active alarms', '11', '6 not acknowledged', ''), ('Priority 1', '1', 'Koyo 1 lead trip', 'var(--ink-red-7)'), ('Priority 2', '3', 'Koyo 1, Poultry farm, Oil mill', ''), ('Plants reporting', '5 of 6', 'Plant D offline since 05:34', 'var(--ink-amber-7)')) +
    f'<section style="display:flex;flex-direction:column;gap:12px">{toolbar("Search alarms", "<span class=chip><span class=k>Priority</span>All</span><div class=seg><span class=on>Active</span><span>Shelved</span><span>History</span></div>", "Newest first · priority 1 always on top")}{lst(AC, ["", "Alarm", "Plant", "Since", "State", ""], ar)}</section>')
@@ -52,11 +52,16 @@ trips = [('TRIP-0007', 'IL-01 Lead high-high · AT-401 9.4 µg/L', 'Koyo 1', '22
          ('TRIP-0006', 'IL-01 Lead high-high · AT-401 8.6 µg/L', 'Koyo 1', '14 Nov · 11:02', ('Closed · 1 h 12 min', 'gray'), 'QA release Grace O. · QH-0029', None),
          ('B-TRIP-0012', 'IL-B2 Turbidity high · 4.6 NTU', 'Plant B', '12 Nov · 16:40', ('Closed · 48 min', 'gray'), 'QA release Chidi O. · QH-0027', None),
          ('O-TRIP-0004', 'IL-O1 Deodorizer vacuum lost · 9 mbar', 'Oil mill', '9 Nov · 13:25', ('Closed · 2 h 05 min', 'gray'), 'QA release Femi A. · QH-0026', None),
-         ('R-TRIP-0002', 'IL-R1 Metal detector reject', 'Rice mill', '4 Nov · 10:10', ('Closed · 25 min', 'gray'), 'QA release Halima S. · QH-0024', None)]
+         ('R-TRIP-0002', 'IL-R1 Metal detector reject', 'Rice mill', '4 Nov · 10:10', ('Closed · 25 min', 'gray'), 'QA release Halima S. · QH-0024', None),
+         ('TRIP-0005', 'IL-02 Turbidity high · AT-303 4.3 NTU', 'Koyo 1', '3 Nov · 19:47', ('Closed · 41 min', 'gray'), 'QA release Grace O. · QH-0025', None),
+         ('P-TRIP-0003', 'IL-P1 House temperature high · H2 33 °C', 'Poultry farm', '30 Oct · 14:20', ('Closed · 1 h 30 min', 'gray'), 'Fans and pad checked · Amaka F.', None),
+         ('TRIP-0004', 'IL-03 UV intensity low · UV-301 64 %', 'Koyo 1', '27 Oct · 09:15', ('Closed · 22 min', 'gray'), 'QA release Grace O. · QH-0023', None),
+         ('O-TRIP-0003', 'IL-O1 Deodorizer vacuum lost · 11 mbar', 'Oil mill', '21 Oct · 07:02', ('Closed · 3 h 10 min', 'gray'), 'QA release Femi A. · QH-0022', None),
+         ('B-TRIP-0011', 'IL-B1 RO conductivity high · 42 µS/cm', 'Plant B', '16 Oct · 11:48', ('Closed · 35 min', 'gray'), 'QA release Chidi O. · QH-0020', None)]
 tr = [row(TC, [c2(i, t), plant_link(p), f'<span class="tab">{w}</span>', f'<span>{bd(*s)}</span>', f'<span class="c qs">{n}</span>', f'<span style="color:var(--ink-gray-4);display:flex">{ic("chev-r","i s35")}</span>'], h, 56) for i, t, p, w, s, n, h in trips]
 co('CoTrips.dc.html', 'CoTrips.dc.html', crumb(('Interlock trips', None)), f'{btn("Export","download","ghost")}',
    kpis(('Open trips', '1', 'Koyo 1 · 32 min', 'var(--ink-red-7)'), ('This month', '5', 'in 4 plants', ''), ('Median time to restart', '58 min', 'trip to QA release and restart', ''), ('Quality holds opened', '5', 'one per quality-related trip', '')) +
-   f'<section style="display:flex;flex-direction:column;gap:12px">{toolbar("Search trips", "<div class=seg><span>Open</span><span class=on>All</span></div>", "Only the PLC can trip or reset an interlock; Frappe Factory runs the recovery")}{lst(TC, ["Trip and interlock", "Plant", "Tripped", "State", "Recovery", ""], tr)}</section>')
+   f'<section style="display:flex;flex-direction:column;gap:12px">{toolbar("Search trips", "<div class=seg><span>Open</span><span class=on>All</span></div>", "Only the PLC can trip or reset an interlock; Frappe Factory runs the recovery")}{lst(TC, ["Trip and interlock", "Plant", "Tripped", "State", "Recovery", ""], tr)}' + '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:4px"><span class="qs">10 of 23</span>' + btn('Load more', kind='ghost') + '</div>' + f'</section>')
 
 # ---------------- Production, all plants (needs ERPNext)
 PC = 'grid-template-columns:minmax(0,1.6fr) 110px minmax(0,1.3fr) 100px 140px 24px'
@@ -139,11 +144,11 @@ reps = [('Shift production summary', 'Output, plan, OEE, stops and rejects per p
         ('Resource use per unit', 'Water per bag, diesel per 1,000 bags, kWh per tonne, feed per dozen eggs', '—', 'droplet'),
         ('Flock and lay rate', 'Poultry: birds, mortality, lay rate, eggs per bird, feed and water per bird', 'Daily · 18:00 WhatsApp', 'chart'),
         ('Yield and recovery', 'Rice: head rice yield, broken %. Oil: oil yield, refining loss', '—', 'layers')]
-rc = ''.join(f'''<div class="card" style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;gap:10px;align-items:center"><span style="width:32px;height:32px;border-radius:8px;background:var(--surface-gray-2);display:grid;place-items:center;color:var(--ink-gray-7)">{ic(i)}</span><span style="font-weight:600;color:var(--ink-gray-9)">{t}</span></div>
-<p class="ps" style="min-height:40px">{d}</p><div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--outline-gray-1)"><span class="qs">{s}</span><span style="display:flex;gap:6px">{btn("Schedule",kind="ghost")}<a href="{RH[t]}" class="btn">Open</a></span></div></div>''' for t, d, s, i in reps)
+RCC = 'grid-template-columns:32px minmax(0,1.1fr) minmax(0,1.6fr) minmax(0,1fr) 170px'
+rc = '<div class="list"><div class="lh" style="' + RCC + '"><span></span><span>Report</span><span>Covers</span><span>Schedule</span><span></span></div>' + ''.join(f'''<div class="lr" style="{RCC};min-height:56px;cursor:default"><span style="display:flex;color:var(--ink-gray-6)">{ic(i)}</span><span class="t1">{t}</span><span class="c qs" style="color:var(--ink-gray-7);white-space:normal;line-height:1.4">{d}</span><span class="qs">{"Not scheduled" if s == "—" else s}</span><span style="display:flex;gap:6px;justify-content:flex-end">{btn("Schedule",kind="ghost")}<a href="{RH[t]}" class="btn">Open</a></span></div>''' for t, d, s, i in reps) + '</div>'
 co('CoReports.dc.html', 'CoReports.dc.html', crumb(('Reports', None)), f'{btn("New report","plus")}',
    f'''<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;gap:8px;align-items:baseline"><h2 class="h2">Reports</h2><span class="qs">8 built in · any can be scheduled to email or WhatsApp</span></div><span class="chip"><span class="k">Plant</span>All 6</span></div>
-<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">{rc}</div>
+{rc}
 <p class="qs" style="margin:0">Reports are Frappe Script and Query Reports, so they also open in Desk, export to Excel or PDF, and can be added to any Frappe workspace.</p>''')
 
 # ================= Plant level (Koyo 1)
@@ -157,32 +162,50 @@ ktrips = [('TRIP-0007', 'IL-01 Lead high-high · AT-401 9.4 µg/L', '22 Nov · 0
           ('TRIP-0005', 'IL-02 Turbidity high · AT-303 4.3 NTU', '3 Nov · 19:47', ('Closed · 41 min', 'gray'), 'Cause: media filter backwash overdue', None),
           ('TRIP-0004', 'IL-03 UV intensity low · UV-301 64 %', '27 Oct · 09:15', ('Closed · 22 min', 'gray'), 'Cause: lamp sleeve fouled, cleaned', None)]
 ktr = [row(TL, [c2(i, t), f'<span class="tab">{w}</span>', f'<span>{bd(*s)}</span>', f'<span class="c qs">{n}</span>', f'<span style="color:var(--ink-gray-4);display:flex">{ic("chev-r","i s35")}</span>'], h, 56) for i, t, w, s, n, h in ktrips]
+IL = 'grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1.2fr) 120px 110px'
+ils = [('IL-01 Lead high-high', 'AT-401 · PLC-1', '8 µg/L', 'Key KS-401 after QA release', '2', ('Tripped', 's-red')),
+       ('IL-02 Turbidity high', 'AT-303 · PLC-1', '4 NTU', 'Key KS-401 after QA release', '1', ('Armed', 'green')),
+       ('IL-03 UV intensity low', 'UV-301 · PLC-2', 'under 70 %', 'Panel button after lamp check', '1', ('Armed', 'green'))]
+ilr = [row(IL, [c2(n, t), f'<span class="tab">{at}</span>', f'<span class="c qs">{r}</span>', f'<span class="tab">{c}</span>', f'<span>{bd(*st)}</span>'], None, 56) for n, t, at, r, c, st in ils]
 pl('TripList.dc.html', 'TripList.dc.html', crumb(*K, ('Interlock trips', None)), btn("Export","download","ghost"),
    kpis(('Open', '1', 'TRIP-0007 · 32 min', 'var(--ink-red-7)'), ('Last 30 days', '3', '2 lead, 1 turbidity', ''), ('Median time to restart', '41 min', 'trip to restart', ''), ('Interlocks armed', '3 of 3', 'lead, turbidity, UV', '')) +
-   f'<section style="display:flex;flex-direction:column;gap:12px">{lst(TL, ["Trip and interlock", "Tripped", "State", "Cause and hold", ""], ktr)}</section>')
+   f'<section style="display:flex;flex-direction:column;gap:12px">{lst(TL, ["Trip and interlock", "Tripped", "State", "Cause and hold", ""], ktr)}</section>' +
+   f'<section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h2">Interlocks</h2><span class="qs">Wired in the PLC. Frappe Factory reads them; it cannot change, bypass or reset them</span></div>{lst(IL, ["Interlock", "Trips at", "Reset", "Trips this year", "State"], ilr)}</section>')
 
 HL = 'grid-template-columns:minmax(0,1.4fr) minmax(0,1.3fr) 120px minmax(0,1.3fr) 24px'
 kholds = [('QH-0031', 'Lead trip TRIP-0007 · 22 Nov', '256 bags + 14 sachets, T5 2.3 m³', ('Open', 'amber'), 'L1 waiting on lab · L2 scrap · L3 reprocess', 'QualityHold.dc.html'),
           ('QH-0030', 'Coliform plate failed · 18 Nov', '40 bags · 800 sachets', ('Closed', 'gray'), 'Scrapped · signed Grace O.', None),
-          ('QH-0029', 'Lead trip TRIP-0006 · 14 Nov', '430 bags · 8,600 sachets', ('Closed', 'gray'), '310 released with deviation (Tunde B.), 120 scrapped', None)]
+          ('QH-0029', 'Lead trip TRIP-0006 · 14 Nov', '430 bags · 8,600 sachets', ('Closed', 'gray'), '310 released with deviation (Tunde B.), 120 scrapped', None),
+          ('QH-0028', 'Customer complaint · taste · 6 Nov', '120 bags · 2,400 sachets', ('Closed', 'gray'), 'Released · lab clear', None),
+          ('QH-0025', 'Turbidity trip TRIP-0005 · 3 Nov', '180 bags · 3,600 sachets', ('Closed', 'gray'), 'Released · all samples pass', None),
+          ('QH-0023', 'UV trip TRIP-0004 · 27 Oct', '64 bags · 1,280 sachets', ('Closed', 'gray'), 'Scrapped · signed Grace O.', None),
+          ('QH-0021', 'Seal leak, routine check · 19 Oct', '35 bags · 700 sachets', ('Closed', 'gray'), 'Reworked · resealed and recounted', None),
+          ('QH-0019', 'Date code missing · 11 Oct', '210 bags · 4,200 sachets', ('Closed', 'gray'), 'Released with deviation (Tunde B.)', None)]
 khr = [row(HL, [c2(i, t), f'<span class="c tab" style="color:var(--ink-gray-8)">{q}</span>', f'<span>{bd(*s)}</span>', f'<span class="c qs">{n}</span>', f'<span style="color:var(--ink-gray-4);display:flex">{ic("chev-r","i s35")}</span>'], h, 56) for i, t, q, s, n, h in kholds]
 pl('HoldList.dc.html', 'HoldList.dc.html', crumb(*K, ('Quality holds', None)), f'{btn("Hold product","plus")}',
    kpis(('Open', '1', 'QH-0031', 'var(--ink-amber-7)'), ('Held this month', '726 bags', '14,520 sachets · plus T5 water', ''), ('Released', '310 bags', '43% of held', ''), ('Scrapped', '160 bags', 'plus 156 bags in L2 if confirmed', '')) +
-   f'<section style="display:flex;flex-direction:column;gap:12px">{lst(HL, ["Hold", "Held", "State", "Outcome", ""], khr)}<p class="qs" style="margin:0">A bag is 20 sachets of 50 cl. Hold product by hand with the button above, for a complaint or a failed routine check.</p></section>')
+   f'<section style="display:flex;flex-direction:column;gap:12px">{lst(HL, ["Hold", "Held", "State", "Outcome", ""], khr)}' + '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:4px"><span class="qs">8 of 19</span>' + btn('Load more', kind='ghost') + '</div>' + f'<p class="qs" style="margin:0">A bag is 20 sachets of 50 cl. Hold product by hand with the button above, for a complaint or a failed routine check.</p></section>')
 
 HH = 'grid-template-columns:150px minmax(0,1fr) 200px 140px 24px'
 hos = [('22 Nov · 14:00', 'Morning to afternoon', 'Musa A. → Bola N.', ('Draft', 'amber'), 'Handover.dc.html'),
        ('22 Nov · 06:00', 'Night to morning', 'Ibrahim K. → Musa A.', ('Signed 06:04', 'gray'), None),
        ('21 Nov · 22:00', 'Afternoon to night', 'Bola N. → Ibrahim K.', ('Signed 22:06', 'gray'), None),
        ('21 Nov · 14:00', 'Morning to afternoon', 'Musa A. → Bola N.', ('Signed 14:02', 'gray'), None),
-       ('21 Nov · 06:00', 'Night to morning', 'Ibrahim K. → Musa A.', ('Signed 06:11', 'gray'), None)]
+       ('21 Nov · 06:00', 'Night to morning', 'Ibrahim K. → Musa A.', ('Signed 06:11', 'gray'), None),
+       ('20 Nov · 22:00', 'Afternoon to night', 'Bola N. → Ibrahim K.', ('Signed 22:03', 'gray'), None),
+       ('20 Nov · 14:00', 'Morning to afternoon', 'Musa A. → Bola N.', ('Signed 14:09', 'gray'), None),
+       ('20 Nov · 06:00', 'Night to morning', 'Ibrahim K. → Musa A.', ('Signed late · 06:41', 'amber'), None),
+       ('19 Nov · 22:00', 'Afternoon to night', 'Bola N. → Ibrahim K.', ('Signed 22:05', 'gray'), None),
+       ('19 Nov · 14:00', 'Morning to afternoon', 'Musa A. → Bola N.', ('Signed 14:01', 'gray'), None),
+       ('19 Nov · 06:00', 'Night to morning', 'Ibrahim K. → Musa A.', ('Signed 06:07', 'gray'), None),
+       ('18 Nov · 22:00', 'Afternoon to night', 'Bola N. → Ibrahim K.', ('Signed 22:04', 'gray'), None)]
 hhr = [row(HH, [f'<span class="tab">{t}</span>', f'<span class="t1">{s}</span>', f'<span class="qs" style="color:var(--ink-gray-7)">{w}</span>', f'<span>{bd(*st)}</span>', f'<span style="color:var(--ink-gray-4);display:flex">{ic("chev-r","i s35")}</span>'], h) for t, s, w, st, h in hos]
 pl('HandoverHistory.dc.html', 'HandoverHistory.dc.html', crumb(*K, ('Shift handover', 'Handover.dc.html'), ('All handovers', None)), btn("Export","download","ghost"),
    f'<section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h2">Handovers</h2><span class="qs">Each one is signed by the outgoing supervisor; open items carry over as ToDos</span></div>{lst(HH, ["Shift change", "Handover", "From → to", "State", ""], hhr)}</section>')
 
 # ---------------- Pinned tags (Koyo 1)
 pins = [('AT-401 Lead', 'µg/L · trip at 8'), ('AT-301 pH', 'band 7.8 – 8.3'), ('AT-302 Conductivity', 'µS/cm · band 150 – 220'), ('AT-303 Turbidity', 'NTU · trip at 4'), ('UV-301 Intensity', '% · trip below 70'), ('FT-201 Permeate', 'm³/h')]
-pinl = ''.join(f'<div style="display:grid;grid-template-columns:20px 24px minmax(0,1fr) 28px;gap:8px;align-items:center;height:48px;padding:0 10px;border-bottom:1px solid var(--outline-gray-1)"><span style="color:var(--ink-gray-4);display:flex">{ic("grip","i s35") if "grip" in IC else "⋮⋮"}</span><span class="tab qs">{i+1}</span><span class="c"><div class="t1">{n}</div><div class="m">{m}</div></span><span style="color:var(--ink-gray-5);display:flex">{ic("x","i s35")}</span></div>' for i, (n, m) in enumerate(pins))
+pinl = ''.join(f'<div style="display:grid;grid-template-columns:20px 24px minmax(0,1fr) 28px;gap:8px;align-items:center;height:48px;padding:0 10px;border-bottom:1px solid var(--outline-gray-1)"><span style="color:var(--ink-gray-4);display:flex">{ic("grip","i s35") if "grip" in IC else "⋮⋮"}</span><span class="tab qs">{i+1}</span><span class="c"><div class="t1">{n}</div><div class="m">{m}</div></span><span style="color:var(--ink-gray-6);display:flex">{ic("x","i s35")}</span></div>' for i, (n, m) in enumerate(pins))
 cand = [('LT-201 T2 level', 'm³', False), ('LT-101 T1 level', 'm³', False), ('PT-201 HP pump outlet', 'bar', False), ('DP-102 Carbon filter ΔP', 'bar', True), ('F1 – F10 rate', 'sachets/h', False), ('G-1 Diesel level', 'L', False), ('TT-F1 … F10 jaw temp', '°C', False)]
 candl = ''.join(f'<label style="display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;border-bottom:1px solid var(--outline-gray-1);font-size:14px"><span class="cb{" on" if on else ""}"></span><span style="flex:1;color:var(--ink-gray-8)">{n}</span><span class="qs">{u}</span></label>' for n, u, on in cand)
 pl('PinnedTags.dc.html', 'PinnedTags.dc.html', crumb(*K, ('Pinned tags', None)), f'{btn("Cancel",kind="ghost")}<a href="Main.dc.html" class="btn solid">Save</a>',

@@ -16,8 +16,8 @@ a.kb{text-decoration:none}
 """
 
 def topbar(user=None, kiosk=('K1', 'Filling hall · F1 – F5', 'Koyo 1 · tablet T-02 · session KS-0221')):
-    u = (f'<div style="display:flex;align-items:center;gap:10px"><span class="av md" style="width:36px;height:36px;flex:0 0 36px;font-size:13px">{user[0]}</span><span style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:500;color:var(--ink-gray-9)">{user[1]}</span><span class="qs">{user[2]}</span></span><a href="KioskLogin.dc.html" class="kb" style="height:40px;font-size:14px;margin-left:8px">{ic("arrow-r")}Log out</a></div>'
-         if user else '<span class="qs" style="font-size:14px">Nobody signed in</span>')
+    u = (f'<div style="display:flex;align-items:center;gap:10px"><span class="av md" style="width:36px;height:36px;flex:0 0 36px;font-size:13px">{user[0]}</span><span style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:500;color:var(--ink-gray-9)">{user[1]}</span><span class="qs">{user[2]}</span></span><a href="KioskLogin.dc.html" class="kb" style="height:48px;font-size:15px;margin-left:8px">{ic("arrow-r")}Log out</a></div>'
+         if user else '<span class="qs" style="font-size:14px">Nobody logged in</span>')
     return f'''<header style="height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--outline-gray-1)">
 <div style="display:flex;align-items:center;gap:12px"><span class="logo" style="width:36px;height:36px;flex-basis:36px">{kiosk[0]}</span><span style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:600;color:var(--ink-gray-9)">{kiosk[1]}</span><span class="qs">{kiosk[2]}</span></span></div>
 <div style="display:flex;align-items:center;gap:20px">{topbar_right()}{u}</div></header>'''
@@ -117,15 +117,15 @@ def job(ref, title, meta, st, sc, btns):
 <div style="display:flex;flex-direction:column;gap:3px;min-width:0"><div style="display:flex;gap:8px;align-items:center"><span class="tab qs" style="font-size:13px">{ref}</span>{bd(st, sc)}</div><span style="font-size:16px;font-weight:500;color:var(--ink-gray-9)">{title}</span><span class="qs" style="font-size:13px">{meta}</span></div>
 <div style="display:flex;gap:8px">{btns}</div></div>'''
 jobs = ''.join([
-  job('MNT-0088', 'F9 · replace jaw heater, test 40 sachets', 'Planned · logged by Musa A. 05:32 · heater from MR-0195', 'In progress', 'blue', '<button type="button" class="kb" style="height:44px;font-size:15px">Add note</button><button type="button" class="kb solid" style="height:44px;font-size:15px">Finish and test</button>'),
-  job('MNT-0090', 'CF-102 · backwash the carbon filter', 'From the shift handover · due 16:00 · ΔP above 1.2 bar since 07:52', 'Open', 'gray', '<button type="button" class="kb solid" style="height:44px;font-size:15px">Start job</button>'),
+  job('MNT-0088', 'F9 · replace jaw heater, test 40 sachets', 'Planned · logged by Musa A. 05:32 · heater from MR-0195', 'In progress', 'blue', '<button type="button" class="kb" style="height:48px;font-size:15px">Add note</button><button type="button" class="kb solid" style="height:48px;font-size:15px">Finish and test</button>'),
+  job('MNT-0090', 'CF-102 · backwash the carbon filter', 'From the shift handover · due 16:00 · ΔP above 1.2 bar since 07:52', 'Open', 'gray', '<button type="button" class="kb" style="height:48px;font-size:15px">Start job</button>'),
   job('MNT-0091', 'DP-1 · refill antiscalant from MR-0193', 'Due 15:00 · storekeeper is bringing 2 drums of 25 L', 'Waiting for parts', 'amber', '<button type="button" class="kb" style="height:44px;font-size:15px">Start job</button>'),
 ])
 def kal(p, col, title, meta, btn_):
-    return f'<div style="display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--outline-gray-1)"><span style="width:22px;height:22px;border-radius:6px;background:{col};color:#fff;font-size:12px;font-weight:600;display:grid;place-items:center">{p}</span><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:500;color:var(--ink-gray-9)">{title}</span><span class="qs" style="font-size:13px">{meta}</span></span>{btn_}</div>'
+    return f'<div style="display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--outline-gray-1)"><span style="width:22px;height:22px;border-radius:6px;background:{col};color:{'#fff' if col == RED else 'oklch(0.21 0 0)'};font-size:12px;font-weight:600;display:grid;place-items:center">{p}</span><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:500;color:var(--ink-gray-9)">{title}</span><span class="qs" style="font-size:13px">{meta}</span></span>{btn_}</div>'
 AMB, RED = 'oklch(0.723 0.152 71.82)', 'oklch(0.556 0.198 26.552)'
 mal = ''.join([
-  kal('3', AMB, 'DP-102 carbon filter ΔP high', '1.3 bar · since 07:52 · not acknowledged', '<button type="button" class="kb" style="height:40px;font-size:14px">Acknowledge</button>'),
+  kal('3', AMB, 'DP-102 carbon filter ΔP high', '1.3 bar · since 07:52 · not acknowledged', '<button type="button" class="kb" style="height:48px;font-size:15px">Acknowledge</button>'),
   kal('3', AMB, 'Diesel runway under 48 h', '41 h left · acknowledged by Musa A.', ''),
   kal('3', AMB, 'F9 jaw temperature low', 'Shelved by Musa A. while MNT-0088 is open', bd('Shelved', 'gray')),
 ])
@@ -137,7 +137,8 @@ maint = f'''{topbar(('IK', 'Ibrahim K.', 'Maintenance Technician'), ('K1', 'Main
 {card('My jobs', '3 open · assigned to Ibrahim K.', jobs)}
 {card('Equipment alarms', 'Only alarms on equipment this kiosk covers', mal)}
 </div>
-{actions(f'<a href="KioskFault.dc.html" class="kb" style="height:60px">{ic("wrench")}Report a fault</a>', f'<a href="KioskSpare.dc.html" class="kb" style="height:60px">{ic("package")}Request a spare part</a>', f'<button type="button" class="kb" style="height:60px">{ic("phone")}Call supervisor</button>')}
+</div>
+<div style="flex:0 0 auto;padding:12px 24px 16px;border-top:1px solid var(--outline-gray-1);display:flex;flex-direction:column;gap:8px;background:var(--surface-base)">{actions(f'<a href="KioskFault.dc.html" class="kb" style="height:60px">{ic("wrench")}Report a fault</a>', f'<a href="KioskSpare.dc.html" class="kb" style="height:60px">{ic("package")}Request a spare part</a>', f'<button type="button" class="kb" style="height:60px">{ic("phone")}Call supervisor</button>')}
 </div>'''
 write('KioskMaint.dc.html', kpage('Kiosk maintenance', maint))
 
@@ -152,11 +153,11 @@ def lot(ref, qty, sub, test, tc, act):
     return f'<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 0;border-top:1px solid var(--outline-gray-1)"><span style="display:flex;flex-direction:column;gap:3px;min-width:0"><span style="display:flex;gap:8px;align-items:center"><span style="font-size:15px;font-weight:600;color:var(--ink-gray-9)">{ref}</span><span class="tab" style="font-size:15px;color:var(--ink-gray-8)">{qty}</span></span><span class="qs tab" style="font-size:13px">{sub}</span><span>{bd(test, tc)}</span></span>{act}</div>'
 lots = ''.join([
   lot('L1', '100 bags', '2,000 sachets · 07:56 – 08:03', '2 of 3 pass · S-4 at the outside lab', 'gray', '<button type="button" class="kb" style="height:44px;font-size:15px" disabled>Decide</button>'),
-  lot('L2', '156 bags + 14 sachets', '3,134 sachets · 08:03 – 08:14', 'S-3 failed · 6.8 µg/L', 'red', '<a href="KioskDecide.dc.html" class="kb solid" style="height:44px;font-size:15px">Decide</a>'),
-  lot('L3', '2.3 m³ in T5', 'Not yet filled · template says reprocess', 'Reprocess via IX-501', 'gray', '<a href="KioskDecide.dc.html" class="kb solid" style="height:44px;font-size:15px">Decide</a>'),
+  lot('L2', '156 bags + 14 sachets', '3,134 sachets · 08:03 – 08:14', 'S-3 failed · 6.8 µg/L', 'red', '<a href="KioskDecide.dc.html" class="kb" style="height:48px;font-size:15px">Decide</a>'),
+  lot('L3', '2.3 m³ in T5', 'Not yet filled · template says reprocess', 'Reprocess via IX-501', 'gray', '<a href="KioskDecide.dc.html" class="kb" style="height:48px;font-size:15px">Decide</a>'),
 ])
 def chk(name, rule, last, nxt, due=False):
-    return f'<div style="display:grid;grid-template-columns:minmax(0,1fr) 76px;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--outline-gray-1)"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:500;color:var(--ink-gray-9)">{name}</span><span class="qs" style="font-size:13px">{rule} · last {last}</span></span><span class="tab" style="text-align:right;font-size:15px;font-weight:600;color:{"var(--ink-amber-7)" if due else "var(--ink-gray-8)"}">{nxt}</span></div>'
+    return f'<div style="display:grid;grid-template-columns:minmax(0,1fr) 76px;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--outline-gray-1)"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:500;color:var(--ink-gray-9)">{name}</span><span class="qs" style="font-size:13px">{rule} · last {last}</span></span><span class="tab" style="text-align:right;font-size:15px;font-weight:600;color:{"var(--ink-amber-8)" if due else "var(--ink-gray-8)"}">{nxt}</span></div>'
 checks = ''.join([
   chk('Lead at SP-1', 'Every 2 h · ASV meter · under 5 µg/L', '07:55 pass 2.2', 'Paused'),
   chk('Fill volume', '10 sachets per filler · 50 cl ± 2%', '07:30 pass', '09:30'),
@@ -171,7 +172,8 @@ qa = f'''{topbar(('GO', 'Grace O.', 'Quality Inspector'), ('K1', 'Quality lab ·
 {card('QH-0031 · held product', '256 bags, 14 loose sachets and 2.3 m³ · opened by TRIP-0007', lots, '<a href="QualityHold.dc.html" style="font-size:14px">Open hold</a>', 'var(--outline-amber-3)')}
 {card('Routine checks', 'From the plant quality plan · lead check paused during the trip', checks)}
 </div>
-{actions(f'<a href="KioskSample.dc.html" class="kb" style="height:60px">{ic("flask")}Record a sample</a>', f'<button type="button" class="kb" style="height:60px" disabled>{ic("lock")}QA release · needs sample 2</button>', f'<button type="button" class="kb" style="height:60px">{ic("phone")}Call supervisor</button>')}
+</div>
+<div style="flex:0 0 auto;padding:12px 24px 16px;border-top:1px solid var(--outline-gray-1);display:flex;flex-direction:column;gap:8px;background:var(--surface-base)">{actions(f'<a href="KioskSample.dc.html" class="kb" style="height:60px">{ic("flask")}Record a sample</a>', f'<button type="button" class="kb" style="height:60px" disabled>{ic("lock")}QA release · needs sample 2</button>', f'<button type="button" class="kb" style="height:60px">{ic("phone")}Call supervisor</button>')}
 <span class="qs" style="font-size:13px;text-align:center">Every result and decision is saved under your Frappe user.</span>
 </div>'''
 write('KioskQA.dc.html', kpage('Kiosk quality', qa))
@@ -243,8 +245,8 @@ write('KioskFault.dc.html', kpage('Kiosk · report a fault', maint, kdialog('Rep
 def part(code, name, qty, stock, ok):
     return f'''<div style="display:grid;grid-template-columns:minmax(0,1fr) 150px 120px 44px;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--outline-gray-1)">
 <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:500;color:var(--ink-gray-9)">{name}</span><span class="qs tab" style="font-size:13px">{code}</span></span>
-<span style="display:flex;align-items:center;gap:6px"><span class="key" style="width:40px;height:40px;font-size:20px">−</span><span class="tab" style="width:36px;text-align:center;font-size:18px;font-weight:600">{qty}</span><span class="key" style="width:40px;height:40px;font-size:20px">+</span></span>
-<span>{bd(stock, "green" if ok else "amber")}</span><span style="color:var(--ink-gray-5);display:flex">{ic("x")}</span></div>'''
+<span style="display:flex;align-items:center;gap:6px"><span class="key" style="width:48px;height:48px;font-size:20px">−</span><span class="tab" style="width:36px;text-align:center;font-size:18px;font-weight:600">{qty}</span><span class="key" style="width:48px;height:48px;font-size:20px">+</span></span>
+<span>{bd(stock, "green" if ok else "amber")}</span><span style="color:var(--ink-gray-6);display:flex">{ic("x")}</span></div>'''
 spr = f'''<div style="display:flex;flex-direction:column;gap:16px">
 <div style="display:flex;flex-direction:column;gap:8px">{klabel('For job')}{chips(['MNT-0088 · F9 jaw heater', 'MNT-0090 · CF-102 backwash', 'No job'], ['MNT-0088 · F9 jaw heater'], 3, 48)}</div>
 <div>{klabel('Parts', 'from the Item list · stock at Koyo 1 store')}

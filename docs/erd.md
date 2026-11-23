@@ -42,11 +42,11 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
-| Production Run | Submittable | `start`, `end`, `good_qty`, `reject_qty`, `rejects` (table: qty, reason), `status` | → Work Order, → Plant Area (line), → Batch (optional) |
+| Production Run | Submittable | `start`, `end`, `good_qty`, `reject_qty`, `rejects` (table: qty, reason), `state` (Planned, Running, Stopped, Ended, Posted, Post failed; the Work Order keeps its own ERPNext status) | → Work Order, → Plant Area (line), → Batch (optional) |
 | Factory Event | Log | `ts`, `event_type` (State, Status), `from_state`, `to_state`, `reason_code`, `msg_id` (unique) | → Plant Asset, → IoT Device Registry |
 | Machine Stop (was Downtime Entry; renamed because ERPNext already has a Downtime Entry DocType) | Submittable | `start`, `end`, `duration_min`, `planned`, `comment`, `events` (table) | → Production Run, → Downtime Reason, → Plant Asset |
-| Alarm | Regular | `status` (Raised, Acknowledged, Cleared, Shelved, Closed), `raised_at`, `acked_at`, `acked_by`, `cleared_at`, `shelved_until`, `shelve_reason`, `peak_value`, `repeat_count`, `escalation_level` | → Alarm Definition, → Plant Asset |
-| Interlock Trip | Submittable | `tripped_at`, `readings_snapshot` (JSON), `steps` (table: step, done_by, done_at, value), `lab_value`, `signed_off_by`, `signed_off_at`, `restarted_at` | → Alarm, → Production Run, → Machine Stop, → Quality Inspection |
+| Alarm | Regular | `state` (Active unacknowledged, Active acknowledged, Cleared unacknowledged, Shelved, Closed; ISA-18.2), `raised_at`, `acked_at`, `acked_by`, `cleared_at`, `shelved_until`, `shelve_reason`, `peak_value`, `repeat_count`, `escalation_level` | → Alarm Definition, → Plant Asset |
+| Interlock Trip | Submittable | `phase` (Stopped, Sampling, Awaiting release, Awaiting reset, Restarted, Closed; moved only by recovery steps, the hold's lot decisions and the PLC key reset), `tripped_at`, `readings_snapshot` (JSON), `steps` (table: step, done_by, done_at, value), `lab_value`, `signed_off_by`, `signed_off_at`, `restarted_at` | → Alarm, → Production Run, → Machine Stop, → Quality Inspection |
 | Device Command | Submittable | `value`, `action`, `reason`, `status`, `requested_by`, `approved_by`, `sent_at`, `result`, `result_at` | → Tag, → IoT Device Registry |
 | Refill Entry | Submittable | `qty`, `supplier`, `level_before`, `level_after`, `delivery_note` | → Resource Meter, → Stock Entry (optional) |
 
@@ -56,7 +56,7 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 | --- | --- | --- | --- |
 | Shift Production Summary | Submittable | `shift_date`, `good_qty`, `reject_qty`, `uptime_min`, `downtime_min`, `oee`, `water_l`, `diesel_l`, `kwh`, `alarms`, `trips`, `notes` | → Plant Area, → Shift Type |
 | Daily Plant Summary | Regular | `date`, same totals as shift, per site | → Plant Area (site) |
-| Plant Status | Regular, one row per plant, overwritten | `state` (Running, Alert, Tripped, Offline), `note`, `good_qty_shift`, `open_alarms_p1/p2/p3`, `lowest_runway`, `last_seen`; feeds the Plants home cards | → Plant Area (site) |
+| Plant Status | Regular, one row per plant, overwritten | `state` (Offline, Tripped, Alarm P1, Alert, Running: the first that holds, in that order), `connection` (Live, Delayed 30 s – 5 min, Offline, Never connected; from the last heartbeat, read by the sidebar, header badge and offline banner), `note`, `good_qty_shift`, `open_alarms_p1/p2/p3`, `lowest_runway`, `last_seen`; feeds the Plants home cards | → Plant Area (site) |
 | Resource Reading | Log | `ts`, `level`, `volume` (hourly from rollups) | → Resource Meter |
 | Sync Outbox | Log | `seq`, `ref_doctype`, `ref_name` (Dynamic Link), `operation`, `status`, `attempts`, `last_error` | → DocType |
 | Machine Telemetry | Virtual | reads TimescaleDB: `ts`, `tag`, `value`, `quality` | → Tag |

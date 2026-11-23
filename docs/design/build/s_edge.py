@@ -16,7 +16,7 @@ def side(active):
 def head(title, sub, acts=''):
     return f'<header class="ph"><div style="display:flex;flex-direction:column;gap:2px"><div class="crumb"><span class="cur">{title}</span></div></div><div class="acts"><span class="qs" style="margin-right:4px">{sub}</span>{acts}</div></header>'
 
-NOTE = f'<div class="inset" style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;color:var(--ink-gray-7)"><span style="display:flex;color:var(--ink-gray-5);margin-top:2px">{ic("info","i s35")}</span><span>This page is on the edge box and works without the internet. Tags, alarm definitions and layouts are changed in Frappe Factory and arrive here as a new config version.</span></div>'
+NOTE = f'<div class="inset" style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;color:var(--ink-gray-7)"><span style="display:flex;color:var(--ink-gray-6);margin-top:2px">{ic("info","i s35")}</span><span>This page is on the edge box and works without the internet. Tags, alarm definitions and layouts are changed in Frappe Factory and arrive here as a new config version.</span></div>'
 
 def epage(fname, title, sub, body, acts=''):
     html = f'<div class="ff">{side(fname)}<main class="main">{head(title, sub, acts)}<div class="body" style="overflow:auto">{body}</div></main></div>'

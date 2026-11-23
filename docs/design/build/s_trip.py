@@ -9,16 +9,16 @@ def trend_svg():
     y = lambda v: T + ph_ - v/10*ph_
     x = lambda i: L + i*pw/(len(lead)-1)
     pts = ' '.join(f'{x(i):.1f},{y(v):.1f}' for i, v in enumerate(lead))
-    grid = ''.join(f'<line x1="{L}" x2="{W-R}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="var(--outline-gray-1)"/><text x="{L-8}" y="{y(v)+4:.1f}" text-anchor="end" font-size="11" fill="var(--ink-gray-5)">{v}</text>' for v in (0, 2, 4, 6, 8, 10))
-    ticks = ''.join(f'<text x="{x(i):.1f}" y="{H-4}" text-anchor="{'end' if i==60 else ('start' if i==0 else 'middle')}" font-size="11" fill="var(--ink-gray-5)">{lab}</text>' for i, lab in ((0,'07:46'),(14,'08:00'),(28,'08:14'),(44,'08:30'),(60,'08:46')))
-    lim = (f'<line x1="{L}" x2="{W-R}" y1="{y(8):.1f}" y2="{y(8):.1f}" stroke="var(--ink-red-7)" stroke-dasharray="4 4"/><text x="{W-R}" y="{y(8)-5:.1f}" text-anchor="end" font-size="11" fill="var(--ink-red-7)">Trip 8</text>'
-           f'<line x1="{L}" x2="{W-R}" y1="{y(5):.1f}" y2="{y(5):.1f}" stroke="var(--ink-amber-7)" stroke-dasharray="4 4"/><text x="{W-R}" y="{y(5)-5:.1f}" text-anchor="end" font-size="11" fill="var(--ink-amber-7)">Alert 5</text>'
-           f'<line x1="{L}" x2="{W-R}" y1="{y(3):.1f}" y2="{y(3):.1f}" stroke="var(--ink-gray-5)" stroke-dasharray="2 4"/><text x="{W-R}" y="{y(3)-5:.1f}" text-anchor="end" font-size="11" fill="var(--ink-gray-5)">Reset under 3</text>')
+    grid = ''.join(f'<line x1="{L}" x2="{W-R}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="var(--outline-gray-1)"/><text x="{L-8}" y="{y(v)+4:.1f}" text-anchor="end" font-size="12" fill="var(--ink-gray-6)">{v}</text>' for v in (0, 2, 4, 6, 8, 10))
+    ticks = ''.join(f'<text x="{x(i):.1f}" y="{H-4}" text-anchor="{'end' if i==60 else ('start' if i==0 else 'middle')}" font-size="12" fill="var(--ink-gray-6)">{lab}</text>' for i, lab in ((0,'07:46'),(14,'08:00'),(28,'08:14'),(44,'08:30'),(60,'08:46')))
+    lim = (f'<line x1="{L}" x2="{W-R}" y1="{y(8):.1f}" y2="{y(8):.1f}" stroke="var(--ink-red-7)" stroke-dasharray="4 4"/><text x="{W-R}" y="{y(8)-5:.1f}" text-anchor="end" font-size="12" fill="var(--ink-red-7)">Trip 8</text>'
+           f'<line x1="{L}" x2="{W-R}" y1="{y(5):.1f}" y2="{y(5):.1f}" stroke="var(--ink-amber-7)" stroke-dasharray="4 4"/><text x="{W-R}" y="{y(5)-5:.1f}" text-anchor="end" font-size="12" fill="var(--ink-amber-8)">Alert 5</text>'
+           f'<line x1="{L}" x2="{W-R}" y1="{y(3):.1f}" y2="{y(3):.1f}" stroke="var(--ink-gray-5)" stroke-dasharray="2 4"/><text x="{W-R}" y="{y(3)-5:.1f}" text-anchor="end" font-size="12" fill="var(--ink-gray-6)">Reset under 3</text>')
     tx = x(28)
     mark = (f'<rect x="{tx:.1f}" y="{T}" width="{W-R-tx:.1f}" height="{ph_}" fill="var(--surface-red-2)" opacity=".55"/>'
             f'<line x1="{tx:.1f}" x2="{tx:.1f}" y1="{T}" y2="{T+ph_}" stroke="var(--ink-red-7)"/>'
             f'<circle cx="{tx:.1f}" cy="{y(9.4):.1f}" r="3.5" fill="var(--surface-base)" stroke="var(--ink-red-7)" stroke-width="1.5"/>'
-            f'<text x="{tx:.1f}" y="12" text-anchor="middle" font-size="11" font-weight="500" fill="var(--ink-red-7)">Trip 08:14 · 9.4</text>')
+            f'<text x="{tx:.1f}" y="12" text-anchor="middle" font-size="12" font-weight="500" fill="var(--ink-red-7)">Trip 08:14 · 9.4</text>')
     return f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="AT-401 lead from 07:46 to 08:46. Rose past the trip limit of 8 at 08:13, peaked at 9.4 at 08:14, now 1.6." style="display:block">{mark}{grid}{lim}<polyline points="{pts}" fill="none" stroke="var(--ink-gray-8)" stroke-width="1.75" stroke-linejoin="round"/>{ticks}</svg>'
 
 def step(n, state, title, meta, body=''):
@@ -27,9 +27,9 @@ def step(n, state, title, meta, body=''):
     elif state == 'now':
         mk = f'<span style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink-gray-9);color:var(--ink-gray-9);display:grid;place-items:center;font-size:12px;font-weight:600">{n}</span>'
     elif state == 'wait':
-        mk = f'<span style="width:24px;height:24px;border-radius:50%;border:1px dashed var(--outline-gray-3);color:var(--ink-gray-5);display:grid;place-items:center;font-size:12px">{n}</span>'
+        mk = f'<span style="width:24px;height:24px;border-radius:50%;border:1px dashed var(--outline-gray-3);color:var(--ink-gray-6);display:grid;place-items:center;font-size:12px">{n}</span>'
     else:
-        mk = f'<span style="width:24px;height:24px;border-radius:50%;background:var(--surface-gray-2);color:var(--ink-gray-5);display:grid;place-items:center;font-size:12px">{n}</span>'
+        mk = f'<span style="width:24px;height:24px;border-radius:50%;background:var(--surface-gray-2);color:var(--ink-gray-6);display:grid;place-items:center;font-size:12px">{n}</span>'
     last = n == 7
     line = '' if last else '<span style="position:absolute;left:11.5px;top:30px;bottom:-6px;width:1px;background:var(--outline-gray-2)"></span>'
     tcol = 'var(--ink-gray-5)' if state in ('todo','wait') else 'var(--ink-gray-9)'
@@ -38,7 +38,7 @@ def step(n, state, title, meta, body=''):
     return f'''<li style="position:relative;display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;{pad}">{line}{mk}
 <div style="min-width:0;padding-top:2px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font-size:14px;font-weight:600;color:{tcol}">{title}</span><span class="qs tab" style="white-space:nowrap">{meta}</span></div>{b}</div></li>'''
 
-check_rows = ''.join(f'<div style="display:flex;align-items:center;gap:8px;height:28px;font-size:13px;color:var(--ink-gray-7)"><span style="color:var(--ink-green-7);display:inline-flex">{ic("check","i s35")}</span><span style="flex:1">{a}</span><span class="tab" style="color:var(--ink-gray-5)">{b}</span></div>' for a, b in (
+check_rows = ''.join(f'<div style="display:flex;align-items:center;gap:8px;height:28px;font-size:13px;color:var(--ink-gray-7)"><span style="color:var(--ink-green-7);display:inline-flex">{ic("check","i s35")}</span><span style="flex:1">{a}</span><span class="tab" style="color:var(--ink-gray-6)">{b}</span></div>' for a, b in (
   ('Filler run permissive off (PLC)', 'IL-01.PERM = 0'),
   ('XV-301 routed to T5 quarantine', 'ZS-301 = T5'),
   ('XV-402 open to T5', 'ZS-402 = open'),
@@ -46,8 +46,8 @@ check_rows = ''.join(f'<div style="display:flex;align-items:center;gap:8px;heigh
 s1 = f'<div class="inset" style="padding:4px 12px">{check_rows}</div><p class="qs" style="margin:8px 0 0">Checked from live tags. Nothing to do here.</p>'
 
 s2 = f'''<div class="inset" style="padding:4px 12px">
-<div style="display:flex;align-items:center;gap:8px;height:28px;font-size:13px;color:var(--ink-gray-7)"><span style="color:var(--ink-green-7);display:inline-flex">{ic("check","i s35")}</span><span style="flex:1">T4 drained to T5</span><span class="tab" style="color:var(--ink-gray-5)">LT-401 0.02 m³ · 08:31</span></div>
-<div style="display:flex;align-items:center;gap:8px;height:28px;font-size:13px;color:var(--ink-gray-7)"><span style="color:var(--ink-green-7);display:inline-flex">{ic("check","i s35")}</span><span style="flex:1">T4 rinsed with permeate</span><span class="tab" style="color:var(--ink-gray-5)">Musa A. · 08:38</span></div>
+<div style="display:flex;align-items:center;gap:8px;height:28px;font-size:13px;color:var(--ink-gray-7)"><span style="color:var(--ink-green-7);display:inline-flex">{ic("check","i s35")}</span><span style="flex:1">T4 drained to T5</span><span class="tab" style="color:var(--ink-gray-6)">LT-401 0.02 m³ · 08:31</span></div>
+<div style="display:flex;align-items:center;gap:8px;height:28px;font-size:13px;color:var(--ink-gray-7)"><span style="color:var(--ink-green-7);display:inline-flex">{ic("check","i s35")}</span><span style="flex:1">T4 rinsed with permeate</span><span class="tab" style="color:var(--ink-gray-6)">Musa A. · 08:38</span></div>
 </div>'''
 
 sample1 = f'''<div style="display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--outline-gray-1);border-radius:8px">
@@ -64,7 +64,7 @@ sample2 = f'''<div style="display:flex;flex-direction:column;gap:12px;padding:12
 </div>
 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end">
 {field('Method', sel('Portable ASV meter'))}
-<div class="fl" style="grid-column:span 2"><span class="lab">Certificate or photo</span><span class="in" style="border:1px dashed var(--outline-gray-3);background:var(--surface-base)">{ic('paperclip')}<span class="grow" style="color:var(--ink-gray-5)">Drop a file or <button type="button" style="border:0;background:none;padding:0;font:inherit;color:var(--ink-blue-7);cursor:pointer">browse</button></span></span></div>
+<div class="fl" style="grid-column:span 2"><span class="lab">Certificate or photo</span><span class="in" style="border:1px dashed var(--outline-gray-3);background:var(--surface-base)">{ic('paperclip')}<span class="grow" style="color:var(--ink-gray-6)">Drop a file or <button type="button" style="border:0;background:none;padding:0;font:inherit;color:var(--ink-blue-7);cursor:pointer">browse</button></span></span></div>
 </div>
 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span class="qs" style="display:inline-flex;align-items:center;gap:6px">{ic('info','i s35')}Logged as Quality Inspection QI-0931, linked to this trip.</span>{btn('Save result','check')}</div>
 </div>'''

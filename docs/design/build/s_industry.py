@@ -8,7 +8,7 @@ S_ = 1.25  # symbol scale on the mimic
 
 def put(svg, x, y, label, value='', s=S_, warn=None):
     w = 48 * s
-    lab = f'<text x="{x+w/2:.0f}" y="{y+w+14:.0f}" text-anchor="middle" font-size="11" font-weight="500" fill="var(--ink-gray-8)">{label}</text>'
+    lab = f'<text x="{x+w/2:.0f}" y="{y+w+14:.0f}" text-anchor="middle" font-size="12" font-weight="500" fill="var(--ink-gray-8)">{label}</text>'
     if value:
         col = 'var(--ink-amber-7)' if warn == 'amber' else ('var(--ink-red-7)' if warn == 'red' else 'var(--ink-gray-5)')
         lab += f'<text x="{x+w/2:.0f}" y="{y+w+27:.0f}" text-anchor="middle" font-size="10" fill="{col}">{value}</text>'
@@ -26,13 +26,13 @@ def pipe(d, run=True):
 def plant_screen(name, ini, href, area, status, pins, mimic_svg, legend_note, alarms, runway, shift, layout_href='LayoutEditor.dc.html', more_counts=None, live='<span class="dot g"></span>Live · 2 s', foot=None):
     st_word, st_bd, st_bg, st_border, st_msg = status
     pin_html = ''.join(
-        f'<div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:4px;{"border-color:var(--outline-amber-3)" if w else ""}"><span class="qs" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{n}</span><span class="tab" style="font-size:20px;font-weight:600;color:{"var(--ink-amber-7)" if w else "var(--ink-gray-9)"}">{v} <small style="font-size:13px;font-weight:400;color:var(--ink-gray-5)">{u}</small></span><span class="qs" style="font-size:12px">{m}</span></div>'
+        f'<div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:4px;{"border-color:var(--outline-amber-3)" if w else ""}"><span class="qs" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{n}</span><span class="tab" style="font-size:20px;font-weight:600;color:{"var(--ink-amber-8)" if w else "var(--ink-gray-9)"}">{v} <small style="font-size:13px;font-weight:400;color:var(--ink-gray-6)">{u}</small></span><span class="qs" style="font-size:12px">{m}</span></div>'
         for n, v, u, m, w in pins)
     al_html = ''.join(
-        f'<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--outline-gray-1)"><svg width="18" height="18" viewBox="0 0 18 18" style="flex:0 0 18px;margin-top:1px" aria-label="Priority {p}"><polygon points="9,0 18,9 9,18 0,9" fill="{c}"/><text x="9" y="13" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">{p}</text></svg><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px"><span style="color:var(--ink-gray-8)">{t}</span><span class="qs">{m}</span></div>{btn("Acknowledge", kind="xs")}</div>'
+        f'<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--outline-gray-1)"><svg width="18" height="18" viewBox="0 0 18 18" style="flex:0 0 18px;margin-top:1px" aria-label="Priority {p}"><polygon points="9,0 18,9 9,18 0,9" fill="{c}"/><text x="9" y="13" text-anchor="middle" font-size="10" font-weight="600" fill="{'#fff' if str(p) == '1' else 'oklch(0.21 0 0)'}">{p}</text></svg><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px"><span style="color:var(--ink-gray-8)">{t}</span><span class="qs">{m}</span></div>{btn("Acknowledge", kind="xs")}</div>'
         for p, c, t, m in alarms)
     rw_html = ''.join(
-        f'<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--ink-gray-7)">{n}</span><span class="tab" style="font-weight:500;color:{"var(--ink-amber-7)" if w else "var(--ink-gray-8)"}">{v}</span></div><span class="bar"><i class="{"a" if w else ""}" style="width:{p}"></i></span></div>'
+        f'<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--ink-gray-7)">{n}</span><span class="tab" style="font-weight:500;color:{"var(--ink-amber-8)" if w else "var(--ink-gray-8)"}">{v}</span></div><span class="bar"><i class="{"a" if w else ""}" style="width:{p}"></i></span></div>'
         for n, v, p, w in runway)
     head = header(crumb(('Plants', 'Plants.dc.html'), (name, href)) .replace('</div>', f'<span class="sep" aria-hidden="true">/</span><button type="button" class="btn ghost" style="font:600 18px Inter,sans-serif;color:var(--ink-gray-9);padding:0 6px">{area}{ic("chev-d")}</button></div>', 1),
                   f'<span class="bd gray">{live}</span><a href="{layout_href}" class="btn">{ic("pen")}Edit layout</a>')
@@ -79,10 +79,10 @@ rice += ''.join([
   put(I.grader(), 340, y2, 'Grader'),
   put(I.color_sorter(), 240, y2, 'Color sorter', 'reject 1.1 %'),
   put(I.bagger(), 140, y2, 'Bagger B-1', '50 kg · 7/min'),
-  f'<text x="40" y="{mid2+4}" text-anchor="middle" font-size="11" fill="var(--ink-gray-6)">Bags →</text>',
-  f'<text x="842" y="{y2+4}" text-anchor="end" font-size="10" fill="var(--ink-gray-5)">husk to boiler</text>',
-  f'<text x="562" y="354" text-anchor="middle" font-size="10" fill="var(--ink-gray-5)">bran to bran bin</text>',
-  f'<text x="760" y="384" text-anchor="middle" font-size="10" fill="var(--ink-gray-5)">unhusked paddy back to husker</text>',
+  f'<text x="40" y="{mid2+4}" text-anchor="middle" font-size="12" fill="var(--ink-gray-6)">Bags →</text>',
+  f'<text x="842" y="{y2+4}" text-anchor="end" font-size="10" fill="var(--ink-gray-6)">husk to boiler</text>',
+  f'<text x="562" y="354" text-anchor="middle" font-size="10" fill="var(--ink-gray-6)">bran to bran bin</text>',
+  f'<text x="760" y="384" text-anchor="middle" font-size="10" fill="var(--ink-gray-6)">unhusked paddy back to husker</text>',
 ])
 rice_svg = f'<svg viewBox="0 0 860 400" width="100%" role="img" aria-label="Rice mill line: intake, cleaning, drying, silos, destoner, husker, separator, two whiteners, grader, color sorter, bagger. All running; whitener W-2 load high." style="display:block">{rice}</svg>'
 
@@ -124,7 +124,7 @@ oil += ''.join([
   put(I.column(), 510, y2, 'Deodorizer', '240 °C · 3 mbar'),
   put(S.tank_v(0.62), 600, y2, 'Refined oil', '62 %'),
   put(I.bottle_filler(), 700, y2, 'Bottling', '1 L · 42/min'),
-  f'<text x="200" y="144" text-anchor="middle" font-size="10" fill="var(--ink-gray-5)">crude oil to tank</text>',
+  f'<text x="200" y="144" text-anchor="middle" font-size="10" fill="var(--ink-gray-6)">crude oil to tank</text>',
 ])
 oil_svg = f'<svg viewBox="0 0 860 400" width="100%" role="img" aria-label="Edible oil line: seed silo, elevator, cleaner, cooker, three expellers, crude oil tank, filter press, neutralizer, bleacher, heater, deodorizer, refined tank, bottling. Expeller EX-3 tripped on overload." style="display:block">{oil}</svg>'
 
@@ -149,7 +149,7 @@ def house(x, tag, birds, temp, env, lay, st):
     edge = 'var(--ink-amber-7)' if st == 'hot' else 'var(--ink-gray-6)'
     tcol = 'var(--ink-amber-7)' if st == 'hot' else ('var(--ink-gray-5)' if st == 'off' else 'var(--ink-gray-9)')
     o = f'<rect x="{x}" y="{HY}" width="{HW}" height="{HH}" rx="6" fill="var(--surface-base)" stroke="{edge}" stroke-width="{2 if st=="hot" else 1.5}"/>'
-    o += f'<text x="{x+10}" y="{HY+18}" font-size="12" font-weight="600" fill="var(--ink-gray-9)">{tag}</text><text x="{x+32}" y="{HY+18}" font-size="10" fill="var(--ink-gray-5)">{birds}</text>'
+    o += f'<text x="{x+10}" y="{HY+18}" font-size="12" font-weight="600" fill="var(--ink-gray-9)">{tag}</text><text x="{x+32}" y="{HY+18}" font-size="10" fill="var(--ink-gray-6)">{birds}</text>'
     o += f'<text x="{x+HW-10}" y="{HY+18}" text-anchor="end" font-size="12" font-weight="600" fill="{tcol}">{temp}</text>'
     o += f'<g transform="translate({x+4} {HY+30}) scale(0.9)">{I.cooling_pad(run and st=="hot")}</g>'
     o += f'<g transform="translate({x+48} {HY+22}) scale(1.9 0.8)">{I.feeder_line(run)}</g>'
@@ -157,7 +157,7 @@ def house(x, tag, birds, temp, env, lay, st):
     o += f'<g transform="translate({x+HW-26} {HY+28}) scale(0.48)">{I.exhaust_fan(run)}</g><g transform="translate({x+HW-26} {HY+54}) scale(0.48)">{I.exhaust_fan(run and st=="hot")}</g>'
     o += f'<text x="{x+10}" y="{HY+HH-22}" font-size="10" fill="var(--ink-gray-6)">{env}</text><text x="{x+10}" y="{HY+HH-8}" font-size="10" fill="var(--ink-gray-6)">{lay}</text>'
     fans = '6 of 6 fans · pad on' if st == 'hot' else ('fans off' if st == 'off' else '2 of 6 fans')
-    o += f'<text x="{x+HW-10}" y="{HY+HH-8}" text-anchor="end" font-size="10" fill="{"var(--ink-amber-7)" if st=="hot" else "var(--ink-gray-5)"}">{fans}</text>'
+    o += f'<text x="{x+HW-10}" y="{HY+HH-8}" text-anchor="end" font-size="10" fill="{"var(--ink-amber-8)" if st=="hot" else "var(--ink-gray-5)"}">{fans}</text>'
     if st == 'hot':
         o += f'<g transform="translate({x+HW-8} {HY-8})"><polygon points="7,0 14,7 7,14 0,7" fill="oklch(0.723 0.152 71.82)"/><text x="7" y="10.5" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">2</text></g>'
     return o
@@ -187,9 +187,9 @@ poul += ''.join([
   put(I.egg_grader(), 560, 282, 'Egg grader', '3,240 eggs/h', s=1.25),
   put(I.egg_packer(), 650, 282, 'Packer', 'trays of 30', s=1.25),
   put(I.cold_room(), 740, 282, 'Cold room', '12 °C', s=1.25),
-  f'<text x="800" y="113" text-anchor="start" font-size="10" fill="var(--ink-gray-5)">feed</text>',
-  f'<text x="800" y="127" text-anchor="start" font-size="10" fill="var(--ink-gray-5)">water</text>',
-  f'<text x="440" y="306" text-anchor="middle" font-size="10" fill="var(--ink-gray-5)">egg belts to the cross conveyor</text>',
+  f'<text x="800" y="113" text-anchor="start" font-size="10" fill="var(--ink-gray-6)">feed</text>',
+  f'<text x="800" y="127" text-anchor="start" font-size="10" fill="var(--ink-gray-6)">water</text>',
+  f'<text x="440" y="306" text-anchor="middle" font-size="10" fill="var(--ink-gray-6)">egg belts to the cross conveyor</text>',
 ])
 poultry_svg = f'<svg viewBox="0 0 860 390" width="100%" role="img" aria-label="Layer farm: maize silo, elevator, hammer mill, mixer and feed bin feed four layer houses by auger; water tank, medicator and pump feed the drinker lines; egg belts run to the grader, packer and cold room. House H3 is hot at 31.8 °C; H4 is empty for cleaning." style="display:block">{poul}</svg>'
 
@@ -225,8 +225,8 @@ pb += ''.join([
   put(I.conveyor(), 600, 250, 'Conveyor'),
   put(LBL, 500, 250, 'Labeller', '99.6 % good'),
   put(I.bagger(), 400, 250, 'Shrink wrapper', 'packs of 12'),
-  f'<text x="330" y="284" text-anchor="end" font-size="11" fill="var(--ink-gray-6)">Packs of 12 → store</text>',
-  f'<text x="562" y="154" text-anchor="start" font-size="10" fill="var(--ink-gray-5)">concentrate to drain · recovery 58 %</text>',
+  f'<text x="330" y="284" text-anchor="end" font-size="12" fill="var(--ink-gray-6)">Packs of 12 → store</text>',
+  f'<text x="562" y="154" text-anchor="start" font-size="10" fill="var(--ink-gray-6)">concentrate to drain · recovery 58 %</text>',
 ])
 pb_svg = f'<svg viewBox="0 0 860 400" width="100%" role="img" aria-label="Bottled water line: raw tank, feed pump, media filter, cartridge filter, high-pressure pump, RO, permeate tank, UV, transfer pump, rinse-fill-cap monoblock, conveyor, labeller and shrink wrapper. RO salt rejection is low." style="display:block">{pb}</svg>'
 
