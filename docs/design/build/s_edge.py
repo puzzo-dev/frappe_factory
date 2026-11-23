@@ -58,6 +58,10 @@ pair = f'''<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0
 {card('Pairing', kv([("Site", "frappe.koyo.ng", bd("Paired","green","g")), ("Plant", "Koyo 1 · K1", ""), ("Broker", "mqtts://mqtt.koyo.ng:8883", ""), ("Client ID", '<span class="tab">opsedge-koyo-1</span>', ""), ("Paired", "3 Nov 2026 by Tunde B.", ""), ("Certificate", "Renews by itself · expires 3 Feb 2027", "")]) + f'<div style="display:flex;gap:8px;padding-top:4px">{btn("Pair again")}{btn("Unpair", kind="ghost")}</div><span class="qs" style="line-height:1.5">To pair, get a code from Frappe Factory → Plant settings → Connector and enter it here, or run <span class="tab">opsedge pair &lt;code&gt;</span>. The broker, client ID and credentials come with the code.</span>')}
 {card('Network', kv([("Plant LAN", "eth0 · 192.168.10.20 · static", bd("Up","green")), ("PLC network", "eth1 · 10.0.1.20 · static", bd("Up","green")), ("Internet", "eth0 via 192.168.10.1 · 38 ms to broker", bd("Up","green")), ("Backup link", "GSM modem · MTN · used if the LAN is down", bd("Standby","gray")), ("Proxy", "None", ""), ("Name", "opsedge-k1.local", "")]) + f'<div style="display:flex;gap:8px;padding-top:4px">{btn("Edit network","pen")}</div>')}
 </div>
+{card('Uplink sessions · last 7 days', tbl('grid-template-columns:160px 160px 120px minmax(0,1fr)', ['Connected', 'Until', 'Length', 'Why it ended'], [
+  ('22 Nov · 05:16', 'now', '3 h 30 min', '—'), ('22 Nov · 05:12', '22 Nov · 05:16', '4 min', 'Broker unreachable · ISP outage · 288 messages buffered, all sent'),
+  ('19 Nov · 02:00', '22 Nov · 05:12', '3 days 3 h', 'Certificate renewed, reconnected'), ('17 Nov · 14:31', '19 Nov · 02:00', '1 day 11 h', 'Box rebooted for update 0.4.2'),
+  ('16 Nov · 09:02', '17 Nov · 14:31', '1 day 5 h', 'Plant LAN switch replaced · 22 min on GSM backup')]))}
 {NOTE}'''
 epage('EdgePair.dc.html', 'Pairing and network', 'How this box reaches the plant and the cloud', pair)
 
@@ -101,6 +105,9 @@ scan = f'''<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr)
 </div>
 <div style="display:flex;gap:8px;align-items:center">{btn("Scan again","refresh")}<span class="qs">Finished 08:40 · 254 addresses · 5 devices · reads only, never writes</span></div>
 {tbl(SC, ['', 'Address', 'What answered', ''], found)}
+{card('10.0.1.12 · unit 1 · first registers', tbl('grid-template-columns:120px 120px 120px minmax(0,1fr)', ['Register', 'Raw', 'As float', 'Looks like'], [
+  ('40001', '17204', '—', 'Counter, rising'), ('40003–40004', '0x4148 0x0000', '12.5', 'Flow, m³/h'), ('40005–40006', '0x4120 0x0000', '10.0', 'Pressure, bar'),
+  ('40011', '1', '—', 'Run bit'), ('40021', '742', '74.2 with ÷10', 'Level, %')]) + '<span class="qs">Read once to help you name tags in Frappe Factory. Guesses only; nothing is saved here.</span>')}
 <div style="display:flex;justify-content:space-between;align-items:center"><span class="qs">2 selected. They appear in Frappe Factory → Devices and tags as suggestions, where tags are picked and named.</span><button type="button" class="btn solid">{ic("upload")}Send to Frappe Factory</button></div>'''
 epage('EdgeScan.dc.html', 'Scan', 'Find devices on the plant networks', scan)
 
@@ -108,7 +115,10 @@ epage('EdgeScan.dc.html', 'Scan', 'Find devices on the plant networks', scan)
 LC = 'grid-template-columns:96px 120px minmax(0,1fr)'
 logs = [('08:46:11', bd('Info','gray'), 'uplink · batch 4,211 sent · 1,204 values'), ('08:41:02', bd('Warning','amber'), 'agent · PLC-2 · F9.COUNT stale for 3 polls'),
         ('08:14:00', bd('Info','gray'), 'local alarms · AT-401 lead trip · stack light on'), ('07:58:30', bd('Info','gray'), 'config · v41 applied · 132 tags · 18 alarm definitions'),
-        ('07:40:08', bd('Info','gray'), 'agent · power source changed grid → generator · ATS-1 · 8 s gap'), ('05:12:44', bd('Error','red'), 'uplink · broker unreachable 4 min · 288 messages buffered, then sent')]
+        ('07:40:08', bd('Info','gray'), 'agent · power source changed grid → generator · ATS-1 · 8 s gap'), ('06:02:15', bd('Info','gray'), 'agent · power source changed generator → grid · ATS-1 · 6 s gap'),
+        ('05:32:10', bd('Info','gray'), 'agent · F9 put in maintenance · MNT-0088 · polling slowed to 10 s'), ('05:16:02', bd('Info','gray'), 'uplink · reconnected · 288 buffered messages sent in order'),
+        ('05:12:44', bd('Error','red'), 'uplink · broker unreachable 4 min · messages buffered'), ('03:00:00', bd('Info','gray'), 'timescaledb · compression job · 7-day-old chunks · 4.1 GB → 0.4 GB'),
+        ('02:14:51', bd('Warning','amber'), 'agent · DSE-7320 · 3 timeouts in a row, then OK'), ('00:00:05', bd('Info','gray'), 'clock · chrony in sync · offset 3 ms')]
 logsb = f'''<div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:12px;align-items:start">
 {card('Recent events', '<div style="display:flex;gap:8px"><span class="chip"><span class="k">Service</span>All</span><span class="chip"><span class="k">Level</span>All</span></div>' + tbl(LC, ['Time', 'Level', 'Event'], logs), btn('Download logs','download','ghost'))}
 <div style="display:flex;flex-direction:column;gap:12px">
