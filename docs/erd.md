@@ -67,7 +67,7 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
-| Kiosk Profile | Regular | `kiosk_name`, `kiosk_type` (Select: OpsKiosk, Cloud), `view`, `machines` (Table MultiSelect of Plant Asset), `allowed_actions`, `device_token`, `frappe_login_days` (default 7), `idle_logout` (default 10 min), `disabled` | → Plant Area (site) |
+| Kiosk Profile | Regular | `kiosk_name`, `kiosk_type` (Select: At the plant, Cloud), `view`, `machines` (Table MultiSelect of Plant Asset), `allowed_actions`, `device_token`, `frappe_login_days` (default 7), `idle_logout` (default 10 min), `disabled` | → Plant Area (site) |
 | Kiosk PIN | Regular, one per user, only the user and System Manager can read | `user`, `pin_hash` (Argon2), `previous_hashes` (last 3), `set_on`, `failed_count`, `locked_until` | → User |
 | Kiosk Login | Regular, written by Frappe Factory | `user`, `kiosk_profile`, `logged_in_at`, `expires_on`, `token_hash`, `revoked` | → User, → Kiosk Profile |
 | Kiosk Profile User | Child of Kiosk Profile | `user`, `is_default` | → User |
@@ -107,3 +107,12 @@ TimescaleDB holds the readings. It has no foreign keys to MariaDB; the Frappe `T
 | `reading_1h` (continuous aggregate on `reading_1m`) | `(tag, bucket)` | same | forever |
 
 The agent's local buffer is a SQLite file with the same columns as `reading`, emptied in order when TimescaleDB is reachable.
+
+### Sync (deployment 2, and the OpsKiosk queue in deployment 1)
+
+| DocType | Site | Fields | Notes |
+| --- | --- | --- | --- |
+| Sync Outbox | Plant | `msg_id` (unique), `seq` (unique per plant), `ref_doctype`, `ref_name`, `payload`, `status` (Pending, Sent, Confirmed), `attempts`, `last_error` | Written in the same transaction as the record |
+| Sync Receipt | Cloud | `plant`, `msg_id` (unique), `seq`, `ref_doctype`, `ref_name`, `received_at` | Saved in the same transaction as the record; a repeat finds it and saves nothing |
+| Sync Rejection | Cloud | `plant`, `msg_id`, `seq`, `ref_doctype`, `payload`, `reason`, `status` (Open, Resent, Dismissed) | Confirmed to the plant so the queue moves on; fixed and resent by a Factory Manager |
+| Plant Sync State | Cloud | `plant`, `confirmed_up_to` (seq), `held` (seqs waiting for a gap), `last_daily_check`, `daily_check_result` | One per plant |

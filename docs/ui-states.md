@@ -149,3 +149,5 @@ The states each flow can be in, beyond the main screens. Each one is a board on 
 | `ListEmpty` | Empty: says the plants are reporting, so empty means calm, not broken. |
 | `ListNoResults` | No results for a search or filter, with a way out. |
 | `ListFailed` | A failed load says what failed and that alarms are still being raised. |
+| `SettingsPlantSite` | Connector with deployment 2 chosen: plant site address, sync, what it holds and never holds, who can use it. |
+| `SettingsSyncProblem` | Deployment 2: a record the cloud rejected is kept, shown with its reason, fixed and resent with the same number. |

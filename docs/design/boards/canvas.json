@@ -546,7 +546,7 @@
    "y": 9280,
    "w": 1440,
    "h": 900,
-   "title": "60 \u00b7 Plant settings \u00b7 Koyo 1 \u00b7 connector",
+   "title": "60 \u00b7 Plant settings \u00b7 connector \u00b7 deployment 1: edge box + cloud site",
    "expand": "fill",
    "is_interactive": true
   },
@@ -1314,6 +1314,24 @@
    "title": "78 \u00b7 Kiosk session \u00b7 First sign-in: Frappe login, then choose a PIN (Frappe login every 7 days, PIN every time)",
    "expand": "fill",
    "is_interactive": true
+  },
+  "SettingsPlantSite.dc.html": {
+   "x": 18240,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "60b \u00b7 Plant settings \u00b7 connector \u00b7 deployment 2: edge box + plant site + cloud site",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsSyncProblem.dc.html": {
+   "x": 19760,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "60c \u00b7 Plant settings \u00b7 deployment 2 \u00b7 a record the cloud rejected (kept, fixed, resent with the same number)",
+   "expand": "fill",
+   "is_interactive": true
   }
  },
  "order": [
@@ -1378,6 +1396,8 @@
   "Symbols.dc.html",
   "AlarmDefs.dc.html",
   "Settings.dc.html",
+  "SettingsPlantSite.dc.html",
+  "SettingsSyncProblem.dc.html",
   "SettingsCommands.dc.html",
   "LayoutUtilities.dc.html",
   "SettingsGeneral.dc.html",

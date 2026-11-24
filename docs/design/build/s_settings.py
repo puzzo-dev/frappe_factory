@@ -34,13 +34,51 @@ def section(title, rows):
 def option(title, desc, on):
     return f'<label style="display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;padding:12px;border-radius:10px;border:1px solid {"var(--ink-gray-9)" if on else "var(--outline-gray-2)"};cursor:pointer"><span class="rd{" on" if on else ""}" style="margin-top:2px"></span><span style="display:flex;flex-direction:column;gap:4px"><span style="font-weight:500;color:var(--ink-gray-8)">{title}</span><span style="font-size:13px;line-height:1.5;color:var(--ink-gray-6)">{desc}</span></span></label>'
 
-def connector_panel():
+def delivery(problem):
+    if problem:
+        alert = f'''<div class="alert" style="background:var(--surface-amber-2);border-color:var(--outline-amber-2)"><span style="color:var(--ink-amber-7);display:flex">{ic("info")}</span><div style="display:flex;flex-direction:column;gap:4px;font-size:14px;line-height:1.5;color:var(--ink-gray-8)"><b style="font-weight:600">1 record rejected by this site</b><span>Message 48,214, stop reason K1-DT-004417 from tablet T-02, was rejected: its work order WO-0409 was cancelled here at 09:12. It is kept, not dropped, and the messages after it went through. Fix it and resend it with the same number.</span><span style="display:flex;gap:8px;padding-top:4px">{btn("Open the record")}<button type="button" class="btn solid">Pick another work order and resend</button></span></div></div>'''
+        rows = [row('Sent and confirmed', 'Every message has a number. Everything up to this number has arrived here, with no gaps.', '<span class="tab" style="font-size:14px">up to 48,250 · no gaps</span>'),
+                row('Rejected', 'Records this site could not accept. Kept here to fix and resend, never dropped.', '<span class="tab" style="font-size:14px;color:var(--ink-amber-7)">1 open</span>'),
+                row('Repeats ignored', 'Sent again by the plant after a lost reply; already saved, so nothing was saved twice.', '<span class="tab" style="font-size:14px">3 today</span>'),
+                row('Daily check', 'Counts and fingerprints of today&#39;s records compared at 00:05.', bd('Matched','green','g'))]
+        return alert + section('Delivery to this site', rows)
+    rows = [row('Sent and confirmed', 'Every message has a number. Everything up to this number has arrived here, with no gaps.', '<span class="tab" style="font-size:14px">up to 48,213 · no gaps</span>'),
+            row('Repeats ignored', 'Sent again by the plant after a lost reply; already saved, so nothing was saved twice.', '<span class="tab" style="font-size:14px">3 today</span>'),
+            row('Rejected', 'Records this site could not accept. Kept here to fix and resend, never dropped.', '<span class="tab" style="font-size:14px">0</span>'),
+            row('Daily check', 'Counts and fingerprints of each day&#39;s records compared at 00:05. Last: 25 Nov.', bd('Matched','green','g'))]
+    return section('Delivery to this site', rows)
+
+def plant_site_sections(problem=False):
+    chip = lambda t, tone='gray': f'<span class="chip" style="height:22px;font-size:12px">{t}</span>'
+    on_site = ''.join(chip(t) for t in ['Koyo 1 only', 'Kiosk sessions', 'Stop reasons', 'Rejects', 'Samples', 'Runs', 'Alarms', 'Live screens'])
+    off_site = ''.join(chip(t) for t in ['Other plants', 'ERPNext and stock', 'Costs and prices', 'Company reports', 'Users outside Koyo 1', 'API keys'])
+    return f'''{section('Plant site', [
+  row('Address', 'Reachable on the plant network only. Not published to the internet.', '<span class="in out" style="width:280px"><span class="grow tab">https://koyo1.factory.local</span></span>'),
+  row('Sync with this site', ('Last confirmed 4 s ago · 0 records waiting up · 1 rejected' if problem else 'Last confirmed 4 s ago · 0 records waiting up · masters 1 min old'), (bd('1 rejected','amber') if problem else bd('In sync','green','g'))),
+  row('Pair the plant site', 'Run bench --site koyo1.factory.local pair-cloud with this code.', '<span style="display:flex;gap:8px;align-items:center"><span class="in out" style="width:140px"><span class="grow tab">K1-S4P-8LD</span></span><button type="button" class="btn">New code</button></span>'),
+])}
+{delivery(problem)}
+<section style="display:flex;flex-direction:column;gap:10px"><h3 style="margin:0;font-size:14px;font-weight:600;color:var(--ink-gray-8)">What the plant site holds</h3>
+<div style="display:grid;grid-template-columns:140px minmax(0,1fr);gap:10px;align-items:start;font-size:14px"><span class="qs" style="padding-top:3px">Kept at the plant</span><span style="display:flex;flex-wrap:wrap;gap:6px">{on_site}</span>
+<span class="qs" style="padding-top:3px">Never sent there</span><span style="display:flex;flex-wrap:wrap;gap:6px">{off_site}</span></div>
+<span class="qs" style="line-height:1.6">Floor records are created at the plant and sent here; masters (users, profiles, work orders, alarm definitions) are made here and copied there read-only. Each record has one owner site and a plant-prefixed name, so a record sent twice is saved once.</span></section>
+{section('Who can use it', [
+  row('Roles allowed on the plant site', 'Floor roles only. Factory Manager and System Manager work on this cloud site; the plant site has no Desk for anyone else.', '<span class="qs" style="color:var(--ink-gray-8)">Operator, Inspector, Technician, Supervisor</span>'),
+  row('Sign-in', 'Frappe login checked by this site every 7 days, PIN each time. No passwords are stored at the plant.', bd('Frappe login + PIN','gray')),
+  row('Keep confirmed records at the plant', 'Deleted from the plant site this long after this site confirms them.', f'<span class="in out" style="width:120px"><span class="grow">30 days</span>{ic("chev-d","i s35")}</span>'),
+  row('Disk encryption', 'The plant server disk is encrypted; backups are taken here, not at the plant.', bd('On','green','g')),
+])}'''
+
+def connector_panel(mode='cloud'):
+    cloud = mode == 'cloud'
     return f'''<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px"><div style="display:flex;flex-direction:column;gap:4px"><h2 style="margin:0;font-size:16px;font-weight:600;color:var(--ink-gray-8)">Connector</h2><p style="margin:0;font-size:14px;color:var(--ink-gray-6)">How Koyo 1's live data reaches Frappe Factory.</p></div>{btn("Test now","refresh")}</div>
 <div style="display:flex;flex-direction:column;gap:40px;padding-top:24px">
 <section style="display:flex;flex-direction:column;gap:8px">
-{option('Edge box · Frappe Factory in the cloud', 'The edge box reads the PLCs, sounds the siren and sends everything to this site through its uplink. OpsKiosk at the plant keeps the kiosks working on the LAN when the internet drops.', True)}
+<a href="Settings.dc.html" style="text-decoration:none;color:inherit">{option('Deployment 1 · Edge box + this cloud site', 'One Frappe Factory site, this one. The edge box reads the PLCs, sounds the siren and sends everything here through its uplink. OpsKiosk on the plant server keeps kiosks working on the LAN when the internet drops; it keeps only a cache and a queue, never a copy of the records.', cloud)}</a>
+<a href="SettingsPlantSite.dc.html" style="text-decoration:none;color:inherit">{option('Deployment 2 · Edge box + plant site + this cloud site', 'A small Frappe Factory site at the plant runs the kiosks and floor screens on the LAN and syncs with this site. It holds only this plant&#39;s floor records, and each record is owned by one site, so nothing is edited in two places.', not cloud)}</a>
 {option('ThingsBoard', 'Use an existing ThingsBoard server instead of an edge box. Frappe Factory pulls telemetry and alarms through the ThingsBoard API.', False)}
 </section>
+{'' if cloud else plant_site_sections(mode == 'site_problem')}
 {section('Uplink · edge box to this site', [
   row('Broker', 'The MQTT broker this site listens on. The edge box connects out to it, so the plant needs no open ports.', f'<span class="in out" style="width:280px"><span class="grow tab">mqtts://mqtt.koyo.ng:8883</span></span>'),
   row('Client ID', 'One per plant. Topics are factory/koyo-1/…', '<span class="in out" style="width:280px"><span class="grow tab">opsedge-koyo-1</span></span>'),
@@ -87,6 +125,8 @@ def build(name, active, panel):
     write(name, page('Plant settings', f'<div style="position:relative">{bg}{dlg}</div>', {"$preview": {"width": 1440, "height": 900}}))
 
 build('Settings.dc.html', 'Connector', connector_panel())
+build('SettingsPlantSite.dc.html', 'Connector', connector_panel('site'))
+build('SettingsSyncProblem.dc.html', 'Connector', connector_panel('site_problem'))
 build('SettingsCommands.dc.html', 'Commands', commands_panel())
 
 def ptitle(t, d, act=''):
