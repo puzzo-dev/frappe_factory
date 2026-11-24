@@ -140,7 +140,7 @@ build('CompanyTB.dc.html', 'ThingsBoard', tb())
 # ---------------- Kiosk PIN (the signed-in user's own dialog, from the app menu)
 pdots = lambda n, f: ''.join(f'<span style="width:12px;height:12px;border-radius:50%;{"background:var(--ink-gray-9)" if i < f else "border:2px solid var(--outline-gray-3)"}"></span>' for i in range(n))
 pin_panel = f'''<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px"><div style="display:flex;flex-direction:column;gap:4px"><h2 style="margin:0;font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kiosk PIN</h2>
-<p class="ps" style="font-size:14px;max-width:560px">Your PIN signs you in on OpsKiosk tablets you are assigned to, after you tap your name. It works only with your Frappe user: a PIN on its own signs no one in.</p></div>{close_btn("dlg")}</div>
+<p class="ps" style="font-size:14px;max-width:560px">Your PIN signs you in on the kiosks you are assigned to, after you tap your name, while your Frappe login on that kiosk is valid (you enter it every 7 days). A PIN on its own signs no one in.</p></div>{close_btn("dlg")}</div>
 <div style="display:flex;flex-direction:column;gap:24px;padding-top:20px">
 <div class="alert" style="background:var(--surface-green-2);border-color:var(--outline-green-3)"><span style="color:var(--ink-green-7);display:flex">{ic("check")}</span><span style="font-size:14px;color:var(--ink-gray-8)">PIN set on 3 Nov 2026. Last used at Quality lab T-06 on 22 Nov, 07:12.</span></div>
 <section style="display:flex;flex-direction:column;gap:14px"><h3 style="margin:0;font-size:14px;font-weight:600;color:var(--ink-gray-8)">Change your PIN</h3>

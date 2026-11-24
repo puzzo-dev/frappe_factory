@@ -132,7 +132,7 @@
    "y": 2320,
    "w": 1440,
    "h": 900,
-   "title": "14 \u00b7 Settings \u00b7 Kiosks and assigned users",
+   "title": "14 \u00b7 Settings \u00b7 Kiosks: OpsKiosk at the plant or cloud kiosk",
    "expand": "fill",
    "is_interactive": true
   },
@@ -330,7 +330,7 @@
    "y": 6960,
    "w": 1180,
    "h": 820,
-   "title": "36 \u00b7 OpsKiosk \u00b7 tap your name, then your PIN",
+   "title": "36 \u00b7 OpsKiosk \u00b7 tap your name, then your PIN (Frappe login on the kiosk still valid)",
    "expand": "fill",
    "is_interactive": true
   },
@@ -1306,12 +1306,12 @@
    "expand": "fill",
    "is_interactive": true
   },
-  "KioskNoPin.dc.html": {
+  "KioskFirstSignIn.dc.html": {
    "x": 0,
    "y": 12900,
    "w": 1440,
    "h": 900,
-   "title": "78 \u00b7 Kiosk session \u00b7 A user with no PIN yet is listed but cannot sign in.",
+   "title": "78 \u00b7 Kiosk session \u00b7 First sign-in: Frappe login, then choose a PIN (Frappe login every 7 days, PIN every time)",
    "expand": "fill",
    "is_interactive": true
   }
@@ -1395,7 +1395,7 @@
   "EdgeScan.dc.html",
   "EdgeLogs.dc.html",
   "KioskLocked.dc.html",
-  "KioskNoPin.dc.html",
+  "KioskFirstSignIn.dc.html",
   "KioskIdle.dc.html",
   "KioskOffline.dc.html",
   "KioskSaveRetry.dc.html",

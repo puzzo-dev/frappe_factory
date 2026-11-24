@@ -67,7 +67,9 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
-| Kiosk Profile | Regular | `kiosk_name`, `machines` (Table MultiSelect of Plant Asset), `allowed_actions`, `device_token`, `idle_minutes`, `disabled` | → Plant Area (site) |
+| Kiosk Profile | Regular | `kiosk_name`, `kiosk_type` (Select: OpsKiosk, Cloud), `view`, `machines` (Table MultiSelect of Plant Asset), `allowed_actions`, `device_token`, `frappe_login_days` (default 7), `idle_logout` (default 10 min), `disabled` | → Plant Area (site) |
+| Kiosk PIN | Regular, one per user, only the user and System Manager can read | `user`, `pin_hash` (Argon2), `previous_hashes` (last 3), `set_on`, `failed_count`, `locked_until` | → User |
+| Kiosk Login | Regular, written by Frappe Factory | `user`, `kiosk_profile`, `logged_in_at`, `expires_on`, `token_hash`, `revoked` | → User, → Kiosk Profile |
 | Kiosk Profile User | Child of Kiosk Profile | `user`, `is_default` | → User |
 | Kiosk Session | Submittable, like POS Opening and Closing Entry | `opened_by`, `opened_at`, `closed_by`, `closed_at`, `status` | → Kiosk Profile, → Shift Type, → Production Run (only with ERPNext) |
 | ERPNext Settings | Single | `enabled`, `mode` (Same site, Another site), `site_url`, `api_key`, `api_secret` (Password), `company`, `fg_warehouse`, one Check per link (work orders, stock, downtime, workstation status, quality, material requests, HRMS) | — |

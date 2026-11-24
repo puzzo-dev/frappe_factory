@@ -42,15 +42,15 @@ login = f'''{topbar()}
 <div style="padding:28px 32px;display:flex;flex-direction:column;gap:18px;overflow:auto"><div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-size:24px;font-weight:600;color:var(--ink-gray-9)">Who is working here?</h1><p class="ps" style="font-size:15px">Tap your Frappe user, then enter your PIN. Only the 5 users assigned to Filling hall T-02 are listed.</p></div>
 <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">{tiles}</div>
 <div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;border-radius:12px;background:var(--surface-gray-1);font-size:14px;line-height:1.5;color:var(--ink-gray-7)">
-<div style="display:flex;gap:10px"><span style="color:var(--ink-gray-6);display:flex;margin-top:2px">{ic("info","i s35")}</span><span>A PIN on its own signs no one in. It is checked against the Frappe user you tapped, so every stop reason, sample and approval is recorded against that user and this shift.</span></div>
-<div style="display:flex;gap:10px"><span style="color:var(--ink-amber-7);display:flex;margin-top:2px">{ic("lock","i s35")}</span><span>Yusuf B. has no PIN yet. He sets one himself in Frappe Factory under the app menu → Kiosk PIN, after entering his Frappe password.</span></div></div>
+<div style="display:flex;gap:10px"><span style="color:var(--ink-gray-6);display:flex;margin-top:2px">{ic("info","i s35")}</span><span>Signing in takes both: your Frappe login on this kiosk, renewed every 7 days, and your own PIN every time. A PIN on its own signs no one in, so every stop reason, sample and approval is recorded against you.</span></div>
+<div style="display:flex;gap:10px"><span style="color:var(--ink-amber-7);display:flex;margin-top:2px">{ic("lock","i s35")}</span><span>Yusuf B. has not signed in here yet. He enters his Frappe login once, then chooses his PIN on this screen.</span></div></div>
 <span class="qs" style="font-size:14px">Not listed? A Factory Manager adds your Frappe user to this kiosk in App settings → Kiosks.</span></div>
 <div style="border-left:1px solid var(--outline-gray-1);background:var(--surface-gray-1);padding:28px 32px;display:flex;flex-direction:column;align-items:center;gap:18px">
-<span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">KE</span><div style="text-align:center;display:flex;flex-direction:column;gap:2px"><div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kemi E.</div><div class="qs tab" style="font-size:14px">kemi.e@koyo1.ng · Machine Operator</div><div style="font-size:14px;color:var(--ink-gray-7);margin-top:6px">Enter your 6-digit PIN</div></div>
+<span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">KE</span><div style="text-align:center;display:flex;flex-direction:column;gap:2px"><div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kemi E.</div><div class="qs tab" style="font-size:14px">kemi.e@koyo1.ng · Machine Operator<br><span style="color:var(--ink-green-7)">Frappe login on this kiosk until 1 Dec</span></div><div style="font-size:14px;color:var(--ink-gray-7);margin-top:6px">Enter your 6-digit PIN</div></div>
 <div style="display:flex;gap:12px">{dots}</div>
 <div style="display:grid;grid-template-columns:repeat(3,72px);gap:12px">{keys}</div>
 <a href="KioskLine.dc.html" class="kb solid" style="width:240px">Sign in</a>
-<span class="qs" style="font-size:13px;text-align:center;line-height:1.5">5 wrong PINs lock this user on every kiosk for 15 min. Signs out after 10 min without a tap.</span></div>
+<span class="qs" style="font-size:13px;text-align:center;line-height:1.5">5 wrong PINs lock this user on every kiosk at the plant for 15 min. Signs out after 10 min without a tap.</span></div>
 </div>'''
 write('KioskLogin.dc.html', kpage('Kiosk sign in', login))
 

@@ -39,7 +39,6 @@ def connector_panel():
 <div style="display:flex;flex-direction:column;gap:40px;padding-top:24px">
 <section style="display:flex;flex-direction:column;gap:8px">
 {option('Edge box · Frappe Factory in the cloud', 'The edge box reads the PLCs, sounds the siren and sends everything to this site through its uplink. OpsKiosk at the plant keeps the kiosks working on the LAN when the internet drops.', True)}
-{option('Edge box with its own Frappe site', 'A full Frappe Factory site also runs on the edge box and syncs to this one, so office screens at the plant keep working when the internet drops. For plants with poor internet.', False)}
 {option('ThingsBoard', 'Use an existing ThingsBoard server instead of an edge box. Frappe Factory pulls telemetry and alarms through the ThingsBoard API.', False)}
 </section>
 {section('Uplink · edge box to this site', [

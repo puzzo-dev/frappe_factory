@@ -96,10 +96,14 @@ h = right_panel(L, f"""<span class="av" style="width:64px;height:64px;flex:0 0 6
 save('KioskLocked.dc.html', h, 'Kiosk · locked after wrong PINs', 'Kiosk session', 'Five wrong PINs lock that user on every kiosk at the plant for 15 min.')
 
 h = right_panel(L, f"""<span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">YB</span>
-<div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Yusuf B.</div>
-{notice('amber', 'lock', 'Yusuf B. has no PIN yet', 'He sets one in Frappe Factory under the app menu → Kiosk PIN, after entering his Frappe password. It reaches this kiosk within a minute. Until then he cannot sign in here.')}
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Yusuf B.</div><div class="qs" style="font-size:14px">First sign-in on this kiosk · step 1 of 2</div></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:300px;text-align:left">
+<label class="fl"><span class="lab">Frappe user</span><span class="in" style="height:48px;font-size:16px;color:var(--ink-gray-7)">yusuf.b@koyo1.ng</span></label>
+<label class="fl"><span class="lab">Frappe password</span><span class="in focus" style="height:48px;font-size:16px">••••••••</span></label></div>
+<span class="kb solid" style="width:300px">Next: choose your PIN</span>
+<span class="qs" style="font-size:13px;line-height:1.5;max-width:300px">Checked by Frappe Factory, so this step needs the internet. Your login then lasts 7 days on this kiosk; each sign-in after that is your name and PIN.</span>
 {kbtn('Pick another name', 'KioskLogin.dc.html')}""")
-save('KioskNoPin.dc.html', h, 'Kiosk · user has no PIN yet', 'Kiosk session', 'A user with no PIN is listed but cannot sign in until they set one in Frappe Factory.')
+save('KioskFirstSignIn.dc.html', h, 'Kiosk · first sign-in: Frappe login, then choose a PIN', 'Kiosk session', 'A user signs in with their Frappe login once every 7 days on the kiosk; their PIN is asked every time.')
 
 K = load('KioskLine.dc.html')
 h = overlay(K, f'''<div style="padding:28px 28px 8px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
