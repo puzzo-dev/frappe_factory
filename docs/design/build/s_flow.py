@@ -9,8 +9,8 @@ def node(key, x, y, tag, typ, sel=False, w=W, muted=False):
     st = 'stroke:var(--ink-blue-7);stroke-width:2' if sel else 'stroke:var(--ink-gray-6);stroke-width:1.25'
     fill = 'var(--surface-gray-1)' if muted else 'var(--surface-base)'
     return (f'<g><rect x="{x}" y="{y}" width="{w}" height="{H}" rx="6" style="fill:{fill};{st}"/>'
-            f'<text x="{x+w/2}" y="{y+15}" text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink-gray-9)">{tag}</text>'
-            f'<text x="{x+w/2}" y="{y+28}" text-anchor="middle" font-size="9" fill="var(--ink-gray-5)">{typ}</text></g>')
+            f'<text x="{x+w/2}" y="{y+15}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink-gray-9)">{tag}</text>'
+            f'<text x="{x+w/2}" y="{y+28}" text-anchor="middle" font-size="9" fill="var(--ink-gray-6)">{typ}</text></g>')
 def pt(k, side):
     x, y, w = N[k]
     return {'r': (x+w, y+H/2), 'l': (x, y+H/2), 't': (x+w/2, y), 'b': (x+w/2, y+H)}[side]
@@ -21,7 +21,7 @@ def edge(a, sa, b, sb, ret=False, label=''):
     elif sa in 'tb': d = f'M{x1} {y1} V{y2} H{x2}'
     else: d = f'M{x1} {y1} H{x2} V{y2}'
     dash = ' stroke-dasharray="5 4"' if ret else ''
-    lab = f'<text x="{(x1+x2)/2}" y="{min(y1,y2)-5}" text-anchor="middle" font-size="9" fill="var(--ink-gray-5)">{label}</text>' if label else ''
+    lab = f'<text x="{(x1+x2)/2}" y="{min(y1,y2)-5}" text-anchor="middle" font-size="9" fill="var(--ink-gray-6)">{label}</text>' if label else ''
     return f'<path d="{d}" fill="none" stroke="var(--ink-gray-6)" stroke-width="1.25"{dash} marker-end="url(#arr)"/>{lab}'
 
 X = [16 + i*104 for i in range(8)]
@@ -44,11 +44,11 @@ edges = ''.join([
   edge('xv402','b','fill','t'), edge('xv301','b','t5','t', label=''), edge('t5','r','p501','l'), edge('p501','r','ix','l'),
 ])
 ixr = pt('ix', 'r'); t1t = pt('t1', 't')
-ret = f'<path d="M{ixr[0]} {ixr[1]} H930 V12 H{t1t[0]} V{t1t[1]}" fill="none" stroke="var(--ink-gray-6)" stroke-width="1.25" stroke-dasharray="5 4" marker-end="url(#arr)"/><text x="925" y="190" text-anchor="end" font-size="9" fill="var(--ink-gray-5)">return to T1</text>'
-inst = f'<g><circle cx="422" cy="218" r="9" fill="var(--surface-base)" stroke="var(--ink-gray-6)"/><text x="422" y="221" text-anchor="middle" font-size="7" font-weight="600" fill="var(--ink-gray-7)">AT</text><text x="422" y="244" text-anchor="middle" font-size="9" fill="var(--ink-gray-5)">AT-401 on line</text></g>'
-labs = ''.join([f'<text x="856" y="52" text-anchor="middle" font-size="9" fill="var(--ink-gray-5)">concentrate</text>',
-                f'<text x="790" y="140" text-anchor="start" font-size="9" fill="var(--ink-gray-5)">permeate</text>',
-                f'<text x="378" y="284" text-anchor="start" font-size="9" fill="var(--ink-gray-5)">diverted on trip</text>'])
+ret = f'<path d="M{ixr[0]} {ixr[1]} H930 V12 H{t1t[0]} V{t1t[1]}" fill="none" stroke="var(--ink-gray-6)" stroke-width="1.25" stroke-dasharray="5 4" marker-end="url(#arr)"/><text x="925" y="190" text-anchor="end" font-size="9" fill="var(--ink-gray-6)">return to T1</text>'
+inst = f'<g><circle cx="422" cy="218" r="9" fill="var(--surface-base)" stroke="var(--ink-gray-6)"/><text x="422" y="221" text-anchor="middle" font-size="7" font-weight="600" fill="var(--ink-gray-7)">AT</text><text x="422" y="244" text-anchor="middle" font-size="9" fill="var(--ink-gray-6)">AT-401 on line</text></g>'
+labs = ''.join([f'<text x="856" y="52" text-anchor="middle" font-size="9" fill="var(--ink-gray-6)">concentrate</text>',
+                f'<text x="790" y="140" text-anchor="start" font-size="9" fill="var(--ink-gray-6)">permeate</text>',
+                f'<text x="378" y="284" text-anchor="start" font-size="9" fill="var(--ink-gray-6)">diverted on trip</text>'])
 svg = (f'<svg viewBox="0 0 950 350" width="100%" role="img" aria-label="Process flow of Koyo 1 drawn from each asset\'s Feeds into links: borehole to T1, filters, RO, T2, remineralization, UV, diverter, T4 verify, fill pump and ten fillers; diverter to T5 quarantine, recycle pump and ion exchange back to T1." style="display:block">'
        f'<defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" fill="var(--ink-gray-6)"/></marker></defs>{edges}{ret}{nodes}{inst}{labs}</svg>')
 
@@ -59,7 +59,7 @@ links = [('Borehole', 'T1', 'Raw water', ''), ('T1', 'P-101', 'Raw water', ''), 
 lr = ''.join(f'<div class="lr" style="{FC};cursor:default;{"background:var(--surface-gray-2)" if a=="P-401" else ""}"><span class="t1">{a}</span><span style="display:flex;gap:4px;flex-wrap:wrap">{"".join(f"<span class=chip style=height:22px>{x}</span>" for x in b.split(" · "))}</span><span class="qs">{m}</span><span>{bd(r, "violet" if r=="Return" else "gray") if r else ""}</span></div>' for a, b, m, r in links)
 
 head = header(crumb(('Plants', 'Plants.dc.html'), ('Koyo 1', 'Main.dc.html'), ('Process flow', None)),
-              f'{bd("Live · v4","green")}{btn("Import from P&ID","upload","ghost")}<a href="LayoutEditor.dc.html" class="btn solid">{ic("layout")}Generate layout</a>')
+              f'{bd("Live · v4","green")}{btn("Import from P&ID","upload","ghost")}<a href="LayoutEditor.dc.html" class="btn">{ic("layout")}Generate layout</a>')
 checks = f'''<div class="alert" style="background:var(--surface-green-2);border-color:var(--outline-green-3);align-items:center"><span style="color:var(--ink-green-7);display:flex">{ic("check")}</span>
 <span style="font-size:14px;color:var(--ink-gray-8)">25 assets, 26 links. Every path ends at a filler, the drain or a return. 1 return loop (IX-501 → T1), marked as a return. Utilities such as G-1 are left out of the flow. Live version v4, approved by Tunde B. on 20 Nov.</span></div>'''
 prop = f'''<div class="card" style="display:flex;align-items:center;gap:14px;border-color:var(--outline-amber-3);background:var(--surface-amber-1, var(--surface-base))"><span class="av" style="width:32px;height:32px;flex:0 0 32px">KE</span>

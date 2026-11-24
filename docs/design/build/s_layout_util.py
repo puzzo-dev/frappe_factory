@@ -23,7 +23,7 @@ syms = ''.join([
 SEL = '''<g aria-label="Selected ATS-1">
 <rect x="312" y="136" width="75" height="75" fill="none" stroke="var(--ink-blue-7)" stroke-width="1.25"/>
 <g fill="var(--surface-base)" stroke="var(--ink-blue-7)" stroke-width="1.25"><rect x="308.5" y="132.5" width="7" height="7"/><rect x="383.5" y="132.5" width="7" height="7"/><rect x="308.5" y="207.5" width="7" height="7"/><rect x="383.5" y="207.5" width="7" height="7"/></g>
-<rect x="402" y="132" width="84" height="20" rx="4" fill="var(--ink-blue-7)"/><text x="444" y="146" text-anchor="middle" font-size="11" font-weight="500" fill="#fff">ATS-1 · switch</text></g>'''
+<rect x="402" y="132" width="84" height="20" rx="4" fill="var(--ink-blue-7)"/><text x="444" y="146" text-anchor="middle" font-size="12" font-weight="500" fill="#fff">ATS-1 · switch</text></g>'''
 canvas_svg = f'<svg viewBox="0 0 800 440" width="100%" role="img" aria-label="Utilities layout: grid, ATS, generator and diesel tank" style="display:block">{pipes}{syms}{SEL}</svg>'
 cats = [
   ('Power', [('Grid incomer', S.grid_in()), ('Energy meter', S.meter()), ('Breaker', S.breaker()), ('Changeover · ATS', S.ats()), ('Generator', S.generator()), ('Distribution board', S.db())]),

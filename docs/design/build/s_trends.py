@@ -34,15 +34,15 @@ def panel(name, unit, vals, lo, hi, col, lines, last):
     y = lambda v: T + PH - (v-lo)/(hi-lo)*PH
     x = lambda i: L + i*(W-L-R)/(N-1)
     pts = ' '.join(f'{x(i):.1f},{y(v):.1f}' for i, v in enumerate(vals) if i % 2 == 0 or i > 400)
-    g = ''.join(f'<line x1="{L}" x2="{W-R}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="var(--outline-gray-1)"/><text x="{L-8}" y="{y(v)+4:.1f}" text-anchor="end" font-size="11" fill="var(--ink-gray-5)">{v:g}</text>' for v in (lo, (lo+hi)/2, hi))
-    lim = ''.join(f'<line x1="{L}" x2="{W-R}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="{c}" stroke-dasharray="4 4"/><text x="{L+6}" y="{y(v)-4:.1f}" font-size="11" fill="{c}">{t}</text>' for v, t, c in lines)
+    g = ''.join(f'<line x1="{L}" x2="{W-R}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="var(--outline-gray-1)"/><text x="{L-8}" y="{y(v)+4:.1f}" text-anchor="end" font-size="12" fill="var(--ink-gray-6)">{v:g}</text>' for v in (lo, (lo+hi)/2, hi))
+    lim = ''.join(f'<line x1="{L}" x2="{W-R}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="{c}" stroke-dasharray="4 4"/><text x="{L+6}" y="{y(v)-4:.1f}" font-size="12" fill="{c}">{t}</text>' for v, t, c in lines)
     band = f'<rect x="{x(TRIP):.1f}" y="{T}" width="{W-R-x(TRIP):.1f}" height="{PH}" fill="var(--surface-red-2)" opacity=".6"/><line x1="{x(TRIP):.1f}" x2="{x(TRIP):.1f}" y1="{T}" y2="{T+PH}" stroke="var(--ink-red-7)" stroke-width="1"/>'
     cur = f'<line x1="{x(CUR):.1f}" x2="{x(CUR):.1f}" y1="{T}" y2="{T+PH}" stroke="var(--ink-gray-6)" stroke-width="1"/><circle cx="{x(CUR):.1f}" cy="{y(vals[CUR]):.1f}" r="3.5" fill="var(--surface-base)" stroke="{col}" stroke-width="2"/>'
     ticks = ''
     if last:
         for i, lab in ((14, '01:00'), (134, '03:00'), (254, '05:00'), (374, '07:00')):
-            ticks += f'<text x="{x(i):.1f}" y="{H-8}" text-anchor="middle" font-size="11" fill="var(--ink-gray-5)">{lab}</text>'
-        ticks += f'<text x="{x(TRIP):.1f}" y="{H-8}" text-anchor="middle" font-size="11" font-weight="500" fill="var(--ink-red-7)">Trip 08:14</text>'
+            ticks += f'<text x="{x(i):.1f}" y="{H-8}" text-anchor="middle" font-size="12" fill="var(--ink-gray-6)">{lab}</text>'
+        ticks += f'<text x="{x(TRIP):.1f}" y="{H-8}" text-anchor="middle" font-size="12" font-weight="500" fill="var(--ink-red-7)">Trip 08:14</text>'
     return f'''<div style="display:flex;flex-direction:column;gap:4px"><div style="display:flex;align-items:center;gap:8px;padding-left:{L}px"><i style="width:10px;height:2px;border-radius:1px;background:{col}"></i><span style="font-size:13px;font-weight:500;color:var(--ink-gray-8)">{name}</span><span class="qs">{unit}</span></div>
 <svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{name} from 00:46 to 08:46" style="display:block">{band}{g}{lim}<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="1.5" stroke-linejoin="round"/>{cur}{ticks}</svg></div>'''
 
@@ -68,7 +68,7 @@ groups = [
 ]
 gl = ''
 for g, tags in groups:
-    gl += f'<div style="display:flex;align-items:center;justify-content:space-between;height:28px;padding:0 8px;margin-top:8px;font-size:13px;color:var(--ink-gray-5)"><span>{g}</span>{ic("chev-d","i s35")}</div>'
+    gl += f'<div style="display:flex;align-items:center;justify-content:space-between;height:28px;padding:0 8px;margin-top:8px;font-size:13px;color:var(--ink-gray-6)"><span>{g}</span>{ic("chev-d","i s35")}</div>'
     for n, u, on, c in tags:
         sw = f'<i style="width:8px;height:8px;border-radius:2px;background:{c}"></i>' if on else ''
         gl += f'<label class="si" style="height:28px;cursor:pointer;font-size:13px"><span class="cb{" on" if on else ""}"></span><span class="lbl" style="color:var(--ink-gray-{"8" if on else "7"})">{n}</span>{sw}</label>'

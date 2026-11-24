@@ -26,7 +26,13 @@ for ini, name, meta, st, note, foot, href in plants:
 <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--outline-gray-1);font-size:13px"><span class="qs">{foot}</span><span style="display:inline-flex;align-items:center;gap:4px;color:var(--ink-gray-8);font-weight:500">Open{ic("chev-r","i s35")}</span></div></a>'''
 cards += f'<a href="AddPlant.dc.html" class="btn ghost" style="height:auto;min-height:160px;flex-direction:column;border:1px dashed var(--outline-gray-2);border-radius:12px;color:var(--ink-gray-6)">{ic("plus")}Add plant</a>'
 
+CC = 'grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1fr) 140px 110px'
+rows_ = [('Koyo 1', 'Deployment 1 · edge box + cloud site', 'OpsEdge K1 · v0.4.2', '2 s ago', ('Live', 'green')), ('Oil mill', 'Deployment 1 · edge box + cloud site', 'OpsEdge O1 · v0.4.2', '2 s ago', ('Live', 'green')),
+         ('Plant B', 'ThingsBoard', 'tb.koyo.ng · rule chain', '5 s ago', ('Live', 'green')), ('Rice mill', 'Deployment 2 · edge box + plant site (trial)', 'OpsEdge R1 · v0.4.1', '2 s ago', ('Live', 'green')),
+         ('Poultry farm', 'Deployment 1 · edge box + cloud site', 'OpsEdge P1 · v0.4.2', '10 s ago', ('Live', 'green')), ('Plant D', 'Deployment 1 · edge box + cloud site', 'OpsEdge D1 · v0.4.0', '05:34 · 3 h 12 min', ('Offline', 'gray'))]
+conn = '<div class="list"><div class="lh" style="' + CC + '"><span>Plant</span><span>Setup</span><span>Edge box</span><span>Last data</span><span>State</span></div>' + ''.join(f'<div class="lr" style="{CC};min-height:48px;cursor:default"><span class="t1">{a}</span><span class="qs" style="color:var(--ink-gray-7)">{b}</span><span class="qs tab">{c}</span><span class="tab">{d}</span><span>{bd(*e)}</span></div>' for a, b, c, d, e in rows_) + '</div>'
 head = header(f'<div class="crumb"><span class="cur">Plants</span></div>', f'<div class="seg"><span class="on">Cards</span><span>Table</span></div>')
 body = f'''<div class="body"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;align-items:baseline;gap:8px"><h2 class="h2">Your plants</h2><span class="qs">6 plants · open one to see it live</span></div><span class="in muted" style="width:240px">{ic("search")}<span class="grow">Search plants</span></span></div>
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">{cards}</div></div>'''
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">{cards}</div>
+<section style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h2">Connections</h2><span class="qs">How each plant's data reaches this site</span></div>{conn}</section></div>'''
 write('Plants.dc.html', page('Plants', shell('Plants.dc.html', head, body, scope='company'), {"$preview": {"width": 1440, "height": 900}}))

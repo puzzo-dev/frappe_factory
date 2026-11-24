@@ -53,7 +53,7 @@ panel = f'''<aside class="panel"><div style="padding:16px;display:flex;flex-dire
 <div style="display:flex;flex-direction:column;gap:10px"><h3 class="h3">Activity</h3><div class="tline">
 <div class="ev"><span class="ic">{ic('flask')}</span><span><b>Grace O.</b> recorded S-3, 6.8 µg/L, fail <span class="w">· 08:44</span></span></div>
 <div class="ev"><span class="ic">{ic('msg')}</span><span><b>WhatsApp</b> to Grace O. and Tunde B. <span class="w">· 08:14</span></span></div>
-<div class="ev"><span class="ic" style="background:var(--surface-amber-2);color:var(--ink-amber-7)">{ic('shield')}</span><span>Hold opened by TRIP-0007 <span class="w">· 08:14</span></span></div>
+<div class="ev"><span class="ic" style="background:var(--surface-amber-2);color:var(--ink-amber-8)">{ic('shield')}</span><span>Hold opened by TRIP-0007 <span class="w">· 08:14</span></span></div>
 </div></div>
 </div></aside>'''
 

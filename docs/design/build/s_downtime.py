@@ -6,7 +6,7 @@ head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Down
 kpis = f'''<section style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
 <div class="card kpi"><span class="k">Unplanned · today</span><span class="v">1 h 06 min</span><span class="d">7 stops · 32 min still running</span></div>
 <div class="card kpi"><span class="k">Planned · today</span><span class="v">3 h 14 min</span><span class="d">F9 maintenance since 05:32</span></div>
-<div class="card kpi"><span class="k">Needs a reason</span><span class="v" style="color:var(--ink-amber-7)">3</span><span class="d">Short stops the PLC logged</span></div>
+<div class="card kpi"><span class="k">Needs a reason</span><span class="v" style="color:var(--ink-amber-8)">3</span><span class="d">Short stops the PLC logged</span></div>
 <div class="card kpi"><span class="k">Mean time between stops</span><span class="v">1 h 08 min</span><span class="d"><span class="d-dn">−22 min</span> vs 7-day average</span></div>
 </section>'''
 
@@ -50,7 +50,7 @@ pareto = f'''<section class="card" style="display:flex;flex-direction:column;gap
 C = 'grid-template-columns:64px 148px 88px minmax(0,1.4fr) 104px minmax(0,1fr) 24px'
 def reason_cell(r):
     if r is None:
-        return f'<span class="in" style="background:var(--surface-amber-2);border-color:var(--surface-amber-2);color:var(--ink-amber-7);height:24px;width:100%"><span class="grow">Pick a reason</span>{ic("chev-d","i s35")}</span>'
+        return f'<span class="in" style="background:var(--surface-amber-2);border-color:var(--surface-amber-2);color:var(--ink-amber-8);height:24px;width:100%"><span class="grow">Pick a reason</span>{ic("chev-d","i s35")}</span>'
     return f'<span class="t1">{r}</span>'
 ev = [
   ('08:14', '32 min', 'running', 'All fillers', 'Quality hold · interlock IL-01', 'Unplanned', 'From TRIP-0007', False),
@@ -71,7 +71,7 @@ for t, d, run, w, r, cat, by, act in ev:
 menu_groups = [('Power', ['Power dip', 'Generator changeover']), ('Mechanical', ['Jaw jam', 'Film change or splice', 'Seal temperature low']), ('Waiting', ['Waiting for treated water', 'Waiting for film', 'No operator'])]
 mg = ''
 for g, items in menu_groups:
-    mg += f'<div style="display:flex;align-items:center;height:24px;padding:0 8px;font-size:12px;color:var(--ink-gray-5)">{g}</div>'
+    mg += f'<div style="display:flex;align-items:center;height:24px;padding:0 8px;font-size:12px;color:var(--ink-gray-6)">{g}</div>'
     for it in items:
         on = ' on' if it == 'Power dip' else ''
         tick = ic('check','i s35') if it == 'Power dip' else '<span style="width:14px"></span>'

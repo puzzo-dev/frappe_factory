@@ -13,7 +13,7 @@ body{margin:0}
 :root{%s;--shadow-sm:inset 0px 0.25px 1.5px 0px #ffffff29,0px 0px 1px 0px #00000033,0px 1px 3px 0px #00000024;--shadow-xl:0 0 0 1px #00000014,0 8px 24px -4px #0000001f,0 24px 48px -12px #00000029;--shadow-2xl:0 0 0 1px #00000014,0 12px 32px -6px #00000024,0 32px 64px -16px #0000002e}
 .ff{height:100vh;overflow:hidden;display:flex;background:var(--surface-base);color:var(--ink-gray-8);font-family:Inter,InterVar,system-ui,sans-serif;font-size:14px;letter-spacing:.02em;line-height:1.35;-webkit-font-smoothing:antialiased}
 .ff *{box-sizing:border-box}
-.ff a{color:var(--ink-blue-link);text-decoration:none}
+.ff a{color:var(--ink-blue-8);text-decoration:none}
 .ff a.btn{color:var(--ink-gray-8)}
 .ff a.btn.solid{color:var(--ink-base)}
 svg.i{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
@@ -29,11 +29,11 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .si .i{color:var(--ink-gray-6)}
 .si.on{background:var(--surface-elevation-3);box-shadow:var(--shadow-sm);color:var(--ink-gray-8)!important}
 .si .lbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.si .cnt{margin-right:4px;font-size:12px;color:var(--ink-gray-5);font-variant-numeric:tabular-nums}
+.si .cnt{margin-right:4px;font-size:12px;color:var(--ink-gray-6);font-variant-numeric:tabular-nums}
 .si .cnt.red{color:var(--ink-red-7);font-weight:500}
-.slabel{display:flex;align-items:center;height:28px;padding:0 8px;margin-top:12px;font-size:13px;color:var(--ink-gray-5)}
+.slabel{display:flex;align-items:center;height:28px;padding:0 8px;margin-top:12px;font-size:13px;color:var(--ink-gray-6)}
 .sgrp{display:flex;flex-direction:column;gap:2px}
-.side-foot{margin-top:auto;padding:8px 8px 0;font-size:12px;color:var(--ink-gray-5);display:flex;align-items:center;gap:6px}
+.side-foot{margin-top:auto;padding:8px 8px 0;font-size:12px;color:var(--ink-gray-6);display:flex;align-items:center;gap:6px}
 /* Page */
 .main{flex:1 1 auto;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .main>*:not(.ph){flex:1 1 auto;min-height:0;overflow-y:auto}
@@ -42,9 +42,9 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .panel>div[style*="overflow:auto"]{flex:1 1 auto}
 .ph{min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 20px;border-bottom:1px solid var(--outline-gray-1)}
 .crumb{display:flex;align-items:center;gap:6px;font-size:18px;min-width:0;white-space:nowrap}
-.crumb a{color:var(--ink-gray-5)!important;text-decoration:none}
+.crumb a{color:var(--ink-gray-6)!important;text-decoration:none}
 .crumb a:hover{color:var(--ink-gray-7)!important}
-.crumb .sep{color:var(--ink-gray-4)}
+.crumb .sep{color:var(--ink-gray-5)}
 .crumb .cur{color:var(--ink-gray-9);font-weight:600}
 .acts{display:flex;align-items:center;gap:8px}
 .body{padding:20px 20px 40px;display:flex;flex-direction:column;gap:24px}
@@ -68,12 +68,12 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .bd.sm{height:16px;padding:0 6px;font-size:11px}
 .bd.gray{color:var(--ink-gray-6);background:var(--surface-gray-2)}
 .bd.red{color:var(--ink-red-7);background:var(--surface-red-2)}
-.bd.amber{color:var(--ink-amber-7);background:var(--surface-amber-2)}
+.bd.amber{color:var(--ink-amber-8);background:var(--surface-amber-2)}
 .bd.green{color:var(--ink-green-7);background:var(--surface-green-2)}
-.bd.blue{color:var(--ink-blue-7);background:var(--surface-blue-2)}
+.bd.blue{color:var(--ink-blue-8);background:var(--surface-blue-2)}
 .bd.violet{color:var(--ink-violet-7);background:var(--surface-violet-2)}
 .bd.s-red{color:#fff;background:var(--surface-red-7)}
-.bd.s-amber{color:#fff;background:var(--surface-amber-7)}
+.bd.s-amber{color:var(--ink-gray-9);background:var(--surface-amber-5)}
 .bd.s-gray{color:var(--ink-base);background:var(--surface-gray-10)}
 .bd.o-gray{color:var(--ink-gray-6);border:1px solid var(--outline-gray-2);background:transparent}
 .dot{width:6px;height:6px;flex:0 0 6px;border-radius:50%%;display:inline-block}
@@ -81,18 +81,18 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 /* Inputs (TextInput subtle sm) */
 .in{display:flex;align-items:center;gap:6px;height:28px;padding:0 8px;border-radius:8px;border:1px solid var(--surface-gray-2);background:var(--surface-gray-2);color:var(--ink-gray-8);font:400 14px Inter,sans-serif;min-width:0}
 .in:hover{background:var(--surface-gray-3)}
-.in.muted{color:var(--ink-gray-4)}
+.in.muted{color:var(--ink-gray-6)}
 .in.focus{background:var(--surface-base);border-color:var(--outline-gray-4);box-shadow:var(--shadow-sm)}
 .in.out{background:var(--surface-base);border-color:var(--outline-gray-2)}
 .in.dis{background:var(--surface-gray-1);border-color:var(--outline-gray-1);color:var(--ink-gray-5)}
 .in.err{border-color:var(--outline-red-3);background:var(--surface-base)}
 .in .grow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.in .i{color:var(--ink-gray-5)}
+.in .i{color:var(--ink-gray-6)}
 .ta{min-height:72px;align-items:flex-start;padding:6px 8px;height:auto;line-height:1.5}
 .fl{display:flex;flex-direction:column;gap:6px;min-width:0}
 .fl>.lab{font-size:13px;color:var(--ink-gray-6)}
 .fl>.lab .req{color:var(--ink-red-6, var(--ink-red-7))}
-.fl>.hint{font-size:13px;color:var(--ink-gray-5);line-height:1.45}
+.fl>.hint{font-size:13px;color:var(--ink-gray-6);line-height:1.45}
 .fl>.errm{font-size:13px;color:var(--ink-red-7)}
 /* Switch sm / Checkbox */
 .sw{position:relative;display:inline-flex;align-items:center;width:26px;height:16px;flex:0 0 26px;border-radius:999px;background:var(--surface-gray-4);border:2px solid transparent}
@@ -109,7 +109,7 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .rd.on{border:5px solid var(--surface-gray-10)}
 /* Tabs underline */
 .tabs{display:flex;gap:16px;border-bottom:1px solid var(--outline-gray-1);padding:0 20px}
-.tabs .t{display:inline-flex;align-items:center;gap:6px;height:36px;font-size:14px;color:var(--ink-gray-5);border-bottom:1px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap}
+.tabs .t{display:inline-flex;align-items:center;gap:6px;height:36px;font-size:14px;color:var(--ink-gray-6);border-bottom:1px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap}
 .tabs .t:hover{color:var(--ink-gray-7)}
 .tabs .t.on{color:var(--ink-gray-9);border-bottom-color:var(--ink-gray-9)}
 .tabs .t .bd{height:16px;font-size:11px}.lyr:hover{background:var(--surface-gray-2)}.lyr.on{background:var(--surface-gray-3)}
@@ -120,7 +120,7 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 /* List (frappe-ui/list) */
 .list{display:flex;flex-direction:column;margin:0 -12px}
 .lh,.lr{display:grid;align-items:center;column-gap:12px;padding:0 12px}
-.lh{height:32px;font-size:13px;color:var(--ink-gray-5);border-bottom:1px solid var(--outline-gray-1);white-space:nowrap}
+.lh{height:32px;font-size:13px;color:var(--ink-gray-6);border-bottom:1px solid var(--outline-gray-1);white-space:nowrap}
 .lh .sort{display:inline-flex;align-items:center;gap:4px;color:var(--ink-gray-7)}
 .lr{min-height:44px;border-bottom:1px solid var(--outline-gray-1);font-size:14px;color:var(--ink-gray-7);cursor:pointer}
 .lr:hover{background:var(--surface-gray-1)}
@@ -129,23 +129,23 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .lr .c{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lr .t1{color:var(--ink-gray-8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lr .t1.b{font-weight:600;color:var(--ink-gray-9)}
-.lr .m{font-size:13px;color:var(--ink-gray-5);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lr .id{color:var(--ink-gray-4);font-variant-numeric:tabular-nums}
+.lr .m{font-size:13px;color:var(--ink-gray-6);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lr .id{color:var(--ink-gray-6);font-variant-numeric:tabular-nums}
 .r{text-align:right;justify-content:flex-end}
 /* Card, panel, misc */
 .card{border:1px solid var(--outline-gray-1);border-radius:12px;padding:16px;background:var(--surface-base);min-width:0}
 .inset{background:var(--surface-gray-1);border-radius:8px;padding:10px 12px}
 .h2{margin:0;font-size:16px;font-weight:600;color:var(--ink-gray-8)}
 .h3{margin:0;font-size:14px;font-weight:600;color:var(--ink-gray-8)}
-.qs{font-size:13px;color:var(--ink-gray-5)}
-.meta{font-size:13px;color:var(--ink-gray-5)}
+.qs{font-size:13px;color:var(--ink-gray-6)}
+.meta{font-size:13px;color:var(--ink-gray-6)}
 .p{font-size:14px;line-height:1.55;color:var(--ink-gray-7);margin:0}
 .ps{font-size:13px;line-height:1.5;color:var(--ink-gray-6);margin:0}
 .kpi{display:flex;flex-direction:column;gap:6px}
-.kpi .k{font-size:13px;color:var(--ink-gray-5)}
+.kpi .k{font-size:13px;color:var(--ink-gray-6)}
 .kpi .v{font-size:20px;font-weight:600;color:var(--ink-gray-9);font-variant-numeric:tabular-nums;letter-spacing:.01em}
-.kpi .v small{font-size:13px;font-weight:400;color:var(--ink-gray-5)}
-.kpi .d{font-size:13px;color:var(--ink-gray-5)}
+.kpi .v small{font-size:13px;font-weight:400;color:var(--ink-gray-6)}
+.kpi .d{font-size:13px;color:var(--ink-gray-6)}
 .d-up{color:var(--ink-green-7)!important}.d-dn{color:var(--ink-red-7)!important}
 .bar{display:block;height:4px;border-radius:99px;background:var(--surface-gray-3);overflow:hidden}
 .bar>i{display:block;height:100%%;border-radius:99px;background:var(--ink-gray-7)}
@@ -153,18 +153,18 @@ svg.i.s35{width:14px;height:14px;flex-basis:14px}
 .bar.lg{height:8px}
 .panel{flex:0 0 20rem;width:20rem;border-left:1px solid var(--outline-gray-1);display:flex;flex-direction:column;min-width:0}
 .prow{display:grid;grid-template-columns:7.5rem minmax(0,1fr);align-items:center;gap:8px;min-height:32px;font-size:14px}
-.prow>span:first-child{font-size:13px;color:var(--ink-gray-5)}
+.prow>span:first-child{font-size:13px;color:var(--ink-gray-6)}
 .prow>span:last-child{color:var(--ink-gray-8);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .divy>*+*{border-top:1px solid var(--outline-gray-1)}
 .alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid var(--outline-gray-2);background:var(--surface-base)}
 .alert .ttl{font-weight:500;color:var(--ink-gray-8)}
-.alert.red .ai{color:var(--ink-red-7)}.alert.amber .ai{color:var(--ink-amber-7)}.alert.blue .ai{color:var(--ink-blue-7)}.alert.green .ai{color:var(--ink-green-7)}
+.alert.red .ai{color:var(--ink-red-7)}.alert.amber .ai{color:var(--ink-amber-8)}.alert.blue .ai{color:var(--ink-blue-7)}.alert.green .ai{color:var(--ink-green-7)}
 .tline{position:relative;display:flex;flex-direction:column;gap:14px}
 .tline .ev{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;font-size:13px;color:var(--ink-gray-7);line-height:1.45}
 .tline .ev .ic{width:20px;height:20px;border-radius:50%%;background:var(--surface-gray-2);display:grid;place-items:center;color:var(--ink-gray-6)}
 .tline .ev .ic svg{width:12px;height:12px;flex-basis:12px}
 .tline .ev b{font-weight:500;color:var(--ink-gray-8)}
-.tline .ev .w{color:var(--ink-gray-5)}
+.tline .ev .w{color:var(--ink-gray-6)}
 .av{width:20px;height:20px;flex:0 0 20px;border-radius:50%%;background:var(--surface-gray-3);color:var(--ink-gray-7);font-size:10px;font-weight:600;display:inline-grid;place-items:center;letter-spacing:0}
 .av.md{width:26px;height:26px;flex-basis:26px;font-size:10px}
 .avs{display:inline-flex}.avs .av{border:2px solid var(--surface-base);margin-left:-6px}.avs .av:first-child{margin-left:0}
@@ -184,7 +184,7 @@ label.btn{cursor:pointer}
 .toast{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--surface-gray-9);color:var(--ink-base);box-shadow:var(--shadow-xl);font-size:14px}
 .sel-bar{display:flex;align-items:center;gap:8px;height:40px;padding:0 6px 0 12px;border-radius:12px;background:var(--surface-base);box-shadow:var(--shadow-2xl);font-size:14px}
 .chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:8px;background:var(--surface-gray-2);font-size:13px;color:var(--ink-gray-7);white-space:nowrap}
-.chip .k{color:var(--ink-gray-5)}
+.chip .k{color:var(--ink-gray-6)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .grid-bg{background-image:radial-gradient(var(--outline-gray-2) 1px,transparent 1px);background-size:16px 16px}
 .flow{stroke-dasharray:4 9;animation:ffflow 1.2s linear infinite}
@@ -321,17 +321,17 @@ def _head(badge=None, title=None, sub=None, open_=False):
     st = ' style="background:var(--surface-elevation-3);box-shadow:var(--shadow-sm)"' if open_ else ''
     return ('<button type="button" class="side-head"' + st + ' aria-haspopup="menu" aria-label="App menu and app switcher" onClick="{{toggleMenu}}"><span class="logo" aria-hidden="true" style="background:var(--surface-gray-10)">FF</span>'
             '<span style="display:flex;flex-direction:column;min-width:0;flex:1"><span style="font-weight:500;color:var(--ink-gray-9);line-height:1.1">Frappe Factory</span>'
-            '<span style="font-size:13px;color:var(--ink-gray-7);margin-top:3px;line-height:1.1">Tunde B.</span></span>' + ic('chev-d', 'i', 'color:var(--ink-gray-5)') + '</button>')
+            '<span style="font-size:13px;color:var(--ink-gray-7);margin-top:3px;line-height:1.1">Tunde B.</span></span>' + ic('chev-d', 'i', 'color:var(--ink-gray-6)') + '</button>')
 
 PLANTS_SW = [('K1', 'Koyo 1', 'Sachet water', 'Main.dc.html'), ('PB', 'Plant B', 'Bottled water', 'PlantB.dc.html'), ('PD', 'Plant D', 'Sachet water · offline', 'PlantD.dc.html'),
              ('OM', 'Oil mill', 'Vegetable oil', 'OilMill.dc.html'), ('RM', 'Rice mill', 'Parboiled rice', 'RiceMill.dc.html'), ('PF', 'Poultry farm', 'Layers and eggs', 'PoultryFarm.dc.html')]
 def _plant_switch(badge, name):
     btn_ = ('<button type="button" class="si" aria-haspopup="menu" aria-label="Switch plant" onClick="{{toggle_plantsw}}" style="height:36px;width:100%;box-sizing:border-box;border:1px solid var(--outline-gray-2);background:var(--surface-base);margin:2px 0 4px;font:inherit;cursor:pointer;text-align:left">'
             f'<span style="width:20px;height:20px;border-radius:5px;background:var(--surface-gray-3);color:var(--ink-gray-8);display:grid;place-items:center;font-size:10px;font-weight:600">{badge}</span>'
-            f'<span class="lbl" style="font-weight:500;color:var(--ink-gray-8)">{name}</span>' + ic('chevs', 'i', 'color:var(--ink-gray-5)') + '</button>')
+            f'<span class="lbl" style="font-weight:500;color:var(--ink-gray-8)">{name}</span>' + ic('chevs', 'i', 'color:var(--ink-gray-6)') + '</button>')
     items = ''.join(f'<a class="mi{" on" if n == name else ""}" href="{h}" style="font-size:14px;text-decoration:none;align-items:center;height:auto;min-height:40px;padding-top:4px;padding-bottom:4px"><span style="width:20px;height:20px;border-radius:5px;background:var(--surface-gray-3);color:var(--ink-gray-8);display:grid;place-items:center;font-size:10px;font-weight:600;flex-shrink:0">{bg}</span><span style="display:flex;flex-direction:column;line-height:1.2;min-width:0"><span>{n}</span><span class="qs" style="font-size:12px">{d}</span></span>{ic("check","i s35") if n == name else ""}</a>' for bg, n, d, h in PLANTS_SW)
     menu = (f'<sc-if value="{{{{is_plantsw__open}}}}" hint-placeholder-val="{{{{ false }}}}"><div class="menu-scrim" onClick="{{{{toggle_plantsw}}}}" aria-hidden="true"></div>'
-            f'<div class="pop appmenu" role="menu" aria-label="Switch plant" style="left:8px;top:92px;width:232px"><div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Switch plant</div>{items}'
+            f'<div class="pop appmenu" role="menu" aria-label="Switch plant" style="left:8px;top:92px;width:232px"><div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-6)">Switch plant</div>{items}'
             f'<div style="height:1px;background:var(--outline-gray-1);margin:4px -4px"></div><a class="mi" href="Plants.dc.html" style="font-size:14px;text-decoration:none">{ic("grid")}<span>All plants</span></a></div></sc-if>')
     return btn_, menu
 
@@ -370,7 +370,7 @@ def app_menu(left=8, top=50):
     """The app menu (frappe-ui Dropdown) from the sidebar head: the app switcher (Apps) and App settings.
     Plant settings are not here; they open from each plant's sidebar."""
     def mi(icon, label, right='', on=False, href=None, click=None):
-        r = f'<span style="margin-left:auto;display:flex;color:var(--ink-gray-5)">{right}</span>' if right else ''
+        r = f'<span style="margin-left:auto;display:flex;color:var(--ink-gray-6)">{right}</span>' if right else ''
         if href:
             return f'<a class="mi{" on" if on else ""}" href="{href}" style="font-size:14px;text-decoration:none">{icon}<span>{label}</span>{r}</a>'
         ck = f' onClick="{{{{{click}}}}}" role="menuitem" style="font-size:14px;cursor:pointer"' if click else ' style="font-size:14px"'
@@ -380,10 +380,10 @@ def app_menu(left=8, top=50):
     prof = ('<div style="display:flex;align-items:center;gap:10px;padding:8px 8px 6px"><span class="av" style="width:28px;height:28px;flex:0 0 28px;font-size:11px">TB</span>'
             '<span style="display:flex;flex-direction:column;min-width:0;line-height:1.2"><span style="font-weight:500;color:var(--ink-gray-9);font-size:14px">Tunde B.</span><span class="qs" style="font-size:12px">tunde.b@koyo.ng</span></span></div>')
     main = (prof + mi(ic('users'), 'Profile', ic('ext', 'i s35')) + mi(ic('bell'), 'Notifications', '<span class="bd gray" style="height:18px;font-size:11px">3</span>') +
-            mi(ic('moon'), 'Theme', '<span style="font-size:12px">Light</span>') + sep +
+            mi(ic('moon'), 'Theme', '<span style="font-size:12px">Light</span>') + mi(ic('lock'), 'Kiosk PIN', href='KioskPin.dc.html') + sep +
             mi(ic('grid'), 'Apps', ic('chev-r', 'i s35'), click='toggleApps') + mi(ic('cpu'), 'Open kiosk', ic('ext', 'i s35'), href='KioskOpen.dc.html') + mi(ic('settings'), 'App settings', href='CompanyGeneral.dc.html') + sep +
             mi(ic('info'), 'Help and docs') + mi(ic('shield'), 'About') + sep + mi(ic('arrow-r'), 'Log out', href='KioskLogin.dc.html'))
-    sub = (f'<div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-5)">Switch app</div>' +
+    sub = (f'<div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-6)">Switch app</div>' +
            mi(app('oklch(0.205 0 0)', 'FF'), 'Frappe Factory', ic('check', 'i s35'), href='Dashboard.dc.html') + mi(app('oklch(0.45 0 0)', 'D'), 'Desk') + mi(app('oklch(0.55 0.16 252)', 'E'), 'ERPNext') + mi(app('oklch(0.6 0.15 150)', 'C'), 'CRM') +
            mi(app('oklch(0.6 0.17 300)', 'H'), 'Helpdesk') + mi(app('oklch(0.55 0.15 30)', 'W'), 'WhatsApp'))
     return (f'<div class="pop appmenu" role="menu" aria-label="App menu" style="left:{left}px;top:{top}px;width:232px">{main}</div>'

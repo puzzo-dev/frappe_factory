@@ -16,7 +16,7 @@ def hbars():
     rows = ''
     for n, oee, att in plants:
         rows += f'''<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;align-items:center;gap:10px;height:28px;font-size:13px"><span style="color:var(--ink-gray-7)">{n}</span><span style="height:12px;background:var(--surface-gray-2);border-radius:3px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:{oee}%;border-radius:3px;background:var(--ink-gray-7)"></i><i style="position:absolute;left:80%;top:-3px;bottom:-3px;width:1.5px;background:var(--ink-gray-9)"></i></span><span class="tab r" style="display:flex;color:var(--ink-gray-9);font-weight:500">{oee}%</span></div>'''
-    rows += '<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;align-items:center;gap:10px;height:28px;font-size:13px;color:var(--ink-gray-5)"><span>Plant D</span><span>Offline since 05:34</span><span class="r" style="display:flex">—</span></div>'
+    rows += '<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;align-items:center;gap:10px;height:28px;font-size:13px;color:var(--ink-gray-6)"><span>Plant D</span><span>Offline since 05:34</span><span class="r" style="display:flex">—</span></div>'
     return rows
 
 def lines():
@@ -28,16 +28,16 @@ def lines():
               ('Oil mill', 'oklch(0.6 0.14 60)', [80, 78, 82, 79, 81, 77, 83, 80, 78, 82, 79, 81, 76, 73])]
     y = lambda v: T + (H - T - B) * (1 - (v - 50) / 50)
     x = lambda i: L + i * (W - L - 70) / (days - 1)
-    g = ''.join(f'<line x1="{L}" x2="{W-70}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="var(--outline-gray-1)"/><text x="{L-6}" y="{y(v)+4:.1f}" text-anchor="end" font-size="11" fill="var(--ink-gray-5)">{v}%</text>' for v in (50, 75, 100))
-    g += ''.join(f'<text x="{x(i):.1f}" y="{H-6}" text-anchor="middle" font-size="11" fill="var(--ink-gray-5)">{d}</text>' for i, d in ((0, '9 Nov'), (7, '16 Nov'), (13, '22 Nov')))
+    g = ''.join(f'<line x1="{L}" x2="{W-70}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="var(--outline-gray-1)"/><text x="{L-6}" y="{y(v)+4:.1f}" text-anchor="end" font-size="12" fill="var(--ink-gray-6)">{v}%</text>' for v in (50, 75, 100))
+    g += ''.join(f'<text x="{x(i):.1f}" y="{H-6}" text-anchor="middle" font-size="12" fill="var(--ink-gray-6)">{d}</text>' for i, d in ((0, '9 Nov'), (7, '16 Nov'), (13, '22 Nov')))
     for n, c, v in series:
         pts = ' '.join(f'{x(i):.1f},{y(vv):.1f}' for i, vv in enumerate(v))
-        g += f'<polyline points="{pts}" fill="none" stroke="{c}" stroke-width="{2 if n=="Koyo 1" else 1.5}"/><text x="{W-64}" y="{y(v[-1])+4:.1f}" font-size="11" fill="{c}" font-weight="500">{n}</text>'
+        g += f'<polyline points="{pts}" fill="none" stroke="{c}" stroke-width="{2 if n=="Koyo 1" else 1.5}"/><text x="{W-64}" y="{y(v[-1])+4:.1f}" font-size="12" fill="{c}" font-weight="500">{n}</text>'
     return f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Plan attainment per plant over 14 days; Koyo 1 drops to 64 and 70 percent on the last two days" style="display:block">{g}</svg>'
 
 par = [('Quality hold · interlock', 'Koyo 1', 32), ('Motor overload', 'Oil mill', 65), ('Film change or splice', 'Koyo 1', 6), ('Screen blinding', 'Rice mill', 9), ('Power dip', 'all', 14)]
 par.sort(key=lambda r: -r[2]); mx = par[0][2]
-prow = ''.join(f'<div style="display:grid;grid-template-columns:150px minmax(0,1fr) 56px;align-items:center;gap:10px;height:28px;font-size:13px"><span style="display:flex;flex-direction:column;line-height:1.15"><span style="color:var(--ink-gray-8)">{r}</span><span class="qs" style="font-size:11px">{p}</span></span><span style="height:12px"><i style="display:block;height:12px;border-radius:2px;width:{m/mx*100:.0f}%;background:var(--ink-gray-7)"></i></span><span class="tab r" style="display:flex">{m} min</span></div>' for r, p, m in par)
+prow = ''.join(f'<div style="display:grid;grid-template-columns:150px minmax(0,1fr) 56px;align-items:center;gap:10px;height:28px;font-size:13px"><span style="display:flex;flex-direction:column;line-height:1.15"><span style="color:var(--ink-gray-8)">{r}</span><span class="qs" style="font-size:12px">{p}</span></span><span style="height:12px"><i style="display:block;height:12px;border-radius:2px;width:{m/mx*100:.0f}%;background:var(--ink-gray-7)"></i></span><span class="tab r" style="display:flex">{m} min</span></div>' for r, p, m in par)
 
 WC = 'grid-template-columns:minmax(0,1.6fr) 100px minmax(0,1.2fr) 92px 132px 24px'
 wos = [('Pure water · 50 cl sachet', 'WO-0412 · PW-50CL', 'Koyo 1', 1743, 7200, 'bags', 'Today', ('Stopped by trip', 'red')),

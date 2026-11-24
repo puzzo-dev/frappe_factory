@@ -61,13 +61,13 @@ def hourly():
     bw = 48; gap = (pw - bw*3)/3
     out = []
     for v in (0,300,600,900,1200):
-        out.append(f'<line x1="{L}" x2="{W-8}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="var(--outline-gray-1)"/><text x="{L-8}" y="{y(v)+4:.1f}" text-anchor="end" font-size="11" fill="var(--ink-gray-5)">{v:,}</text>')
+        out.append(f'<line x1="{L}" x2="{W-8}" y1="{y(v):.1f}" y2="{y(v):.1f}" stroke="var(--outline-gray-1)"/><text x="{L-8}" y="{y(v)+4:.1f}" text-anchor="end" font-size="12" fill="var(--ink-gray-6)">{v:,}</text>')
     for i,(lab,v,k) in enumerate(data):
         x = L+gap/2+i*(bw+gap)
         out.append(f'<rect x="{x:.1f}" y="{y(v):.1f}" width="{bw}" height="{y(0)-y(v):.1f}" rx="3" fill="var(--ink-gray-7)"/>')
-        out.append(f'<text x="{x+bw/2:.1f}" y="{y(v)-6:.1f}" text-anchor="middle" font-size="11" fill="var(--ink-gray-8)">{v:,}</text>')
-        out.append(f'<text x="{x+bw/2:.1f}" y="{H-6}" text-anchor="middle" font-size="11" fill="var(--ink-gray-5)">{lab}</text>')
-    out.append(f'<line x1="{L}" x2="{W-8}" y1="{y(plan):.1f}" y2="{y(plan):.1f}" stroke="var(--ink-gray-9)" stroke-dasharray="4 4"/><text x="{W-8}" y="{y(plan)-6:.1f}" text-anchor="end" font-size="11" fill="var(--ink-gray-7)">Plan 900 bags / h</text>')
+        out.append(f'<text x="{x+bw/2:.1f}" y="{y(v)-6:.1f}" text-anchor="middle" font-size="12" fill="var(--ink-gray-8)">{v:,}</text>')
+        out.append(f'<text x="{x+bw/2:.1f}" y="{H-6}" text-anchor="middle" font-size="12" fill="var(--ink-gray-6)">{lab}</text>')
+    out.append(f'<line x1="{L}" x2="{W-8}" y1="{y(plan):.1f}" y2="{y(plan):.1f}" stroke="var(--ink-gray-9)" stroke-dasharray="4 4"/><text x="{W-8}" y="{y(plan)-6:.1f}" text-anchor="end" font-size="12" fill="var(--ink-gray-7)">Plan 900 bags / h</text>')
     return f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Good bags per hour: 06:00 800, 07:00 760, 08:00 183 until the trip at 08:14. Plan 900 bags per hour, 9 fillers at 100 bags each." style="display:block">{"".join(out)}</svg>'
 
 def oee_row(label, pct, note):
@@ -77,7 +77,7 @@ FC = 'grid-template-columns:48px minmax(0,1fr) 72px 64px 64px 72px 112px'
 def frow(i, f):
     name, good, stops = f
     if good is None:
-        return f'<div class="lr" style="{FC};cursor:default;color:var(--ink-gray-5)"><span style="font-weight:500">{name}</span><span>—</span><span class="r tab" style="display:flex">—</span><span class="r tab" style="display:flex">—</span><span class="r tab" style="display:flex">—</span><span class="r tab" style="display:flex">—</span><span>{bd("Maintenance","violet")}</span></div>'
+        return f'<div class="lr" style="{FC};cursor:default;color:var(--ink-gray-6)"><span style="font-weight:500">{name}</span><span>—</span><span class="r tab" style="display:flex">—</span><span class="r tab" style="display:flex">—</span><span class="r tab" style="display:flex">—</span><span class="r tab" style="display:flex">—</span><span>{bd("Maintenance","violet")}</span></div>'
     rate = round(good/(124/60))
     rj = rejects[i]
     return f'<div class="lr" style="{FC};cursor:default"><span style="font-weight:500;color:var(--ink-gray-8)">{name}</span><span style="display:flex;align-items:center;gap:8px;min-width:0"><span class="tab" style="width:44px;color:var(--ink-gray-8)">{good:,}</span><span class="bar" style="flex:1"><i style="width:{good/4200*100:.0f}%"></i></span></span><span class="r tab" style="display:flex">{rate:,}/h</span><span class="r tab" style="display:flex">{stops}</span><span class="r tab" style="display:flex">{rj}</span><span class="r tab" style="display:flex">{[142,138,145,140,143,139,141,144,0,140][i]} °C</span><span>{bd("Stopped","red")}</span></div>'

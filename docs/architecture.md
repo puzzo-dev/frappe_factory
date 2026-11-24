@@ -200,7 +200,7 @@ A Vue 3 + frappe-ui single-page app at `/factory`, built into the app's assets l
 | Shell | Who | Device | Shape |
 | --- | --- | --- | --- |
 | Control room | Factory Manager, Floor Supervisor | Desktop, wall screen | Mimic, alarms, KPIs, trends; dense, dark theme option |
-| Floor (kiosk) | Machine Operator, Quality Inspector | Tablet at the line | Large touch targets, one task per screen, own Frappe login, works offline for short drops |
+| Floor (kiosk) | Machine Operator, Quality Inspector | Tablet at the line, on OpsKiosk or a cloud kiosk | Large touch targets, one task per screen, Frappe login every 7 days + PIN each time; OpsKiosk keeps working with no internet |
 | Manager | Factory Manager, owner | Phone, desktop | Plants home (one card per plant, opens that plant), summaries, approvals, trips |
 
 **Stack**
@@ -209,7 +209,8 @@ A Vue 3 + frappe-ui single-page app at `/factory`, built into the app's assets l
 - Realtime through Frappe's socket.io: the bridge calls `frappe.publish_realtime` on `factory:<site>:state`, `:alarm` and `:tag:<tag>` rooms. Live tag values are throttled to 1 update per second per tag.
 - Mimic and floor designer: SVG, drawn from the Plant Floor Layout. Widgets bind to tags and assets. Pipes animate flow when the upstream pump or valve is on.
 - Charts: frappe-ui charts (`frappe-ui/charts`, which run on ECharts 6) for all trends and dashboards, reading `get_series`. Limit lines use `referenceLines`; trip bands, zoom and point thinning go through `echartOptions`; only the stacked Trends panels draw raw ECharts inside `ChartContainer`.
-- PWA install for the kiosk shell, with a small IndexedDB queue for actions taken during a short network drop on the factory LAN.
+- Two deployment types, trialled before one is chosen: 1, edge box + cloud site with OpsKiosk at the plant; 2, edge box + plant site + cloud site. Each record has one owner site, and the plant box holds only that plant's floor data (TRD, Deployment types).
+- Kiosks come in two types on the same Kiosk Profile: at the plant (OpsKiosk in deployment 1, the plant site in deployment 2), which keeps working offline, or Cloud, `/factory/kiosk` on the Frappe Factory site. Sign-in is the user's Frappe login (every 7 days) plus their PIN (every time). There is one site of record in the cloud; OpsKiosk keeps only a cache and a queue (TRD, Kiosk).
 
 **Navigation.** The app opens on Plants: one card per plant the user may see, problems first. A card opens that plant, and every other screen (alarms, runs, setup) is scoped to the open plant; the sidebar's first item goes back to Plants. The sidebar is fixed at full screen height and scrolls only if its own items outgrow the screen. The page body scrolls under a fixed header, as in frappe-ui's DesktopShell.
 
@@ -339,7 +340,7 @@ Every link below is a switch in Settings → ERPNext, so a company turns on only
 
 ## Kiosk access
 
-A kiosk is a full-screen station app, like ERPNext POS: a Floor Supervisor opens a session on a registered tablet, only the people assigned to that Kiosk Profile can sign in, and it shows only that station's machines. Each Kiosk Profile has a view: Line (filling and packing), Maintenance or Quality. Maintenance and QA watch their own part of the plant from their own tablets, so they respond quickly. Access needs both a role and an assignment.
+A kiosk is a full-screen station, on OpsKiosk at the plant or as a cloud kiosk, set up like ERPNext POS: a Floor Supervisor opens a session on a registered tablet, only the people assigned to that Kiosk Profile can sign in, and it shows only that station's machines. Each Kiosk Profile has a view: Line (filling and packing), Maintenance or Quality. Maintenance and QA watch their own part of the plant from their own tablets, so they respond quickly. Access needs both a role and an assignment.
 
 | Who | Role | On the kiosk | Why |
 | --- | --- | --- | --- |

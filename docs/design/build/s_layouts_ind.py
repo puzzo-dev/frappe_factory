@@ -12,7 +12,7 @@ def sel_box(svg, x, y, w, h, label):
     lw = 8 + len(label) * 6.4
     ov = (f'<g aria-label="Selected {label}"><rect x="{x}" y="{y}" width="{w}" height="{h}" fill="none" stroke="var(--ink-blue-7)" stroke-width="1.25"/>'
           f'<g fill="var(--surface-base)" stroke="var(--ink-blue-7)" stroke-width="1.25">{hs}</g>'
-          f'<rect x="{x}" y="{y+h+8}" width="{lw:.0f}" height="20" rx="4" fill="var(--ink-blue-7)"/><text x="{x+lw/2:.0f}" y="{y+h+22}" text-anchor="middle" font-size="11" font-weight="500" fill="#fff">{label}</text></g>')
+          f'<rect x="{x}" y="{y+h+8}" width="{lw:.0f}" height="20" rx="4" fill="var(--ink-blue-7)"/><text x="{x+lw/2:.0f}" y="{y+h+22}" text-anchor="middle" font-size="12" font-weight="500" fill="#fff">{label}</text></g>')
     return svg.replace('</svg>', ov + '</svg>')
 
 GEN = [('Handling', [(n, f()) for n, f in I.GENERAL[:5]]),
@@ -37,7 +37,7 @@ editor('LayoutPoultry.dc.html', [('Poultry farm', [(n, f()) for n, f in I.POULTR
        [('temperature', 'EDGE-P1 · H3.TEMP', 'number · °C', True, '31.8'), ('humidity', 'EDGE-P1 · H3.RH', 'number · %', True, '71'),
         ('ammonia', 'EDGE-P1 · H3.NH3', 'number · ppm', True, '14'), ('fans running', 'EDGE-P1 · H3.FANS', 'number', True, '6'), ('pad pump', '', 'bool', False)],
        'Layer houses and egg room', 'Poultry farm', 'PoultryFarm.dc.html', 'Draft · v2', 'Live: v1', 35,
-       '<span style="color:var(--ink-amber-7);display:flex">' + ic("alert-t","i s35") + '</span><span style="color:var(--ink-gray-8)">1 problem</span><span class="qs">H3 pad pump not bound</span>',
+       '<span style="color:var(--ink-amber-8);display:flex">' + ic("alert-t","i s35") + '</span><span style="color:var(--ink-gray-8)">1 problem</span><span class="qs">H3 pad pump not bound</span>',
        dict(plant=('PF', 'Poultry farm'), plant_href='PoultryFarm.dc.html', counts={'Alarms': '2', 'Downtime': '1', 'Quality holds': '1'}, layout_href='LayoutPoultry.dc.html'), top=110, pos=('440','136'), feeds='<span class="chip" style="height:20px">Egg belt → grader</span>')
 
 WATER = [('Water and beverage', [('Sachet filler', S.filler(True)), ('Media filter', S.mmf()), ('Cartridge filter', S.cart()), ('RO array', S.ro()), ('UV unit', S.uv()), ('Ion exchange', S.ix()), ('Dosing pump', S.dosing())]),
@@ -54,5 +54,5 @@ editor('LayoutPlantD.dc.html', WATER + GEN,
        sel_box(pd_plain, 436, 26, 68, 68, 'AT-401 · lead analyser'), S.analyser(), 'AT-401', 'Analyser · water pack v3', 'AT-401 · Lead analyser',
        [('value', 'EDGE-D1 · AT401.PV', 'number · µg/L', True, '1.4 at 05:34'), ('alert', 'EDGE-D1 · AT401.HI', 'bool', True, 'Off'), ('trip', 'EDGE-D1 · AT401.HIHI', 'bool', True, 'Off')],
        'Treatment and filling', 'Plant D', 'PlantD.dc.html', 'Draft · v3', 'Live: v2', 46,
-       '<span style="color:var(--ink-gray-5);display:flex">' + ic("info","i s35") + '</span><span style="color:var(--ink-gray-8)">Edge offline</span><span class="qs">you can edit; live values return when it syncs</span>',
+       '<span style="color:var(--ink-gray-6);display:flex">' + ic("info","i s35") + '</span><span style="color:var(--ink-gray-8)">Edge offline</span><span class="qs">you can edit; live values return when it syncs</span>',
        dict(plant=('PD', 'Plant D'), plant_href='PlantD.dc.html', counts={'Alarms': '1', 'Downtime': '1'}, layout_href='LayoutPlantD.dc.html', foot='<span class="dot o"></span>Edge offline since 05:34'), top=110, pos=('440', '30'), feeds='<span class="qs">Instrument on the line · feeds nothing</span>')

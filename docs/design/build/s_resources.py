@@ -5,20 +5,20 @@ from ff import *
 head = header(crumb(('Plants','Plants.dc.html'),('Koyo 1','Main.dc.html'),('Resources',None)),
   f'<span class="bd gray"><span class="dot g"></span>Live · 10 s</span><button type="button" class="btn solid">{ic("package")}Request materials</button>')
 
-def tank(name, desc, pct, vol, cap, note, color='var(--ink-gray-7)', warn=''):
+def tank(name, desc, pct, vol, cap, note, color='oklch(0.925 0.039 243.489)', warn=''):
     h = 112
     lvl = h*pct/100
     marks = ''.join(f'<line x1="0" x2="6" y1="{h-h*p/100:.0f}" y2="{h-h*p/100:.0f}" stroke="var(--outline-gray-3)"/>' for p in (25,50,75))
     return f'''<div style="display:flex;flex-direction:column;gap:12px">
-<svg width="56" height="{h+2}" viewBox="0 0 56 {h+2}" role="img" aria-label="{name} {pct}%"><rect x="0.5" y="0.5" width="55" height="{h}" rx="6" fill="var(--surface-gray-1)" stroke="var(--outline-gray-2)"/><rect x="1" y="{h-lvl+0.5:.1f}" width="54" height="{lvl:.1f}" rx="5" fill="{color}" opacity=".85"/>{marks}</svg>
+<svg width="56" height="{h+2}" viewBox="0 0 56 {h+2}" role="img" aria-label="{name} {pct}%"><rect x="0.5" y="0.5" width="55" height="{h}" rx="6" fill="var(--surface-gray-1)" stroke="var(--outline-gray-2)"/><rect x="1" y="{h-lvl+0.5:.1f}" width="54" height="{lvl:.1f}" rx="5" fill="{color}" />{marks}</svg>
 <div style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-weight:600;color:var(--ink-gray-9)">{name}</span><span class="qs">{desc}</span><span class="tab" style="font-size:20px;font-weight:600;color:var(--ink-gray-9);margin-top:4px">{pct}%</span><span class="qs tab">{vol} of {cap} m³</span><span style="font-size:13px;color:{warn or 'var(--ink-gray-7)'}">{note}</span></div></div>'''
 
 tanks = f'''<section class="card" style="display:flex;flex-direction:column;gap:16px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h3">Water</h2><span class="qs">Level transmitters LT-101 … LT-501</span></div>
 <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
 {tank('T1 · Raw', 'Borehole feed', 58, '11.6', '20', 'Lasts 14 h at 4.8 m³/h')}
 {tank('T2 · Permeate', 'After RO', 70, '3.5', '5', 'Lasts 3.1 h, RO stopped')}
-{tank('T4 · Verification', 'Before fillers', 0, '0.0', '2', 'Drained for the trip', 'var(--ink-gray-7)', 'var(--ink-gray-5)')}
-{tank('T5 · Quarantine', 'Rejected water', 46, '2.3', '5', 'Full in 1 h 10 min', 'var(--surface-red-6)', 'var(--ink-red-7)')}
+{tank('T4 · Verification', 'Before fillers', 0, '0.0', '2', 'Drained for the trip', warn='var(--ink-gray-6)')}
+{tank('T5 · Quarantine', 'Rejected water', 46, '2.3', '5', 'Full in 1 h 10 min', 'var(--surface-amber-3)', 'var(--ink-red-7)')}
 </div></section>'''
 
 # ---------- power: the source is detected, not typed in
@@ -30,7 +30,7 @@ energy = f'''<section class="card" style="display:flex;flex-direction:column;gap
 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch">
 {src_tile('grid', 'Grid', bd('Off', 'gray'), 'Off since 07:40 · 62% of today', False)}
 {src_tile('gen', 'Generator', bd('Running', 'amber'), 'GEN-1 · 78 kW of 120 · diesel 41 h left', True)}
-<div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45;color:var(--ink-gray-7);padding:4px 2px"><span style="display:flex;color:var(--ink-gray-5);margin-top:2px">{ic("info","i s35")}</span><span>Switched by itself at 07:40. Read from the changeover switch ATS-1 (PLC-1 input DI 0.4) and confirmed by the generator controller. Click a source for details; the generator shows its diesel tank.</span></div></div>
+<div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45;color:var(--ink-gray-7);padding:4px 2px"><span style="display:flex;color:var(--ink-gray-6);margin-top:2px">{ic("info","i s35")}</span><span>Switched by itself at 07:40. Read from the changeover switch ATS-1 (PLC-1 input DI 0.4) and confirmed by the generator controller. Click a source for details; the generator shows its diesel tank.</span></div></div>
 </section>'''
 
 # ---------- consumables
@@ -48,7 +48,7 @@ items = [
 rows = []
 for k, n, w, oh, rate, hrs, reorder, run, warn, stock, *_ in items:
     pct = min(hrs/(reorder*3) * 100, 100)
-    rc = 'color:var(--ink-amber-7);font-weight:500' if warn else 'color:var(--ink-gray-8)'
+    rc = 'color:var(--ink-amber-8);font-weight:500' if warn else 'color:var(--ink-gray-8)'
     reo = f'{reorder} h' if reorder < 200 else f'{reorder//24} days'
     rows.append(f'''<div class="lr {{{{cls_rsel__{k}}}}}" role="button" tabindex="0" onClick="{{{{set_rsel__{k}}}}}" style="{C};min-height:56px;cursor:pointer"><span class="c"><div class="t1">{n}</div><div class="m">{w}</div></span><span class="tab">{oh}</span><span class="tab qs" style="color:var(--ink-gray-7)">{rate}</span><span class="tab qs" style="color:var(--ink-gray-7)">{reo}</span>
 <span style="display:flex;flex-direction:column;gap:6px;min-width:0"><span class="tab" style="{rc}">{run}</span><span class="bar"><i class="{'a' if warn else ''}" style="width:{pct:.0f}%"></i></span></span><span class="qs c">{stock}</span></div>''')
@@ -79,7 +79,7 @@ for k, n, w, oh, rate, hrs, reorder, run, warn, stock, unit, code, hist in items
 <div class="inset" style="display:flex;flex-direction:column;gap:6px"><span class="qs">{hist_label}</span>{chart}</div>
 {kv([("On hand", oh), ("Use rate", rate), ("Reorder at", f"{reorder} h of runway" if reorder < 200 else f"{reorder // 24} days left"), ("In store", stock), ("Pack", unit), ("ERPNext item", f'<span class="tab">{code}</span>'), ("Warehouse", "Koyo 1 · Stores")])}
 <div class="qs" style="line-height:1.5">{"Replaced when ΔP reaches 1.0 bar or after 30 days. Replacing logs a Stock Entry and resets the counter." if is_filter else ("Replaced at 9,000 h or under 90% intensity." if k == "uv" else "Use rate comes from the dosing pump stroke counter, checked against tank level each shift.")}</div></div>'''
-    foot = pfoot(f'<button type="button" class="btn solid">{ic("package")}{"Request" if warn or not life else "Order spare"}</button>', btn('Log a refill' if not life else 'Log replacement'), btn('Open in ERPNext', 'ext', 'ghost'))
+    foot = pfoot(f'<button type="button" class="btn">{ic("package")}{"Request" if warn or not life else "Order spare"}</button>', btn('Log a refill' if not life else 'Log replacement'), btn('Open in ERPNext', 'ext', 'ghost'))
     panes += pane(k, (body_, foot))
 
 # generator and its diesel day tank
@@ -90,15 +90,15 @@ def day_tank(pct, cap):
     re_y = h - h * 0.25
     return (f'<svg width="100%" viewBox="0 0 {w+20} {h+36}" role="img" aria-label="Diesel tank {pct}%"><rect x="10" y="10" width="{w}" height="{h}" rx="14" fill="var(--surface-gray-1)" stroke="var(--outline-gray-3)" stroke-width="1.5"/>'
             f'<clipPath id="dtc"><rect x="10" y="10" width="{w}" height="{h}" rx="14"/></clipPath><rect x="10" y="{10 + h - lvl:.1f}" width="{w}" height="{lvl:.1f}" fill="var(--surface-amber-3)" clip-path="url(#dtc)"/>'
-            f'<line x1="10" x2="{w+10}" y1="{10+re_y:.1f}" y2="{10+re_y:.1f}" stroke="var(--ink-amber-7)" stroke-dasharray="4 4"/><text x="{w+6}" y="{6+re_y:.1f}" text-anchor="end" font-size="11" fill="var(--ink-amber-7)">Reorder 25%</text>'
+            f'<line x1="10" x2="{w+10}" y1="{10+re_y:.1f}" y2="{10+re_y:.1f}" stroke="var(--ink-amber-7)" stroke-dasharray="4 4"/><text x="{w+6}" y="{6+re_y:.1f}" text-anchor="end" font-size="12" fill="var(--ink-amber-8)">Reorder 25%</text>'
             f'<rect x="{w-40}" y="4" width="24" height="8" rx="2" fill="var(--outline-gray-3)"/>'
             f'<text x="{10 + w/2}" y="{10 + h/2 - 4}" text-anchor="middle" font-size="26" font-weight="600" fill="var(--ink-gray-9)">{pct}%</text><text x="{10 + w/2}" y="{10 + h/2 + 18}" text-anchor="middle" font-size="13" fill="var(--ink-gray-7)">560 of {cap:,} L</text>'
-            f'<text x="10" y="{h+30}" font-size="11" fill="var(--ink-gray-5)">DT-1 day tank · level from LT-901</text></svg>')
+            f'<text x="10" y="{h+30}" font-size="12" fill="var(--ink-gray-6)">DT-1 day tank · level from LT-901</text></svg>')
 gen_body = f'''{phead('Generator · GEN-1', '120 kW diesel set · feeds the whole plant through ATS-1', bd('Running', 'amber'))}
 <div style="padding:12px 16px;display:flex;flex-direction:column;gap:16px">
 <div style="display:flex;flex-direction:column;gap:8px"><h3 class="h3">Diesel tank</h3>{day_tank(28, 2000)}</div>
 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
-<div class="kpi"><span class="k">Runs out in</span><span class="v" style="color:var(--ink-amber-7)">41 h</span><span class="d">at today's load</span></div>
+<div class="kpi"><span class="k">Runs out in</span><span class="v" style="color:var(--ink-amber-8)">41 h</span><span class="d">at today's load</span></div>
 <div class="kpi"><span class="k">Burn rate</span><span class="v">13.7</span><span class="d">L/h at 78 kW</span></div></div>
 <div class="inset" style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between" class="qs"><span>Level · last 7 days</span><span>Refilled 18 Nov · 1,200 L</span></div>{dchart}</div>
 <h3 class="h3" style="margin-top:4px">Generator</h3>
@@ -106,7 +106,7 @@ gen_body = f'''{phead('Generator · GEN-1', '120 kW diesel set · feeds the whol
 <h3 class="h3" style="margin-top:4px">Refuels</h3>
 {kv([("18 Nov", "1,200 L · Halima S. · DN-0219"), ("11 Nov", "1,000 L · Halima S. · DN-0204"), ("4 Nov", "1,100 L · Musa A. · DN-0191")])}
 </div>'''
-gen_foot = pfoot(f'<button type="button" class="btn solid">{ic("package")}Request diesel</button>', btn('Log a refuel'), f'<a class="btn ghost" href="Trends.dc.html">{ic("chart")}Trends</a>')
+gen_foot = pfoot(f'<button type="button" class="btn">{ic("package")}Request diesel</button>', btn('Log a refuel'), f'<a class="btn ghost" href="Trends.dc.html">{ic("chart")}Trends</a>')
 grid_body = f'''{phead('Grid', 'Utility supply through ATS-1', bd('Off', 'gray'))}
 <div style="padding:12px 16px;display:flex;flex-direction:column;gap:16px">
 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">

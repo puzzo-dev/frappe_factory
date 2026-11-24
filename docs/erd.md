@@ -42,11 +42,11 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
-| Production Run | Submittable | `start`, `end`, `good_qty`, `reject_qty`, `rejects` (table: qty, reason), `status` | → Work Order, → Plant Area (line), → Batch (optional) |
+| Production Run | Submittable | `start`, `end`, `good_qty`, `reject_qty`, `rejects` (table: qty, reason), `state` (Planned, Running, Stopped, Ended, Posted, Post failed; the Work Order keeps its own ERPNext status) | → Work Order, → Plant Area (line), → Batch (optional) |
 | Factory Event | Log | `ts`, `event_type` (State, Status), `from_state`, `to_state`, `reason_code`, `msg_id` (unique) | → Plant Asset, → IoT Device Registry |
 | Machine Stop (was Downtime Entry; renamed because ERPNext already has a Downtime Entry DocType) | Submittable | `start`, `end`, `duration_min`, `planned`, `comment`, `events` (table) | → Production Run, → Downtime Reason, → Plant Asset |
-| Alarm | Regular | `status` (Raised, Acknowledged, Cleared, Shelved, Closed), `raised_at`, `acked_at`, `acked_by`, `cleared_at`, `shelved_until`, `shelve_reason`, `peak_value`, `repeat_count`, `escalation_level` | → Alarm Definition, → Plant Asset |
-| Interlock Trip | Submittable | `tripped_at`, `readings_snapshot` (JSON), `steps` (table: step, done_by, done_at, value), `lab_value`, `signed_off_by`, `signed_off_at`, `restarted_at` | → Alarm, → Production Run, → Machine Stop, → Quality Inspection |
+| Alarm | Regular | `state` (Active unacknowledged, Active acknowledged, Cleared unacknowledged, Shelved, Closed; ISA-18.2), `raised_at`, `acked_at`, `acked_by`, `cleared_at`, `shelved_until`, `shelve_reason`, `peak_value`, `repeat_count`, `escalation_level` | → Alarm Definition, → Plant Asset |
+| Interlock Trip | Submittable | `phase` (Stopped, Sampling, Awaiting release, Awaiting reset, Restarted, Closed; moved only by recovery steps, the hold's lot decisions and the PLC key reset), `tripped_at`, `readings_snapshot` (JSON), `steps` (table: step, done_by, done_at, value), `lab_value`, `signed_off_by`, `signed_off_at`, `restarted_at` | → Alarm, → Production Run, → Machine Stop, → Quality Inspection |
 | Device Command | Submittable | `value`, `action`, `reason`, `status`, `requested_by`, `approved_by`, `sent_at`, `result`, `result_at` | → Tag, → IoT Device Registry |
 | Refill Entry | Submittable | `qty`, `supplier`, `level_before`, `level_after`, `delivery_note` | → Resource Meter, → Stock Entry (optional) |
 
@@ -56,7 +56,7 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 | --- | --- | --- | --- |
 | Shift Production Summary | Submittable | `shift_date`, `good_qty`, `reject_qty`, `uptime_min`, `downtime_min`, `oee`, `water_l`, `diesel_l`, `kwh`, `alarms`, `trips`, `notes` | → Plant Area, → Shift Type |
 | Daily Plant Summary | Regular | `date`, same totals as shift, per site | → Plant Area (site) |
-| Plant Status | Regular, one row per plant, overwritten | `state` (Running, Alert, Tripped, Offline), `note`, `good_qty_shift`, `open_alarms_p1/p2/p3`, `lowest_runway`, `last_seen`; feeds the Plants home cards | → Plant Area (site) |
+| Plant Status | Regular, one row per plant, overwritten | `state` (Offline, Tripped, Alarm P1, Alert, Running: the first that holds, in that order), `connection` (Live, Delayed 30 s – 5 min, Offline, Never connected; from the last heartbeat, read by the sidebar, header badge and offline banner), `note`, `good_qty_shift`, `open_alarms_p1/p2/p3`, `lowest_runway`, `last_seen`; feeds the Plants home cards | → Plant Area (site) |
 | Resource Reading | Log | `ts`, `level`, `volume` (hourly from rollups) | → Resource Meter |
 | Sync Outbox | Log | `seq`, `ref_doctype`, `ref_name` (Dynamic Link), `operation`, `status`, `attempts`, `last_error` | → DocType |
 | Machine Telemetry | Virtual | reads TimescaleDB: `ts`, `tag`, `value`, `quality` | → Tag |
@@ -67,7 +67,9 @@ Key fields only; standard Frappe fields (`name`, `owner`, `creation`, `modified`
 
 | DocType | Kind | Key fields | Links to |
 | --- | --- | --- | --- |
-| Kiosk Profile | Regular | `kiosk_name`, `machines` (Table MultiSelect of Plant Asset), `allowed_actions`, `device_token`, `idle_minutes`, `disabled` | → Plant Area (site) |
+| Kiosk Profile | Regular | `kiosk_name`, `kiosk_type` (Select: At the plant, Cloud), `view`, `machines` (Table MultiSelect of Plant Asset), `allowed_actions`, `device_token`, `frappe_login_days` (default 7), `idle_logout` (default 10 min), `disabled` | → Plant Area (site) |
+| Kiosk PIN | Regular, one per user, only the user and System Manager can read | `user`, `pin_hash` (Argon2), `previous_hashes` (last 3), `set_on`, `failed_count`, `locked_until` | → User |
+| Kiosk Login | Regular, written by Frappe Factory | `user`, `kiosk_profile`, `logged_in_at`, `expires_on`, `token_hash`, `revoked` | → User, → Kiosk Profile |
 | Kiosk Profile User | Child of Kiosk Profile | `user`, `is_default` | → User |
 | Kiosk Session | Submittable, like POS Opening and Closing Entry | `opened_by`, `opened_at`, `closed_by`, `closed_at`, `status` | → Kiosk Profile, → Shift Type, → Production Run (only with ERPNext) |
 | ERPNext Settings | Single | `enabled`, `mode` (Same site, Another site), `site_url`, `api_key`, `api_secret` (Password), `company`, `fg_warehouse`, one Check per link (work orders, stock, downtime, workstation status, quality, material requests, HRMS) | — |
@@ -105,3 +107,12 @@ TimescaleDB holds the readings. It has no foreign keys to MariaDB; the Frappe `T
 | `reading_1h` (continuous aggregate on `reading_1m`) | `(tag, bucket)` | same | forever |
 
 The agent's local buffer is a SQLite file with the same columns as `reading`, emptied in order when TimescaleDB is reachable.
+
+### Sync (deployment 2, and the OpsKiosk queue in deployment 1)
+
+| DocType | Site | Fields | Notes |
+| --- | --- | --- | --- |
+| Sync Outbox | Plant | `msg_id` (unique), `seq` (unique per plant), `ref_doctype`, `ref_name`, `payload`, `status` (Pending, Sent, Confirmed), `attempts`, `last_error` | Written in the same transaction as the record |
+| Sync Receipt | Cloud | `plant`, `msg_id` (unique), `seq`, `ref_doctype`, `ref_name`, `received_at` | Saved in the same transaction as the record; a repeat finds it and saves nothing |
+| Sync Rejection | Cloud | `plant`, `msg_id`, `seq`, `ref_doctype`, `payload`, `reason`, `status` (Open, Resent, Dismissed) | Confirmed to the plant so the queue moves on; fixed and resent by a Factory Manager |
+| Plant Sync State | Cloud | `plant`, `confirmed_up_to` (seq), `held` (seqs waiting for a gap), `last_daily_check`, `daily_check_result` | One per plant |

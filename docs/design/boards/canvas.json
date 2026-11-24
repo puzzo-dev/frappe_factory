@@ -1,1 +1,1692 @@
-{"v":3,"createdOnFiles":{"v":1,"at":"2026-11-21T20:48:02Z"},"title":"Frappe Factory \u2014 screens","launch":{"view":"canvas"},"pages":[],"boards":{"Dashboard.dc.html":{"x":-1520,"y":0,"w":1440,"h":900,"title":"0 \u00b7 Dashboard \u00b7 factory and manufacturing","expand":"fill","is_interactive":true},"DashboardMenu.dc.html":{"x":0,"y":0,"w":1440,"h":900,"title":"1 \u00b7 App menu \u00b7 app switcher, App settings","expand":"fill","is_interactive":true},"Plants.dc.html":{"x":1520,"y":0,"w":1440,"h":900,"title":"2 \u00b7 Plants","expand":"fill","is_interactive":true},"AddPlant.dc.html":{"x":3040,"y":0,"w":1440,"h":900,"title":"3 \u00b7 New plant \u00b7 choose industry","expand":"fill","is_interactive":true},"CoAlarms.dc.html":{"x":-1520,"y":1160,"w":1440,"h":900,"title":"5 \u00b7 Alarms \u00b7 all plants","expand":"fill","is_interactive":true},"CoTrips.dc.html":{"x":0,"y":1160,"w":1440,"h":900,"title":"6 \u00b7 Interlock trips \u00b7 all plants","expand":"fill","is_interactive":true},"CoProduction.dc.html":{"x":1520,"y":1160,"w":1440,"h":900,"title":"7 \u00b7 Production \u00b7 all plants \u00b7 needs ERPNext","expand":"fill","is_interactive":true},"CoDowntime.dc.html":{"x":3040,"y":1160,"w":1440,"h":900,"title":"8 \u00b7 Downtime \u00b7 all plants","expand":"fill","is_interactive":true},"CoHolds.dc.html":{"x":4560,"y":1160,"w":1440,"h":900,"title":"9 \u00b7 Quality holds \u00b7 all plants","expand":"fill","is_interactive":true},"CoMaint.dc.html":{"x":6080,"y":1160,"w":1440,"h":900,"title":"10 \u00b7 Maintenance \u00b7 all plants","expand":"fill","is_interactive":true},"CoReports.dc.html":{"x":7600,"y":1160,"w":1440,"h":900,"title":"11 \u00b7 Reports","expand":"fill","is_interactive":true},"CompanyGeneral.dc.html":{"x":-1520,"y":2320,"w":1440,"h":900,"title":"12 \u00b7 App settings \u00b7 general","expand":"fill","is_interactive":true},"CompanyUsers.dc.html":{"x":0,"y":2320,"w":1440,"h":900,"title":"13 \u00b7 Settings \u00b7 Users and roles","expand":"fill","is_interactive":true},"CompanyKiosks.dc.html":{"x":1520,"y":2320,"w":1440,"h":900,"title":"14 \u00b7 Settings \u00b7 Kiosks and assigned users","expand":"fill","is_interactive":true},"CompanyTemplates.dc.html":{"x":3040,"y":2320,"w":1440,"h":900,"title":"15 \u00b7 Settings \u00b7 Process templates","expand":"fill","is_interactive":true},"QHTemplate.dc.html":{"x":4560,"y":2320,"w":1440,"h":900,"title":"16 \u00b7 Quality hold template editor","expand":"fill","is_interactive":true},"CompanyERPNext.dc.html":{"x":6080,"y":2320,"w":1440,"h":900,"title":"17 \u00b7 Settings \u00b7 ERPNext","expand":"fill","is_interactive":true},"CompanyAPI.dc.html":{"x":7600,"y":2320,"w":1440,"h":900,"title":"18 \u00b7 Settings \u00b7 API and webhooks","expand":"fill","is_interactive":true},"CompanyWhatsApp.dc.html":{"x":9120,"y":2320,"w":1440,"h":900,"title":"19 \u00b7 Settings \u00b7 WhatsApp","expand":"fill","is_interactive":true},"CompanyTB.dc.html":{"x":10640,"y":2320,"w":1440,"h":900,"title":"20 \u00b7 Settings \u00b7 ThingsBoard","expand":"fill","is_interactive":true},"Main.dc.html":{"x":-1520,"y":3480,"w":1440,"h":900,"title":"21 \u00b7 Plant \u00b7 Koyo 1 (live)","expand":"fill","is_interactive":true},"Alarms.dc.html":{"x":0,"y":3480,"w":1440,"h":900,"title":"22 \u00b7 Alarms \u00b7 Koyo 1","expand":"fill","is_interactive":true},"TripList.dc.html":{"x":1520,"y":3480,"w":1440,"h":900,"title":"23 \u00b7 Interlock trips \u00b7 Koyo 1","expand":"fill","is_interactive":true},"Trip.dc.html":{"x":3040,"y":3480,"w":1440,"h":900,"title":"24 \u00b7 Interlock trip recovery","expand":"fill","is_interactive":true},"HoldList.dc.html":{"x":4560,"y":3480,"w":1440,"h":900,"title":"25 \u00b7 Quality holds \u00b7 Koyo 1","expand":"fill","is_interactive":true},"QualityHold.dc.html":{"x":6080,"y":3480,"w":1440,"h":900,"title":"26 \u00b7 Quality hold (QA decides held product)","expand":"fill","is_interactive":true},"PinnedTags.dc.html":{"x":7600,"y":3480,"w":1440,"h":900,"title":"27 \u00b7 Edit pinned tags","expand":"fill","is_interactive":true},"Runs.dc.html":{"x":-1520,"y":4640,"w":1440,"h":900,"title":"28 \u00b7 Production runs \u00b7 needs ERPNext","expand":"fill","is_interactive":true},"RunDetail.dc.html":{"x":0,"y":4640,"w":1440,"h":900,"title":"29 \u00b7 Run detail \u00b7 needs ERPNext","expand":"fill","is_interactive":true},"Downtime.dc.html":{"x":1520,"y":4640,"w":1440,"h":900,"title":"30 \u00b7 Downtime","expand":"fill","is_interactive":true},"Resources.dc.html":{"x":3040,"y":4640,"w":1440,"h":900,"title":"31 \u00b7 Resources","expand":"fill","is_interactive":true},"Trends.dc.html":{"x":-1520,"y":5800,"w":1440,"h":900,"title":"32 \u00b7 Trends","expand":"fill","is_interactive":true},"Handover.dc.html":{"x":0,"y":5800,"w":1440,"h":900,"title":"33 \u00b7 Shift handover","expand":"fill","is_interactive":true},"HandoverHistory.dc.html":{"x":1520,"y":5800,"w":1440,"h":900,"title":"34 \u00b7 Past shift handovers","expand":"fill","is_interactive":true},"KioskOpen.dc.html":{"x":-1520,"y":6960,"w":1180,"h":820,"title":"35 \u00b7 Kiosk \u00b7 open session","expand":"fill","is_interactive":true},"KioskLogin.dc.html":{"x":-260,"y":6960,"w":1180,"h":820,"title":"36 \u00b7 Kiosk \u00b7 sign in with Frappe user + PIN","expand":"fill","is_interactive":true},"KioskLine.dc.html":{"x":1000,"y":6960,"w":1180,"h":820,"title":"37 \u00b7 Kiosk \u00b7 line view (filling and packing)","expand":"fill","is_interactive":true},"KioskRejects.dc.html":{"x":2260,"y":6960,"w":1180,"h":820,"title":"38 \u00b7 Kiosk \u00b7 log rejects","expand":"fill","is_interactive":true},"KioskMaint.dc.html":{"x":3520,"y":6960,"w":1180,"h":820,"title":"39 \u00b7 Kiosk \u00b7 maintenance view","expand":"fill","is_interactive":true},"KioskFault.dc.html":{"x":4780,"y":6960,"w":1180,"h":820,"title":"40 \u00b7 Kiosk \u00b7 report a fault","expand":"fill","is_interactive":true},"KioskSpare.dc.html":{"x":6040,"y":6960,"w":1180,"h":820,"title":"41 \u00b7 Kiosk \u00b7 request a spare part","expand":"fill","is_interactive":true},"KioskQA.dc.html":{"x":7300,"y":6960,"w":1180,"h":820,"title":"42 \u00b7 Kiosk \u00b7 quality view","expand":"fill","is_interactive":true},"KioskSample.dc.html":{"x":8560,"y":6960,"w":1180,"h":820,"title":"43 \u00b7 Kiosk \u00b7 record a sample","expand":"fill","is_interactive":true},"KioskDecide.dc.html":{"x":9820,"y":6960,"w":1180,"h":820,"title":"44 \u00b7 Kiosk \u00b7 decide a held lot","expand":"fill","is_interactive":true},"PlantB.dc.html":{"x":-1520,"y":8120,"w":1440,"h":900,"title":"45 \u00b7 Plant \u00b7 Plant B bottled water (ThingsBoard)","expand":"fill","is_interactive":true},"PlantD.dc.html":{"x":0,"y":8120,"w":1440,"h":900,"title":"46 \u00b7 Plant \u00b7 Plant D sachet water (offline)","expand":"fill","is_interactive":true},"RiceMill.dc.html":{"x":1520,"y":8120,"w":1440,"h":900,"title":"47 \u00b7 Plant \u00b7 Rice mill","expand":"fill","is_interactive":true},"OilMill.dc.html":{"x":3040,"y":8120,"w":1440,"h":900,"title":"48 \u00b7 Plant \u00b7 Oil mill","expand":"fill","is_interactive":true},"PoultryFarm.dc.html":{"x":4560,"y":8120,"w":1440,"h":900,"title":"49 \u00b7 Plant \u00b7 Poultry farm (layers)","expand":"fill","is_interactive":true},"Devices.dc.html":{"x":-1520,"y":9280,"w":1440,"h":900,"title":"50 \u00b7 Devices and tags","expand":"fill","is_interactive":true},"AssetFlow.dc.html":{"x":0,"y":9280,"w":1440,"h":900,"title":"51 \u00b7 Process flow \u00b7 feeds into","expand":"fill","is_interactive":true},"LayoutEditor.dc.html":{"x":1520,"y":9280,"w":1440,"h":900,"title":"52 \u00b7 Layout editor \u00b7 Koyo 1 water","expand":"fill","is_interactive":true},"LayoutPlantB.dc.html":{"x":3040,"y":9280,"w":1440,"h":900,"title":"53 \u00b7 Layout editor \u00b7 Plant B","expand":"fill","is_interactive":true},"LayoutPlantD.dc.html":{"x":4560,"y":9280,"w":1440,"h":900,"title":"54 \u00b7 Layout editor \u00b7 Plant D","expand":"fill","is_interactive":true},"LayoutRice.dc.html":{"x":6080,"y":9280,"w":1440,"h":900,"title":"55 \u00b7 Layout editor \u00b7 rice mill","expand":"fill","is_interactive":true},"LayoutOil.dc.html":{"x":7600,"y":9280,"w":1440,"h":900,"title":"56 \u00b7 Layout editor \u00b7 oil mill","expand":"fill","is_interactive":true},"LayoutPoultry.dc.html":{"x":9120,"y":9280,"w":1440,"h":900,"title":"57 \u00b7 Layout editor \u00b7 poultry farm","expand":"fill","is_interactive":true},"Symbols.dc.html":{"x":10640,"y":9280,"w":1440,"h":900,"title":"58 \u00b7 Symbol library \u00b7 industry packs","expand":"fill","is_interactive":true},"AlarmDefs.dc.html":{"x":12160,"y":9280,"w":1440,"h":900,"title":"59 \u00b7 Alarm definitions","expand":"fill","is_interactive":true},"Settings.dc.html":{"x":13680,"y":9280,"w":1440,"h":900,"title":"60 \u00b7 Plant settings \u00b7 Koyo 1 \u00b7 connector","expand":"fill","is_interactive":true},"SettingsCommands.dc.html":{"x":15200,"y":9280,"w":1440,"h":900,"title":"61 \u00b7 Plant settings \u00b7 commands","expand":"fill","is_interactive":true},"LayoutUtilities.dc.html":{"x":16720,"y":9280,"w":1440,"h":900,"title":"62 \u00b7 Layout editor \u00b7 Koyo 1 utilities \u00b7 grid, ATS, generator","expand":"fill","is_interactive":true},"SettingsGeneral.dc.html":{"x":-1520,"y":10440,"w":1440,"h":900,"title":"63 \u00b7 Plant settings \u00b7 General","expand":"fill","is_interactive":true},"SettingsShifts.dc.html":{"x":0,"y":10440,"w":1440,"h":900,"title":"64 \u00b7 Plant settings \u00b7 Shifts","expand":"fill","is_interactive":true},"SettingsReasons.dc.html":{"x":1520,"y":10440,"w":1440,"h":900,"title":"65 \u00b7 Plant settings \u00b7 Downtime reasons","expand":"fill","is_interactive":true},"SettingsRetention.dc.html":{"x":3040,"y":10440,"w":1440,"h":900,"title":"66 \u00b7 Plant settings \u00b7 Data retention","expand":"fill","is_interactive":true},"SettingsNotify.dc.html":{"x":4560,"y":10440,"w":1440,"h":900,"title":"67 \u00b7 Plant settings \u00b7 Notifications","expand":"fill","is_interactive":true},"SettingsWhatsApp.dc.html":{"x":6080,"y":10440,"w":1440,"h":900,"title":"68 \u00b7 Plant settings \u00b7 WhatsApp","expand":"fill","is_interactive":true},"SettingsPeople.dc.html":{"x":7600,"y":10440,"w":1440,"h":900,"title":"69 \u00b7 Plant settings \u00b7 People and roles","expand":"fill","is_interactive":true},"EdgeLogin.dc.html":{"x":-1520,"y":11600,"w":1440,"h":900,"title":"70 \u00b7 OpsEdge box \u00b7 Log in \u00b7 local technician","expand":"fill","is_interactive":true},"EdgeStatus.dc.html":{"x":0,"y":11600,"w":1440,"h":900,"title":"71 \u00b7 OpsEdge box \u00b7 Status","expand":"fill","is_interactive":true},"EdgePair.dc.html":{"x":1520,"y":11600,"w":1440,"h":900,"title":"72 \u00b7 OpsEdge box \u00b7 Pairing and network","expand":"fill","is_interactive":true},"EdgeDevices.dc.html":{"x":3040,"y":11600,"w":1440,"h":900,"title":"73 \u00b7 OpsEdge box \u00b7 Devices","expand":"fill","is_interactive":true},"EdgeTags.dc.html":{"x":4560,"y":11600,"w":1440,"h":900,"title":"74 \u00b7 OpsEdge box \u00b7 Live tags \u00b7 read-only","expand":"fill","is_interactive":true},"EdgeScan.dc.html":{"x":6080,"y":11600,"w":1440,"h":900,"title":"75 \u00b7 OpsEdge box \u00b7 Scan","expand":"fill","is_interactive":true},"EdgeLogs.dc.html":{"x":7600,"y":11600,"w":1440,"h":900,"title":"76 \u00b7 OpsEdge box \u00b7 Logs and update","expand":"fill","is_interactive":true}},"order":["Dashboard.dc.html","DashboardMenu.dc.html","Plants.dc.html","AddPlant.dc.html","CoAlarms.dc.html","CoTrips.dc.html","CoProduction.dc.html","CoDowntime.dc.html","CoHolds.dc.html","CoMaint.dc.html","CoReports.dc.html","CompanyGeneral.dc.html","CompanyUsers.dc.html","CompanyKiosks.dc.html","CompanyTemplates.dc.html","QHTemplate.dc.html","CompanyERPNext.dc.html","CompanyAPI.dc.html","CompanyWhatsApp.dc.html","CompanyTB.dc.html","Main.dc.html","Alarms.dc.html","TripList.dc.html","Trip.dc.html","HoldList.dc.html","QualityHold.dc.html","PinnedTags.dc.html","Runs.dc.html","RunDetail.dc.html","Downtime.dc.html","Resources.dc.html","Trends.dc.html","Handover.dc.html","HandoverHistory.dc.html","KioskOpen.dc.html","KioskLogin.dc.html","KioskLine.dc.html","KioskRejects.dc.html","KioskMaint.dc.html","KioskFault.dc.html","KioskSpare.dc.html","KioskQA.dc.html","KioskSample.dc.html","KioskDecide.dc.html","PlantB.dc.html","PlantD.dc.html","RiceMill.dc.html","OilMill.dc.html","PoultryFarm.dc.html","Devices.dc.html","AssetFlow.dc.html","LayoutEditor.dc.html","LayoutPlantB.dc.html","LayoutPlantD.dc.html","LayoutRice.dc.html","LayoutOil.dc.html","LayoutPoultry.dc.html","Symbols.dc.html","AlarmDefs.dc.html","Settings.dc.html","SettingsCommands.dc.html","LayoutUtilities.dc.html","SettingsGeneral.dc.html","SettingsShifts.dc.html","SettingsReasons.dc.html","SettingsRetention.dc.html","SettingsNotify.dc.html","SettingsWhatsApp.dc.html","SettingsPeople.dc.html","EdgeLogin.dc.html","EdgeStatus.dc.html","EdgePair.dc.html","EdgeDevices.dc.html","EdgeTags.dc.html","EdgeScan.dc.html","EdgeLogs.dc.html"],"notes":{"title":{"x":-1520,"y":-420,"text":"Frappe Factory \u00b7 screens","kind":"title1","maxW":6000},"sample":{"x":-1520,"y":-280,"text":"Built on frappe-ui. One Sidebar on every desktop screen: the app menu at the top (brand and user, opening Apps, Desk, kiosk, help, theme, settings, log out, as in Frappe CRM and Helpdesk), then the company items, or the plant switcher and plant items inside a plant. Frappe Factory runs standalone as a monitoring app; Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked (same site or another site). Koyo 1 at 08:46 on 22 Nov, 32 min after the lead trip, is the main story; every other plant (Plant B, Plant D, Oil mill, Rice mill, Poultry farm) is sample data. Every plant card opens its plant, and every board is linked: click through from the sidebar, app menu, settings and kiosk buttons. Desktop boards are 1440 \u00d7 900; kiosk boards are a 1180 \u00d7 820 tablet. Units: a sachet is 50 cl; a bag is 20 sachets (10 L); each Koyo filler is rated 2,000 sachets (100 bags) an hour.","size":"m","w":900},"row0":{"x":-1520,"y":-110,"text":"Company","size":"m","w":1400},"row1":{"x":-1520,"y":1050,"text":"Across all plants","size":"m","w":1400},"row2":{"x":-1520,"y":2210,"text":"Company settings","size":"m","w":1400},"row3":{"x":-1520,"y":3370,"text":"Inside a plant","size":"m","w":1400},"row4":{"x":-1520,"y":4530,"text":"Production","size":"m","w":1400},"row5":{"x":-1520,"y":5690,"text":"Analysis and shifts","size":"m","w":1400},"row6":{"x":-1520,"y":6850,"text":"Floor kiosks \u00b7 full screen like ERPNext POS \u00b7 line, maintenance and quality views \u00b7 Frappe user + PIN","size":"m","w":1400},"row7":{"x":-1520,"y":8010,"text":"Every other plant: bottled water, sachet water offline, rice, oil, poultry","size":"m","w":1400},"row8":{"x":-1520,"y":9170,"text":"Plant setup \u00b7 process flow (feeds into) and an editable layout for every plant","size":"m","w":1400},"row9":{"x":-1520,"y":10330,"text":"Plant settings \u00b7 every option opens inside the same popup","size":"m","w":1400},"row10":{"x":-1520,"y":11490,"text":"OpsEdge box \u00b7 its own local page for setting up and checking the box; works without the internet","size":"m","w":1400}},"designSystems":[]}
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-21T20:48:02Z"
+ },
+ "title": "Frappe Factory \u2014 screens",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Dashboard.dc.html": {
+   "x": -1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "0 \u00b7 Dashboard \u00b7 factory and manufacturing",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "DashboardMenu.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "1 \u00b7 App menu \u00b7 app switcher, App settings",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Plants.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "2 \u00b7 Plants",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AddPlant.dc.html": {
+   "x": 3040,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "title": "3 \u00b7 New plant \u00b7 choose industry",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CoAlarms.dc.html": {
+   "x": -1520,
+   "y": 1160,
+   "w": 1440,
+   "h": 900,
+   "title": "5 \u00b7 Alarms \u00b7 all plants",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CoTrips.dc.html": {
+   "x": 0,
+   "y": 1160,
+   "w": 1440,
+   "h": 900,
+   "title": "6 \u00b7 Interlock trips \u00b7 all plants",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CoProduction.dc.html": {
+   "x": 1520,
+   "y": 1160,
+   "w": 1440,
+   "h": 900,
+   "title": "7 \u00b7 Production \u00b7 all plants \u00b7 needs ERPNext",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CoDowntime.dc.html": {
+   "x": 3040,
+   "y": 1160,
+   "w": 1440,
+   "h": 900,
+   "title": "8 \u00b7 Downtime \u00b7 all plants",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CoHolds.dc.html": {
+   "x": 4560,
+   "y": 1160,
+   "w": 1440,
+   "h": 900,
+   "title": "9 \u00b7 Quality holds \u00b7 all plants",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CoMaint.dc.html": {
+   "x": 6080,
+   "y": 1160,
+   "w": 1440,
+   "h": 900,
+   "title": "10 \u00b7 Maintenance \u00b7 all plants",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CoReports.dc.html": {
+   "x": 7600,
+   "y": 1160,
+   "w": 1440,
+   "h": 900,
+   "title": "11 \u00b7 Reports",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CompanyGeneral.dc.html": {
+   "x": -1520,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "12 \u00b7 App settings \u00b7 general",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CompanyUsers.dc.html": {
+   "x": 0,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "13 \u00b7 Settings \u00b7 Users and roles",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CompanyKiosks.dc.html": {
+   "x": 1520,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "14 \u00b7 Settings \u00b7 Kiosks: OpsKiosk at the plant or cloud kiosk",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CompanyTemplates.dc.html": {
+   "x": 3040,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "15 \u00b7 Settings \u00b7 Process templates",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "QHTemplate.dc.html": {
+   "x": 4560,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "16 \u00b7 Quality hold template editor",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CompanyERPNext.dc.html": {
+   "x": 6080,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "17 \u00b7 Settings \u00b7 ERPNext",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CompanyAPI.dc.html": {
+   "x": 7600,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "18 \u00b7 Settings \u00b7 API and webhooks",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CompanyWhatsApp.dc.html": {
+   "x": 9120,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "19 \u00b7 Settings \u00b7 WhatsApp",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "CompanyTB.dc.html": {
+   "x": 10640,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "20 \u00b7 Settings \u00b7 ThingsBoard",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Main.dc.html": {
+   "x": -1520,
+   "y": 3480,
+   "w": 1440,
+   "h": 900,
+   "title": "21 \u00b7 Plant \u00b7 Koyo 1 (live)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Alarms.dc.html": {
+   "x": 0,
+   "y": 3480,
+   "w": 1440,
+   "h": 900,
+   "title": "22 \u00b7 Alarms \u00b7 Koyo 1",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "TripList.dc.html": {
+   "x": 1520,
+   "y": 3480,
+   "w": 1440,
+   "h": 900,
+   "title": "23 \u00b7 Interlock trips \u00b7 Koyo 1",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Trip.dc.html": {
+   "x": 3040,
+   "y": 3480,
+   "w": 1440,
+   "h": 900,
+   "title": "24 \u00b7 Interlock trip recovery",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HoldList.dc.html": {
+   "x": 4560,
+   "y": 3480,
+   "w": 1440,
+   "h": 900,
+   "title": "25 \u00b7 Quality holds \u00b7 Koyo 1",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "QualityHold.dc.html": {
+   "x": 6080,
+   "y": 3480,
+   "w": 1440,
+   "h": 900,
+   "title": "26 \u00b7 Quality hold (QA decides held product)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "PinnedTags.dc.html": {
+   "x": 7600,
+   "y": 3480,
+   "w": 1440,
+   "h": 900,
+   "title": "27 \u00b7 Edit pinned tags",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Runs.dc.html": {
+   "x": -1520,
+   "y": 4640,
+   "w": 1440,
+   "h": 900,
+   "title": "28 \u00b7 Production runs \u00b7 needs ERPNext",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "RunDetail.dc.html": {
+   "x": 0,
+   "y": 4640,
+   "w": 1440,
+   "h": 900,
+   "title": "29 \u00b7 Run detail \u00b7 needs ERPNext",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Downtime.dc.html": {
+   "x": 1520,
+   "y": 4640,
+   "w": 1440,
+   "h": 900,
+   "title": "30 \u00b7 Downtime",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Resources.dc.html": {
+   "x": 3040,
+   "y": 4640,
+   "w": 1440,
+   "h": 900,
+   "title": "31 \u00b7 Resources",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Trends.dc.html": {
+   "x": -1520,
+   "y": 5800,
+   "w": 1440,
+   "h": 900,
+   "title": "32 \u00b7 Trends",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Handover.dc.html": {
+   "x": 0,
+   "y": 5800,
+   "w": 1440,
+   "h": 900,
+   "title": "33 \u00b7 Shift handover",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HandoverHistory.dc.html": {
+   "x": 1520,
+   "y": 5800,
+   "w": 1440,
+   "h": 900,
+   "title": "34 \u00b7 Past shift handovers",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskOpen.dc.html": {
+   "x": -1520,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "35 \u00b7 Kiosk \u00b7 open session",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskLogin.dc.html": {
+   "x": -260,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "36 \u00b7 OpsKiosk \u00b7 tap your name, then your PIN (Frappe login on the kiosk still valid)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskLine.dc.html": {
+   "x": 1000,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "37 \u00b7 Kiosk \u00b7 line view (filling and packing)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskRejects.dc.html": {
+   "x": 2260,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "38 \u00b7 Kiosk \u00b7 log rejects",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskMaint.dc.html": {
+   "x": 3520,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "39 \u00b7 Kiosk \u00b7 maintenance view",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskFault.dc.html": {
+   "x": 4780,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "40 \u00b7 Kiosk \u00b7 report a fault",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskSpare.dc.html": {
+   "x": 6040,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "41 \u00b7 Kiosk \u00b7 request a spare part",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskQA.dc.html": {
+   "x": 7300,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "42 \u00b7 Kiosk \u00b7 quality view",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskSample.dc.html": {
+   "x": 8560,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "43 \u00b7 Kiosk \u00b7 record a sample",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskDecide.dc.html": {
+   "x": 9820,
+   "y": 6960,
+   "w": 1180,
+   "h": 820,
+   "title": "44 \u00b7 Kiosk \u00b7 decide a held lot",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "PlantB.dc.html": {
+   "x": -1520,
+   "y": 8120,
+   "w": 1440,
+   "h": 900,
+   "title": "45 \u00b7 Plant \u00b7 Plant B bottled water (ThingsBoard)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "PlantD.dc.html": {
+   "x": 0,
+   "y": 8120,
+   "w": 1440,
+   "h": 900,
+   "title": "46 \u00b7 Plant \u00b7 Plant D sachet water (offline)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "RiceMill.dc.html": {
+   "x": 1520,
+   "y": 8120,
+   "w": 1440,
+   "h": 900,
+   "title": "47 \u00b7 Plant \u00b7 Rice mill",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "OilMill.dc.html": {
+   "x": 3040,
+   "y": 8120,
+   "w": 1440,
+   "h": 900,
+   "title": "48 \u00b7 Plant \u00b7 Oil mill",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "PoultryFarm.dc.html": {
+   "x": 4560,
+   "y": 8120,
+   "w": 1440,
+   "h": 900,
+   "title": "49 \u00b7 Plant \u00b7 Poultry farm (layers)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Devices.dc.html": {
+   "x": -1520,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "50 \u00b7 Devices and tags",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AssetFlow.dc.html": {
+   "x": 0,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "51 \u00b7 Process flow \u00b7 feeds into",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutEditor.dc.html": {
+   "x": 1520,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "52 \u00b7 Layout editor \u00b7 Koyo 1 water",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutPlantB.dc.html": {
+   "x": 3040,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "53 \u00b7 Layout editor \u00b7 Plant B",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutPlantD.dc.html": {
+   "x": 4560,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "54 \u00b7 Layout editor \u00b7 Plant D",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutRice.dc.html": {
+   "x": 6080,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "55 \u00b7 Layout editor \u00b7 rice mill",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutOil.dc.html": {
+   "x": 7600,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "56 \u00b7 Layout editor \u00b7 oil mill",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutPoultry.dc.html": {
+   "x": 9120,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "57 \u00b7 Layout editor \u00b7 poultry farm",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Symbols.dc.html": {
+   "x": 10640,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "58 \u00b7 Symbol library \u00b7 industry packs",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AlarmDefs.dc.html": {
+   "x": 12160,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "59 \u00b7 Alarm definitions",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Settings.dc.html": {
+   "x": 13680,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "60 \u00b7 Plant settings \u00b7 connector \u00b7 deployment 1: edge box + cloud site",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsCommands.dc.html": {
+   "x": 15200,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "61 \u00b7 Plant settings \u00b7 commands",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutUtilities.dc.html": {
+   "x": 16720,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "62 \u00b7 Layout editor \u00b7 Koyo 1 utilities \u00b7 grid, ATS, generator",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsGeneral.dc.html": {
+   "x": -1520,
+   "y": 10440,
+   "w": 1440,
+   "h": 900,
+   "title": "63 \u00b7 Plant settings \u00b7 General",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsShifts.dc.html": {
+   "x": 0,
+   "y": 10440,
+   "w": 1440,
+   "h": 900,
+   "title": "64 \u00b7 Plant settings \u00b7 Shifts",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsReasons.dc.html": {
+   "x": 1520,
+   "y": 10440,
+   "w": 1440,
+   "h": 900,
+   "title": "65 \u00b7 Plant settings \u00b7 Downtime reasons",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsRetention.dc.html": {
+   "x": 3040,
+   "y": 10440,
+   "w": 1440,
+   "h": 900,
+   "title": "66 \u00b7 Plant settings \u00b7 Data retention",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsNotify.dc.html": {
+   "x": 4560,
+   "y": 10440,
+   "w": 1440,
+   "h": 900,
+   "title": "67 \u00b7 Plant settings \u00b7 Notifications",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsWhatsApp.dc.html": {
+   "x": 6080,
+   "y": 10440,
+   "w": 1440,
+   "h": 900,
+   "title": "68 \u00b7 Plant settings \u00b7 WhatsApp",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsPeople.dc.html": {
+   "x": 7600,
+   "y": 10440,
+   "w": 1440,
+   "h": 900,
+   "title": "69 \u00b7 Plant settings \u00b7 People and roles",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeLogin.dc.html": {
+   "x": -1520,
+   "y": 11600,
+   "w": 1440,
+   "h": 900,
+   "title": "70 \u00b7 OpsEdge box \u00b7 Log in \u00b7 local technician",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeStatus.dc.html": {
+   "x": 0,
+   "y": 11600,
+   "w": 1440,
+   "h": 900,
+   "title": "71 \u00b7 OpsEdge box \u00b7 Status",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgePair.dc.html": {
+   "x": 1520,
+   "y": 11600,
+   "w": 1440,
+   "h": 900,
+   "title": "72 \u00b7 OpsEdge box \u00b7 Pairing and network",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeDevices.dc.html": {
+   "x": 3040,
+   "y": 11600,
+   "w": 1440,
+   "h": 900,
+   "title": "73 \u00b7 OpsEdge box \u00b7 Devices",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeTags.dc.html": {
+   "x": 4560,
+   "y": 11600,
+   "w": 1440,
+   "h": 900,
+   "title": "74 \u00b7 OpsEdge box \u00b7 Live tags \u00b7 read-only",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeScan.dc.html": {
+   "x": 6080,
+   "y": 11600,
+   "w": 1440,
+   "h": 900,
+   "title": "75 \u00b7 OpsEdge box \u00b7 Scan",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeLogs.dc.html": {
+   "x": 7600,
+   "y": 11600,
+   "w": 1440,
+   "h": 900,
+   "title": "76 \u00b7 OpsEdge box \u00b7 Logs and update",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskLocked.dc.html": {
+   "x": -1520,
+   "y": 12900,
+   "w": 1440,
+   "h": 900,
+   "title": "77 \u00b7 Kiosk session \u00b7 Five wrong PINs lock that user on every kiosk at the plant for 15 min.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskIdle.dc.html": {
+   "x": 1520,
+   "y": 12900,
+   "w": 1440,
+   "h": 900,
+   "title": "79 \u00b7 Kiosk session \u00b7 After 9.5 min without a tap the kiosk warns, then logs out at 10 min.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskOffline.dc.html": {
+   "x": 3040,
+   "y": 12900,
+   "w": 1440,
+   "h": 900,
+   "title": "Kiosk \u00b7 internet down: OpsKiosk works locally with OpsEdge, entries queue",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskSaveRetry.dc.html": {
+   "x": 4560,
+   "y": 12900,
+   "w": 1440,
+   "h": 900,
+   "title": "81 \u00b7 Kiosk session \u00b7 A save that fails keeps the entry and retries; the button shows the attempt.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskClosing.dc.html": {
+   "x": 6080,
+   "y": 12900,
+   "w": 1440,
+   "h": 900,
+   "title": "82 \u00b7 Kiosk session \u00b7 Closing the kiosk session: a supervisor reviews the shift totals and open items.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AlarmsCleared.dc.html": {
+   "x": -1520,
+   "y": 14060,
+   "w": 1440,
+   "h": 900,
+   "title": "83 \u00b7 Alarm lifecycle \u00b7 A cleared alarm nobody acknowledged stays listed and keeps escalating.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AlarmsShelved.dc.html": {
+   "x": 0,
+   "y": 14060,
+   "w": 1440,
+   "h": 900,
+   "title": "84 \u00b7 Alarm lifecycle \u00b7 Shelved alarms with who shelved them, why, and until when.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AlarmsHistory.dc.html": {
+   "x": 1520,
+   "y": 14060,
+   "w": 1440,
+   "h": 900,
+   "title": "85 \u00b7 Alarm lifecycle \u00b7 Closed alarms with how long they took to acknowledge.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AlarmsEscalated.dc.html": {
+   "x": 3040,
+   "y": 14060,
+   "w": 1440,
+   "h": 900,
+   "title": "86 \u00b7 Alarm lifecycle \u00b7 An unacknowledged alarm past its response time goes up a level.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AlarmsFlood.dc.html": {
+   "x": 4560,
+   "y": 14060,
+   "w": 1440,
+   "h": 900,
+   "title": "87 \u00b7 Alarm lifecycle \u00b7 A flood: downstream alarms are held under the trip so the four that matter stay visible.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AlarmsNone.dc.html": {
+   "x": 6080,
+   "y": 14060,
+   "w": 1440,
+   "h": 900,
+   "title": "88 \u00b7 Alarm lifecycle \u00b7 The calm state: no active alarms, with the last one named.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "PlantConnecting.dc.html": {
+   "x": -1520,
+   "y": 15220,
+   "w": 1440,
+   "h": 900,
+   "title": "89 \u00b7 Plant monitoring \u00b7 A newly paired plant before its first message: nothing is shown as a value.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "PlantDelayed.dc.html": {
+   "x": 0,
+   "y": 15220,
+   "w": 1440,
+   "h": 900,
+   "title": "90 \u00b7 Plant monitoring \u00b7 Between live and offline: data 30 s to 5 min old, shown as delayed.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "PlantNoLayout.dc.html": {
+   "x": 1520,
+   "y": 15220,
+   "w": 1440,
+   "h": 900,
+   "title": "91 \u00b7 Plant monitoring \u00b7 A plant with tags but no layout: live values elsewhere work, the layout area invites one.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "TripAwaitingRelease.dc.html": {
+   "x": -1520,
+   "y": 16380,
+   "w": 1440,
+   "h": 900,
+   "title": "92 \u00b7 Trip recovery \u00b7 Both samples passed; only the Quality Inspector can release the line.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "TripAwaitingReset.dc.html": {
+   "x": 0,
+   "y": 16380,
+   "w": 1440,
+   "h": 900,
+   "title": "93 \u00b7 Trip recovery \u00b7 QA released; the PLC interlock is reset only by the key at the panel.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "TripRestarted.dc.html": {
+   "x": 1520,
+   "y": 16380,
+   "w": 1440,
+   "h": 900,
+   "title": "94 \u00b7 Trip recovery \u00b7 Restarted after the key reset; the trip closes with its quality hold.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "TripSampleFailed.dc.html": {
+   "x": 3040,
+   "y": 16380,
+   "w": 1440,
+   "h": 900,
+   "title": "95 \u00b7 Trip recovery \u00b7 A failed release sample sends recovery back to sampling.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HoldReadyClose.dc.html": {
+   "x": -1520,
+   "y": 17540,
+   "w": 1440,
+   "h": 900,
+   "title": "96 \u00b7 Quality hold \u00b7 Every lot decided: the hold can be closed and its stock moves posted.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HoldClosed.dc.html": {
+   "x": 0,
+   "y": 17540,
+   "w": 1440,
+   "h": 900,
+   "title": "97 \u00b7 Quality hold \u00b7 A closed hold shows what was posted and closes its trip.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HoldDeviation.dc.html": {
+   "x": 1520,
+   "y": 17540,
+   "w": 1440,
+   "h": 900,
+   "title": "98 \u00b7 Quality hold \u00b7 A release with deviation waits for a second person, the Factory Manager.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HoldPostFailed.dc.html": {
+   "x": 3040,
+   "y": 17540,
+   "w": 1440,
+   "h": 900,
+   "title": "99 \u00b7 Quality hold \u00b7 If ERPNext refuses a stock move, the hold stays open and says why.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "DowntimeSaved.dc.html": {
+   "x": -1520,
+   "y": 18700,
+   "w": 1440,
+   "h": 900,
+   "title": "100 \u00b7 Downtime reason \u00b7 After picking a reason: the row updates and a short confirmation shows.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "DowntimeAllGiven.dc.html": {
+   "x": 0,
+   "y": 18700,
+   "w": 1440,
+   "h": 900,
+   "title": "101 \u00b7 Downtime reason \u00b7 Every stop today has a reason: the badge says so instead of disappearing.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "RunStart.dc.html": {
+   "x": -1520,
+   "y": 19860,
+   "w": 1440,
+   "h": 900,
+   "title": "102 \u00b7 Production run \u00b7 Start a run from a work order; it stays disabled while a hold blocks it.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "RunEndConfirm.dc.html": {
+   "x": 0,
+   "y": 19860,
+   "w": 1440,
+   "h": 900,
+   "title": "103 \u00b7 Production run \u00b7 Ending a run shows what will post to ERPNext before it does.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "RunPostFailed.dc.html": {
+   "x": 1520,
+   "y": 19860,
+   "w": 1440,
+   "h": 900,
+   "title": "104 \u00b7 Production run \u00b7 Ended but not posted: counts are kept and the ERPNext error is shown.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "RunNoERPNext.dc.html": {
+   "x": 3040,
+   "y": 19860,
+   "w": 1440,
+   "h": 900,
+   "title": "105 \u00b7 Production run \u00b7 The same run with ERPNext off: no work order, nothing posted.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HandoverSubmitted.dc.html": {
+   "x": -1520,
+   "y": 21020,
+   "w": 1440,
+   "h": 900,
+   "title": "106 \u00b7 Shift handover \u00b7 Submitted and waiting for the incoming supervisor to accept.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HandoverAccepted.dc.html": {
+   "x": 0,
+   "y": 21020,
+   "w": 1440,
+   "h": 900,
+   "title": "107 \u00b7 Shift handover \u00b7 Accepted: the shift closes and the handover becomes read-only.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "HandoverBlocked.dc.html": {
+   "x": 1520,
+   "y": 21020,
+   "w": 1440,
+   "h": 900,
+   "title": "108 \u00b7 Shift handover \u00b7 Without a submitted handover the shift cannot close.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutEmpty.dc.html": {
+   "x": -1520,
+   "y": 22180,
+   "w": 1440,
+   "h": 900,
+   "title": "109 \u00b7 Layout editor \u00b7 A new layout: start from the Process Flow or by dragging symbols.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutFromFlow.dc.html": {
+   "x": 0,
+   "y": 22180,
+   "w": 1440,
+   "h": 900,
+   "title": "110 \u00b7 Layout editor \u00b7 Generated from the Process Flow; a notice says what was placed and what to check.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutPreview.dc.html": {
+   "x": 1520,
+   "y": 22180,
+   "w": 1440,
+   "h": 900,
+   "title": "111 \u00b7 Layout editor \u00b7 Preview shows the draft as operators will see it, with live values, before publishing.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutPublishConfirm.dc.html": {
+   "x": 3040,
+   "y": 22180,
+   "w": 1440,
+   "h": 900,
+   "title": "112 \u00b7 Layout editor \u00b7 Publishing shows what changed and any problems left.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutPublished.dc.html": {
+   "x": 4560,
+   "y": 22180,
+   "w": 1440,
+   "h": 900,
+   "title": "113 \u00b7 Layout editor \u00b7 Published: the version is live and the previous one is kept.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "LayoutConflict.dc.html": {
+   "x": 6080,
+   "y": 22180,
+   "w": 1440,
+   "h": 900,
+   "title": "114 \u00b7 Layout editor \u00b7 Two people editing: the second publisher merges or saves a new version.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "FlowProposing.dc.html": {
+   "x": -1520,
+   "y": 23340,
+   "w": 1440,
+   "h": 900,
+   "title": "115 \u00b7 Process flow \u00b7 Roles below Factory Manager propose a change through the workflow.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "FlowRejected.dc.html": {
+   "x": 0,
+   "y": 23340,
+   "w": 1440,
+   "h": 900,
+   "title": "116 \u00b7 Process flow \u00b7 A rejected proposal keeps the reason and leaves the live version unchanged.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "FlowReadOnly.dc.html": {
+   "x": 1520,
+   "y": 23340,
+   "w": 1440,
+   "h": 900,
+   "title": "117 \u00b7 Process flow \u00b7 With no workflow for their role, lower roles can only read the flow.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "FlowDeadEnd.dc.html": {
+   "x": 3040,
+   "y": 23340,
+   "w": 1440,
+   "h": 900,
+   "title": "118 \u00b7 Process flow \u00b7 Validation blocks approval while any path ends without a filler, drain or return.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AddPlantDetails.dc.html": {
+   "x": -1520,
+   "y": 24500,
+   "w": 1440,
+   "h": 900,
+   "title": "119 \u00b7 Add plant \u00b7 Step 1: the plant's name, code, place and warehouse.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AddPlantEdge.dc.html": {
+   "x": 0,
+   "y": 24500,
+   "w": 1440,
+   "h": 900,
+   "title": "120 \u00b7 Add plant \u00b7 Step 3: pair the plant's edge box with a code.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AddPlantLayout.dc.html": {
+   "x": 1520,
+   "y": 24500,
+   "w": 1440,
+   "h": 900,
+   "title": "121 \u00b7 Add plant \u00b7 Step 4: the first layout, from the template, another plant or blank.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "AddPlantDone.dc.html": {
+   "x": 3040,
+   "y": 24500,
+   "w": 1440,
+   "h": 900,
+   "title": "122 \u00b7 Add plant \u00b7 Finished: what was created and what happens next.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ResourcesGrid.dc.html": {
+   "x": -1520,
+   "y": 25660,
+   "w": 1440,
+   "h": 900,
+   "title": "123 \u00b7 Resources and power \u00b7 The grid is back: the switch is read from ATS-1 and the generator stops.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ResourcesNotMeasured.dc.html": {
+   "x": 0,
+   "y": 25660,
+   "w": 1440,
+   "h": 900,
+   "title": "124 \u00b7 Resources and power \u00b7 Without an ATS, controller or meter signal, the source is shown as not measured.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ResourcesDieselLow.dc.html": {
+   "x": 1520,
+   "y": 25660,
+   "w": 1440,
+   "h": 900,
+   "title": "125 \u00b7 Resources and power \u00b7 Diesel under its reorder point, with the request already raised.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ConnTestFailed.dc.html": {
+   "x": -1520,
+   "y": 26820,
+   "w": 1440,
+   "h": 900,
+   "title": "126 \u00b7 Connector \u00b7 Test now fails: the message says which side did not answer.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ConnUplinkDown.dc.html": {
+   "x": 0,
+   "y": 26820,
+   "w": 1440,
+   "h": 900,
+   "title": "127 \u00b7 Connector \u00b7 The uplink is down: the buffer fills on the box and screens say how old the data is.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ConnCodeExpired.dc.html": {
+   "x": 1520,
+   "y": 26820,
+   "w": 1440,
+   "h": 900,
+   "title": "128 \u00b7 Connector \u00b7 An unused pairing code expires after 24 h; a new one is one click.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ConnUnsaved.dc.html": {
+   "x": 3040,
+   "y": 26820,
+   "w": 1440,
+   "h": 900,
+   "title": "129 \u00b7 Connector \u00b7 A changed field shows a save bar; closing asks before discarding.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeUplinkDown.dc.html": {
+   "x": -1520,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "130 \u00b7 Edge box \u00b7 Uplink down on the box itself: the buffer grows, local work carries on.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeClockUnsynced.dc.html": {
+   "x": 0,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "131 \u00b7 Edge box \u00b7 With the clock unsynced the box keeps reading but holds uploads.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeUnpaired.dc.html": {
+   "x": 1520,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "132 \u00b7 Edge box \u00b7 First boot: the only job is to enter the pairing code.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeUpdating.dc.html": {
+   "x": 3040,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "133 \u00b7 Edge box \u00b7 An update in progress, with the automatic rollback stated.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeDeviceOffline.dc.html": {
+   "x": 4560,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "134 \u00b7 Edge box \u00b7 One device stops answering: which port, since when, and what still works.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeScanEmpty.dc.html": {
+   "x": 6080,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "135 \u00b7 Edge box \u00b7 A scan that finds nothing says what it tried and what to check.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "EdgeLocked.dc.html": {
+   "x": 7600,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "136 \u00b7 Edge box \u00b7 Local logins lock after five wrong passwords, with the way to reset on the box.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "DevicesOffline.dc.html": {
+   "x": -1520,
+   "y": 29140,
+   "w": 1440,
+   "h": 900,
+   "title": "137 \u00b7 Devices and tags \u00b7 A device that stops answering marks its tags Bad and points to the edge page.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "DevicesBadTag.dc.html": {
+   "x": 0,
+   "y": 29140,
+   "w": 1440,
+   "h": 900,
+   "title": "138 \u00b7 Devices and tags \u00b7 A value outside the sensor range is marked Bad and pauses its alarms.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "DevicesSuggestions.dc.html": {
+   "x": 1520,
+   "y": 29140,
+   "w": 1440,
+   "h": 900,
+   "title": "139 \u00b7 Devices and tags \u00b7 Devices the edge box found arrive as suggestions to review.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "DevicesConfigHistory.dc.html": {
+   "x": 3040,
+   "y": 29140,
+   "w": 1440,
+   "h": 900,
+   "title": "140 \u00b7 Devices and tags \u00b7 The history of config versions sent to the box, with restore.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ListLoading.dc.html": {
+   "x": -1520,
+   "y": 30300,
+   "w": 1440,
+   "h": 900,
+   "title": "141 \u00b7 Company lists \u00b7 Loading: rows keep their shape so nothing jumps when data arrives.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ListEmpty.dc.html": {
+   "x": 0,
+   "y": 30300,
+   "w": 1440,
+   "h": 900,
+   "title": "142 \u00b7 Company lists \u00b7 Empty: says the plants are reporting, so empty means calm, not broken.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ListNoResults.dc.html": {
+   "x": 1520,
+   "y": 30300,
+   "w": 1440,
+   "h": 900,
+   "title": "143 \u00b7 Company lists \u00b7 No results for a search or filter, with a way out.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "ListFailed.dc.html": {
+   "x": 3040,
+   "y": 30300,
+   "w": 1440,
+   "h": 900,
+   "title": "144 \u00b7 Company lists \u00b7 A failed load says what failed and that alarms are still being raised.",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskPin.dc.html": {
+   "x": 12160,
+   "y": 2320,
+   "w": 1440,
+   "h": 900,
+   "title": "21 \u00b7 App menu \u00b7 Kiosk PIN (your own, set behind your Frappe password)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "KioskFirstSignIn.dc.html": {
+   "x": 0,
+   "y": 12900,
+   "w": 1440,
+   "h": 900,
+   "title": "78 \u00b7 Kiosk session \u00b7 First sign-in: Frappe login, then choose a PIN (Frappe login every 7 days, PIN every time)",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsPlantSite.dc.html": {
+   "x": 18240,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "60b \u00b7 Plant settings \u00b7 connector \u00b7 deployment 2: edge box + plant site + cloud site",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "SettingsSyncProblem.dc.html": {
+   "x": 19760,
+   "y": 9280,
+   "w": 1440,
+   "h": 900,
+   "title": "60c \u00b7 Plant settings \u00b7 deployment 2 \u00b7 a record the cloud rejected (kept, fixed, resent with the same number)",
+   "expand": "fill",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "Dashboard.dc.html",
+  "DashboardMenu.dc.html",
+  "Plants.dc.html",
+  "AddPlant.dc.html",
+  "CoAlarms.dc.html",
+  "CoTrips.dc.html",
+  "CoProduction.dc.html",
+  "CoDowntime.dc.html",
+  "CoHolds.dc.html",
+  "CoMaint.dc.html",
+  "CoReports.dc.html",
+  "CompanyGeneral.dc.html",
+  "CompanyUsers.dc.html",
+  "CompanyKiosks.dc.html",
+  "CompanyTemplates.dc.html",
+  "QHTemplate.dc.html",
+  "CompanyERPNext.dc.html",
+  "CompanyAPI.dc.html",
+  "CompanyWhatsApp.dc.html",
+  "CompanyTB.dc.html",
+  "KioskPin.dc.html",
+  "Main.dc.html",
+  "Alarms.dc.html",
+  "TripList.dc.html",
+  "Trip.dc.html",
+  "HoldList.dc.html",
+  "QualityHold.dc.html",
+  "PinnedTags.dc.html",
+  "Runs.dc.html",
+  "RunDetail.dc.html",
+  "Downtime.dc.html",
+  "Resources.dc.html",
+  "Trends.dc.html",
+  "Handover.dc.html",
+  "HandoverHistory.dc.html",
+  "KioskOpen.dc.html",
+  "KioskLogin.dc.html",
+  "KioskLine.dc.html",
+  "KioskRejects.dc.html",
+  "KioskMaint.dc.html",
+  "KioskFault.dc.html",
+  "KioskSpare.dc.html",
+  "KioskQA.dc.html",
+  "KioskSample.dc.html",
+  "KioskDecide.dc.html",
+  "PlantB.dc.html",
+  "PlantD.dc.html",
+  "RiceMill.dc.html",
+  "OilMill.dc.html",
+  "PoultryFarm.dc.html",
+  "Devices.dc.html",
+  "AssetFlow.dc.html",
+  "LayoutEditor.dc.html",
+  "LayoutPlantB.dc.html",
+  "LayoutPlantD.dc.html",
+  "LayoutRice.dc.html",
+  "LayoutOil.dc.html",
+  "LayoutPoultry.dc.html",
+  "Symbols.dc.html",
+  "AlarmDefs.dc.html",
+  "Settings.dc.html",
+  "SettingsPlantSite.dc.html",
+  "SettingsSyncProblem.dc.html",
+  "SettingsCommands.dc.html",
+  "LayoutUtilities.dc.html",
+  "SettingsGeneral.dc.html",
+  "SettingsShifts.dc.html",
+  "SettingsReasons.dc.html",
+  "SettingsRetention.dc.html",
+  "SettingsNotify.dc.html",
+  "SettingsWhatsApp.dc.html",
+  "SettingsPeople.dc.html",
+  "EdgeLogin.dc.html",
+  "EdgeStatus.dc.html",
+  "EdgePair.dc.html",
+  "EdgeDevices.dc.html",
+  "EdgeTags.dc.html",
+  "EdgeScan.dc.html",
+  "EdgeLogs.dc.html",
+  "KioskLocked.dc.html",
+  "KioskFirstSignIn.dc.html",
+  "KioskIdle.dc.html",
+  "KioskOffline.dc.html",
+  "KioskSaveRetry.dc.html",
+  "KioskClosing.dc.html",
+  "AlarmsCleared.dc.html",
+  "AlarmsShelved.dc.html",
+  "AlarmsHistory.dc.html",
+  "AlarmsEscalated.dc.html",
+  "AlarmsFlood.dc.html",
+  "AlarmsNone.dc.html",
+  "PlantConnecting.dc.html",
+  "PlantDelayed.dc.html",
+  "PlantNoLayout.dc.html",
+  "TripAwaitingRelease.dc.html",
+  "TripAwaitingReset.dc.html",
+  "TripRestarted.dc.html",
+  "TripSampleFailed.dc.html",
+  "HoldReadyClose.dc.html",
+  "HoldClosed.dc.html",
+  "HoldDeviation.dc.html",
+  "HoldPostFailed.dc.html",
+  "DowntimeSaved.dc.html",
+  "DowntimeAllGiven.dc.html",
+  "RunStart.dc.html",
+  "RunEndConfirm.dc.html",
+  "RunPostFailed.dc.html",
+  "RunNoERPNext.dc.html",
+  "HandoverSubmitted.dc.html",
+  "HandoverAccepted.dc.html",
+  "HandoverBlocked.dc.html",
+  "LayoutEmpty.dc.html",
+  "LayoutFromFlow.dc.html",
+  "LayoutPreview.dc.html",
+  "LayoutPublishConfirm.dc.html",
+  "LayoutPublished.dc.html",
+  "LayoutConflict.dc.html",
+  "FlowProposing.dc.html",
+  "FlowRejected.dc.html",
+  "FlowReadOnly.dc.html",
+  "FlowDeadEnd.dc.html",
+  "AddPlantDetails.dc.html",
+  "AddPlantEdge.dc.html",
+  "AddPlantLayout.dc.html",
+  "AddPlantDone.dc.html",
+  "ResourcesGrid.dc.html",
+  "ResourcesNotMeasured.dc.html",
+  "ResourcesDieselLow.dc.html",
+  "ConnTestFailed.dc.html",
+  "ConnUplinkDown.dc.html",
+  "ConnCodeExpired.dc.html",
+  "ConnUnsaved.dc.html",
+  "EdgeUplinkDown.dc.html",
+  "EdgeClockUnsynced.dc.html",
+  "EdgeUnpaired.dc.html",
+  "EdgeUpdating.dc.html",
+  "EdgeDeviceOffline.dc.html",
+  "EdgeScanEmpty.dc.html",
+  "EdgeLocked.dc.html",
+  "DevicesOffline.dc.html",
+  "DevicesBadTag.dc.html",
+  "DevicesSuggestions.dc.html",
+  "DevicesConfigHistory.dc.html",
+  "ListLoading.dc.html",
+  "ListEmpty.dc.html",
+  "ListNoResults.dc.html",
+  "ListFailed.dc.html"
+ ],
+ "notes": {
+  "title": {
+   "x": -1520,
+   "y": -420,
+   "text": "Frappe Factory \u00b7 screens",
+   "kind": "title1",
+   "maxW": 6000
+  },
+  "sample": {
+   "x": -1520,
+   "y": -280,
+   "text": "Built on frappe-ui. One Sidebar on every desktop screen: the app menu at the top (brand and user, opening Apps, Desk, kiosk, help, theme, settings, log out, as in Frappe CRM and Helpdesk), then the company items, or the plant switcher and plant items inside a plant. Frappe Factory runs standalone as a monitoring app; Production runs, run detail and the Manufacturing half of the Dashboard need ERPNext linked (same site or another site). Koyo 1 at 08:46 on 22 Nov, 32 min after the lead trip, is the main story; every other plant (Plant B, Plant D, Oil mill, Rice mill, Poultry farm) is sample data. Every plant card opens its plant, and every board is linked: click through from the sidebar, app menu, settings and kiosk buttons. Desktop boards are 1440 \u00d7 900; kiosk boards are a 1180 \u00d7 820 tablet. Units: a sachet is 50 cl; a bag is 20 sachets (10 L); each Koyo filler is rated 2,000 sachets (100 bags) an hour.",
+   "size": "m",
+   "w": 900
+  },
+  "row0": {
+   "x": -1520,
+   "y": -110,
+   "text": "Company",
+   "size": "m",
+   "w": 1400
+  },
+  "row1": {
+   "x": -1520,
+   "y": 1050,
+   "text": "Across all plants",
+   "size": "m",
+   "w": 1400
+  },
+  "row2": {
+   "x": -1520,
+   "y": 2210,
+   "text": "Company settings",
+   "size": "m",
+   "w": 1400
+  },
+  "row3": {
+   "x": -1520,
+   "y": 3370,
+   "text": "Inside a plant",
+   "size": "m",
+   "w": 1400
+  },
+  "row4": {
+   "x": -1520,
+   "y": 4530,
+   "text": "Production",
+   "size": "m",
+   "w": 1400
+  },
+  "row5": {
+   "x": -1520,
+   "y": 5690,
+   "text": "Analysis and shifts",
+   "size": "m",
+   "w": 1400
+  },
+  "row6": {
+   "x": -1520,
+   "y": 6850,
+   "text": "Floor kiosks \u00b7 full screen like ERPNext POS \u00b7 line, maintenance and quality views \u00b7 Frappe user + PIN",
+   "size": "m",
+   "w": 1400
+  },
+  "row7": {
+   "x": -1520,
+   "y": 8010,
+   "text": "Every other plant: bottled water, sachet water offline, rice, oil, poultry",
+   "size": "m",
+   "w": 1400
+  },
+  "row8": {
+   "x": -1520,
+   "y": 9170,
+   "text": "Plant setup \u00b7 process flow (feeds into) and an editable layout for every plant",
+   "size": "m",
+   "w": 1400
+  },
+  "row9": {
+   "x": -1520,
+   "y": 10330,
+   "text": "Plant settings \u00b7 every option opens inside the same popup",
+   "size": "m",
+   "w": 1400
+  },
+  "row10": {
+   "x": -1520,
+   "y": 11490,
+   "text": "OpsEdge box \u00b7 its own local page for setting up and checking the box; works without the internet",
+   "size": "m",
+   "w": 1400
+  },
+  "st_0": {
+   "x": -1520,
+   "y": 12790,
+   "text": "States \u00b7 Kiosk session \u00b7 6",
+   "size": "m",
+   "w": 1400
+  },
+  "st_1": {
+   "x": -1520,
+   "y": 13950,
+   "text": "States \u00b7 Alarm lifecycle \u00b7 6",
+   "size": "m",
+   "w": 1400
+  },
+  "st_2": {
+   "x": -1520,
+   "y": 15110,
+   "text": "States \u00b7 Plant monitoring \u00b7 3",
+   "size": "m",
+   "w": 1400
+  },
+  "st_3": {
+   "x": -1520,
+   "y": 16270,
+   "text": "States \u00b7 Trip recovery \u00b7 4",
+   "size": "m",
+   "w": 1400
+  },
+  "st_4": {
+   "x": -1520,
+   "y": 17430,
+   "text": "States \u00b7 Quality hold \u00b7 4",
+   "size": "m",
+   "w": 1400
+  },
+  "st_5": {
+   "x": -1520,
+   "y": 18590,
+   "text": "States \u00b7 Downtime reason \u00b7 2",
+   "size": "m",
+   "w": 1400
+  },
+  "st_6": {
+   "x": -1520,
+   "y": 19750,
+   "text": "States \u00b7 Production run \u00b7 4",
+   "size": "m",
+   "w": 1400
+  },
+  "st_7": {
+   "x": -1520,
+   "y": 20910,
+   "text": "States \u00b7 Shift handover \u00b7 3",
+   "size": "m",
+   "w": 1400
+  },
+  "st_8": {
+   "x": -1520,
+   "y": 22070,
+   "text": "States \u00b7 Layout editor \u00b7 6",
+   "size": "m",
+   "w": 1400
+  },
+  "st_9": {
+   "x": -1520,
+   "y": 23230,
+   "text": "States \u00b7 Process flow \u00b7 4",
+   "size": "m",
+   "w": 1400
+  },
+  "st_10": {
+   "x": -1520,
+   "y": 24390,
+   "text": "States \u00b7 Add plant \u00b7 4",
+   "size": "m",
+   "w": 1400
+  },
+  "st_11": {
+   "x": -1520,
+   "y": 25550,
+   "text": "States \u00b7 Resources and power \u00b7 3",
+   "size": "m",
+   "w": 1400
+  },
+  "st_12": {
+   "x": -1520,
+   "y": 26710,
+   "text": "States \u00b7 Connector \u00b7 4",
+   "size": "m",
+   "w": 1400
+  },
+  "st_13": {
+   "x": -1520,
+   "y": 27870,
+   "text": "States \u00b7 Edge box \u00b7 7",
+   "size": "m",
+   "w": 1400
+  },
+  "st_14": {
+   "x": -1520,
+   "y": 29030,
+   "text": "States \u00b7 Devices and tags \u00b7 4",
+   "size": "m",
+   "w": 1400
+  },
+  "st_15": {
+   "x": -1520,
+   "y": 30190,
+   "text": "States \u00b7 Company lists \u00b7 4",
+   "size": "m",
+   "w": 1400
+  }
+ },
+ "designSystems": []
+}
