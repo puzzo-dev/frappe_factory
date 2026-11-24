@@ -1,5 +1,5 @@
 """Floor kiosk shell: a tablet fixed at the filling line. No sidebar by design (one task per screen,
-signed in with the user's own Frappe login; access comes from the Kiosk Profile, like POS Profile); same frappe-ui tokens at the touch sizes (lg controls, 40-56px targets)."""
+OpsKiosk, the standalone kiosk app; sign-in is a Frappe user + their PIN); same frappe-ui tokens at the touch sizes (lg controls, 40-56px targets)."""
 from ff import *
 import symbols as S
 
@@ -29,19 +29,29 @@ def kpage(name, body, overlay=''):
     ov = (closer('kd') + f'<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent;font-size:16px"><label for="kd" class="overlay" aria-label="Close"></label>{overlay}</div>') if overlay else ''
     return page(name, f'<div style="position:relative;height:100vh"><div class="ff" style="flex-direction:column;font-size:16px">{body}</div>{ov}</div>', {"$preview": {"width": W_, "height": H_}}, helmet_extra=KCSS)
 
-# ---------------- Sign in: the Frappe login. The Kiosk Profile assigned to the user opens next, as POS Profile does.
+# ---------------- Sign in: Frappe user + PIN
+people = [('KE', 'Kemi E.', 'kemi.e@koyo1.ng', 'Machine Operator', True), ('SI', 'Sani I.', 'sani.i@koyo1.ng', 'Machine Operator', True), ('YB', 'Yusuf B.', 'yusuf.b@koyo1.ng', 'Machine Operator', False), ('GO', 'Grace O.', 'grace.o@koyo1.ng', 'Quality Inspector', True), ('MA', 'Musa A.', 'musa.a@koyo1.ng', 'Floor Supervisor', True)]
+def ptile(i, a, n, e, r, pin):
+    sel_ = i == 0
+    return f'<button type="button" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border-radius:14px;border:{"2px solid var(--ink-gray-9)" if sel_ else "1px solid var(--outline-gray-2)"};background:{"var(--surface-base)" if pin else "var(--surface-gray-1)"};cursor:{"pointer" if pin else "not-allowed"};font:inherit;{"" if pin else "opacity:.7"}"><span class="av" style="width:56px;height:56px;flex:0 0 56px;font-size:18px">{a}</span><span style="font-size:16px;font-weight:500;color:var(--ink-gray-9)">{n}</span><span class="qs tab" style="font-size:13px">{e}</span><span class="qs" style="font-size:13px">{r}</span>{"" if pin else bd("No PIN yet","amber")}</button>'
+tiles = ''.join(ptile(i, *p) for i, p in enumerate(people))
+keys = ''.join(f'<span class="key">{k}</span>' for k in '123456789') + f'<span class="key" style="font-size:15px;color:var(--ink-gray-6)">Clear</span><span class="key">0</span><span class="key" style="color:var(--ink-gray-6)">{ic("arrow-l")}</span>'
+dots = ''.join(f'<span style="width:16px;height:16px;border-radius:50%;{"background:var(--ink-gray-9)" if i < 2 else "border:2px solid var(--outline-gray-3)"}"></span>' for i in range(6))
 login = f'''{topbar()}
-<div style="flex:1;display:grid;place-items:center;background:var(--surface-gray-1);min-height:0">
-<div style="width:440px;background:var(--surface-base);border-radius:16px;box-shadow:var(--shadow-lg);padding:32px;display:flex;flex-direction:column;gap:18px">
-<div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center"><span class="logo" style="width:44px;height:44px;flex-basis:44px;font-size:16px">FF</span><h1 style="margin:8px 0 0;font-size:24px;font-weight:600;color:var(--ink-gray-9)">Log in to Frappe Factory</h1><p class="ps" style="font-size:15px">Use your own Frappe login. The kiosk assigned to you opens next.</p></div>
-<label class="fl"><span class="lab" style="font-size:15px">Email</span><span class="in lg focus" style="height:48px;font-size:16px"><span class="grow">kemi.e@koyo1.ng</span></span></label>
-<label class="fl"><span class="lab" style="font-size:15px">Password</span><span class="in lg" style="height:48px;font-size:16px"><span class="grow">••••••••••</span>{ic("eye","i s35") if "eye" in IC else ""}</span></label>
-<a href="KioskLine.dc.html" class="kb solid" style="width:100%">Log in</a>
-<div style="display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:12px;background:var(--surface-gray-1);font-size:14px;line-height:1.5;color:var(--ink-gray-7)">
-<div style="display:flex;gap:10px"><span style="color:var(--ink-gray-6);display:flex;margin-top:2px">{ic("info","i s35")}</span><span>This tablet runs the Filling hall T-02 kiosk. Only users assigned to that Kiosk Profile can open it. Everything you record is saved under your Frappe user and this shift.</span></div>
-<div style="display:flex;gap:10px"><span style="color:var(--ink-gray-6);display:flex;margin-top:2px">{ic("clock","i s35")}</span><span>Logs out after 10 min without a tap.</span></div></div>
-<span class="qs" style="font-size:13px;text-align:center">Not assigned? A Factory Manager adds you in App settings → Kiosks.</span>
-</div></div>'''
+<div style="flex:1;display:grid;grid-template-columns:minmax(0,1fr) 400px;min-height:0">
+<div style="padding:28px 32px;display:flex;flex-direction:column;gap:18px;overflow:auto"><div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-size:24px;font-weight:600;color:var(--ink-gray-9)">Who is working here?</h1><p class="ps" style="font-size:15px">Tap your Frappe user, then enter your PIN. Only the 5 users assigned to Filling hall T-02 are listed.</p></div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">{tiles}</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;border-radius:12px;background:var(--surface-gray-1);font-size:14px;line-height:1.5;color:var(--ink-gray-7)">
+<div style="display:flex;gap:10px"><span style="color:var(--ink-gray-6);display:flex;margin-top:2px">{ic("info","i s35")}</span><span>A PIN on its own signs no one in. It is checked against the Frappe user you tapped, so every stop reason, sample and approval is recorded against that user and this shift.</span></div>
+<div style="display:flex;gap:10px"><span style="color:var(--ink-amber-7);display:flex;margin-top:2px">{ic("lock","i s35")}</span><span>Yusuf B. has no PIN yet. He sets one himself in Frappe Factory under the app menu → Kiosk PIN, after entering his Frappe password.</span></div></div>
+<span class="qs" style="font-size:14px">Not listed? A Factory Manager adds your Frappe user to this kiosk in App settings → Kiosks.</span></div>
+<div style="border-left:1px solid var(--outline-gray-1);background:var(--surface-gray-1);padding:28px 32px;display:flex;flex-direction:column;align-items:center;gap:18px">
+<span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">KE</span><div style="text-align:center;display:flex;flex-direction:column;gap:2px"><div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kemi E.</div><div class="qs tab" style="font-size:14px">kemi.e@koyo1.ng · Machine Operator</div><div style="font-size:14px;color:var(--ink-gray-7);margin-top:6px">Enter your 6-digit PIN</div></div>
+<div style="display:flex;gap:12px">{dots}</div>
+<div style="display:grid;grid-template-columns:repeat(3,72px);gap:12px">{keys}</div>
+<a href="KioskLine.dc.html" class="kb solid" style="width:240px">Sign in</a>
+<span class="qs" style="font-size:13px;text-align:center;line-height:1.5">5 wrong PINs lock this user on every kiosk for 15 min. Signs out after 10 min without a tap.</span></div>
+</div>'''
 write('KioskLogin.dc.html', kpage('Kiosk sign in', login))
 
 # ---------------- Line view during the trip, with a stop that needs a reason
@@ -76,13 +86,13 @@ ol = ''.join(f'<a href="{h}" style="text-decoration:none;display:grid;grid-templ
 openk = f"""<div style="position:relative;flex:1;background:var(--surface-gray-1)">
 <div style="position:absolute;inset:0;display:grid;place-items:center">
 <div class="dialog" role="dialog" aria-labelledby="ok-t" style="position:relative;width:560px;display:flex;flex-direction:column">
-<div style="padding:24px 28px 0;display:flex;flex-direction:column;gap:6px"><h1 id="ok-t" style="margin:0;font-size:22px;font-weight:600;color:var(--ink-gray-9)">Open kiosk</h1><p class="ps" style="font-size:15px">Musa A. · musa.a@koyo1.ng · Floor Supervisor. Logged in with his Frappe user. Only kiosks he is assigned to are listed.</p></div>
+<div style="padding:24px 28px 0;display:flex;flex-direction:column;gap:6px"><h1 id="ok-t" style="margin:0;font-size:22px;font-weight:600;color:var(--ink-gray-9)">Open kiosk</h1><p class="ps" style="font-size:15px">Musa A. · musa.a@koyo1.ng · Floor Supervisor. Signed in with his name and PIN. Only kiosks he is assigned to are listed.</p></div>
 <div style="padding:20px 28px;display:flex;flex-direction:column;gap:18px">
 <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:14px;color:var(--ink-gray-6)">Kiosk</span>{ol}</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">{field('Shift', sel('Morning · 06:00 – 14:00', 'out'))}{field('Production run', sel('RUN-0412 · from WO-0412', 'out'), hint='From ERPNext. Hidden when ERPNext is not linked.')}</div>
 <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:var(--surface-green-2);font-size:14px"><span style="color:var(--ink-green-7);display:flex">{ic("check")}</span><span style="color:var(--ink-gray-8)">This tablet is registered as T-02 for Filling hall T-02.</span></div>
 </div>
-<div style="padding:16px 28px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--outline-gray-1)"><span class="qs" style="font-size:13px;max-width:280px">Opens full screen. Leaving full screen needs a Floor Supervisor to log in. Closing writes every log-in to the shift.</span><span style="display:flex;gap:10px"><a href="Dashboard.dc.html" class="kb">Cancel</a><a href="KioskLogin.dc.html" class="kb solid">Open kiosk</a></span></div>
+<div style="padding:16px 28px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--outline-gray-1)"><span class="qs" style="font-size:13px;max-width:280px">Opens full screen. Leaving full screen needs a Floor Supervisor's name and PIN. Closing writes every log-in to the shift.</span><span style="display:flex;gap:10px"><a href="Dashboard.dc.html" class="kb">Cancel</a><a href="KioskLogin.dc.html" class="kb solid">Open kiosk</a></span></div>
 </div></div></div>"""
 write('KioskOpen.dc.html', kpage('Open kiosk', openk))
 

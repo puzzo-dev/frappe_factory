@@ -38,8 +38,8 @@ def connector_panel():
     return f'''<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px"><div style="display:flex;flex-direction:column;gap:4px"><h2 style="margin:0;font-size:16px;font-weight:600;color:var(--ink-gray-8)">Connector</h2><p style="margin:0;font-size:14px;color:var(--ink-gray-6)">How Koyo 1's live data reaches Frappe Factory.</p></div>{btn("Test now","refresh")}</div>
 <div style="display:flex;flex-direction:column;gap:40px;padding-top:24px">
 <section style="display:flex;flex-direction:column;gap:8px">
-{option('Edge box · Frappe Factory in the cloud', 'The edge box reads the PLCs and sends everything to this site through its uplink. Screens and kiosks need the internet; the PLC interlocks and the edge keep running without it and catch up when it returns.', True)}
-{option('Edge box with its own Frappe site', 'A full Frappe Factory site runs on the edge box and syncs to this one. Screens and kiosks keep working when the internet drops. For plants with poor internet.', False)}
+{option('Edge box · Frappe Factory in the cloud', 'The edge box reads the PLCs, sounds the siren and sends everything to this site through its uplink. OpsKiosk at the plant keeps the kiosks working on the LAN when the internet drops.', True)}
+{option('Edge box with its own Frappe site', 'A full Frappe Factory site also runs on the edge box and syncs to this one, so office screens at the plant keep working when the internet drops. For plants with poor internet.', False)}
 {option('ThingsBoard', 'Use an existing ThingsBoard server instead of an edge box. Frappe Factory pulls telemetry and alarms through the ThingsBoard API.', False)}
 </section>
 {section('Uplink · edge box to this site', [
@@ -127,8 +127,8 @@ def reasons_panel():
                         row('Auto reasons win', 'Trips and power dips set the reason themselves; operators can add a note.', SWON)]))
 
 def retention_panel():
-    return ptitle('Data retention', 'How long Koyo 1 keeps its readings on the plant site and in the cloud.') + wrap(
-      section('On the plant site · TimescaleDB', [row('Raw readings', 'Every value at full speed. Trends use them up to this age.', dd('30 days', 120)),
+    return ptitle('Data retention', 'How long Koyo 1 keeps its readings on the edge box and in the cloud.') + wrap(
+      section('On the edge box · TimescaleDB', [row('Raw readings', 'Every value at full speed. Trends use them up to this age.', dd('7 days', 120)),
                                                    row('1-minute averages', 'Reports and long trends.', dd('2 years', 120)),
                                                    row('Compress after', 'Older chunks shrink about 10×.', dd('7 days', 120))]),
       section('Records', [row('Alarms and trips', 'Kept with their audit trail.', dd('Forever', 120)), row('Kiosk sessions', 'Log-ins, stop reasons, samples.', dd('5 years', 120))]),

@@ -6,8 +6,8 @@ The states each flow can be in, beyond the main screens. Each one is a board on 
 
 | Board | State |
 | --- | --- |
-| `KioskLocked` | Five wrong passwords: Frappe locks the user for 15 min, on every kiosk. |
-| `KioskNotAssigned` | A valid Frappe user who is not on this Kiosk Profile is refused. |
+| `KioskLocked` | Five wrong PINs lock that user on every kiosk at the plant for 15 min. |
+| `KioskNoPin` | A user with no PIN yet is listed but cannot sign in until they set one in Frappe Factory. |
 | `KioskIdle` | After 9.5 min without a tap the kiosk warns, then logs out at 10 min. |
 | `KioskOffline` | Cloud setup with the internet down: values freeze, saves queue on the tablet. |
 | `KioskSaveRetry` | A save that fails keeps the entry and retries; the button shows the attempt. |

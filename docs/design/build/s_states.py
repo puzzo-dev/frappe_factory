@@ -74,19 +74,32 @@ def skeleton_rows(n, cols):
     return ''.join(f'<div class="lr" style="{cols};min-height:52px;cursor:default">' + ''.join(f'<span>{bar(w)}</span>' for w in (70, 45, 55, 40, 30)[:cols.count("px") + cols.count("fr")]) + '</div>' for _ in range(n))
 
 # ======================================================================= Kiosk session
-L = load('KioskLogin.dc.html')
-h = sub(L, '<span class="in lg" style="height:48px;font-size:16px"><span class="grow">••••••••••</span>',
-        '<span class="in lg" style="height:48px;font-size:16px;border-color:var(--outline-red-3);box-shadow:0 0 0 2px var(--surface-red-2)"><span class="grow">••••••••</span>')
-h = sub(h, '<a href="KioskLine.dc.html" class="kb solid" style="width:100%">Log in</a>',
-        notice('red', 'lock', 'Too many wrong passwords', 'Kemi E. is locked out for 15 minutes, on every kiosk and in Frappe. Ask a Factory Manager to unlock you early, or try again at 09:02.') +
-        '<span class="kb solid" style="width:100%;opacity:.45;cursor:not-allowed">Log in</span>')
-save('KioskLocked.dc.html', h, 'Kiosk · locked out', 'Kiosk session', 'Five wrong passwords: Frappe locks the user for 15 min, on every kiosk.')
+def balanced(h, start, tag='div'):
+    depth = 0
+    for m in re.finditer(r'<(/?)' + tag + r'\b[^>]*>', h[start:]):
+        depth += -1 if m.group(1) else 1
+        if depth == 0: return start + m.end()
+    return len(h)
 
-h = sub(L, 'kemi.e@koyo1.ng', 'halima.s@koyo1.ng')
-h = sub(h, '<a href="KioskLine.dc.html" class="kb solid" style="width:100%">Log in</a>',
-        notice('amber', 'user', 'You are not assigned to this kiosk', 'Halima S. (Storekeeper) is not on the Filling hall T-02 Kiosk Profile, so this tablet logged you out again. Your Frappe login itself is fine.') +
-        '<a href="KioskLogin.dc.html" class="kb solid" style="width:100%">Back to log in</a>')
-save('KioskNotAssigned.dc.html', h, 'Kiosk · not assigned here', 'Kiosk session', 'A valid Frappe user who is not on this Kiosk Profile is refused.')
+L = load('KioskLogin.dc.html')
+RIGHT = '<div style="border-left:1px solid var(--outline-gray-1);background:var(--surface-gray-1);padding:28px 32px'
+def right_panel(h, inner):
+    i = h.find(RIGHT)
+    if i < 0: FAIL.append('kiosk right panel'); return h
+    e = balanced(h, i)
+    return h[:i] + RIGHT + ';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center">' + inner + '</div>' + h[e:]
+
+h = right_panel(L, f"""<span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">KE</span>
+<div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kemi E.</div>
+{notice('red', 'lock', 'Too many wrong PINs', 'Kemi E. is locked on every kiosk at Koyo 1 for 15 minutes, until 09:02. A Factory Manager can unlock her early in App settings → Kiosks.')}
+<span class="kb solid" style="width:240px;opacity:.45;cursor:not-allowed">Sign in</span>""")
+save('KioskLocked.dc.html', h, 'Kiosk · locked after wrong PINs', 'Kiosk session', 'Five wrong PINs lock that user on every kiosk at the plant for 15 min.')
+
+h = right_panel(L, f"""<span class="av" style="width:64px;height:64px;flex:0 0 64px;font-size:20px">YB</span>
+<div style="font-size:18px;font-weight:600;color:var(--ink-gray-9)">Yusuf B.</div>
+{notice('amber', 'lock', 'Yusuf B. has no PIN yet', 'He sets one in Frappe Factory under the app menu → Kiosk PIN, after entering his Frappe password. It reaches this kiosk within a minute. Until then he cannot sign in here.')}
+{kbtn('Pick another name', 'KioskLogin.dc.html')}""")
+save('KioskNoPin.dc.html', h, 'Kiosk · user has no PIN yet', 'Kiosk session', 'A user with no PIN is listed but cannot sign in until they set one in Frappe Factory.')
 
 K = load('KioskLine.dc.html')
 h = overlay(K, f'''<div style="padding:28px 28px 8px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
@@ -96,9 +109,9 @@ h = overlay(K, f'''<div style="padding:28px 28px 8px;display:flex;flex-direction
 <div style="display:flex;gap:10px;padding:16px 28px 24px">{kbtn("Log out now", "KioskLogin.dc.html")}<a href="KioskLine.dc.html" class="kb solid" style="flex:1">I'm here</a></div>''', 'KioskLine.dc.html', 460, 220)
 save('KioskIdle.dc.html', h, 'Kiosk · idle warning', 'Kiosk session', 'After 9.5 min without a tap the kiosk warns, then logs out at 10 min.')
 
-h = sub(K, '<span class="dot g"></span>Online</span>', '<span class="dot r"></span>No internet · 3 min</span>')
-h = into_body(h, notice('amber', 'wifi-off', 'No internet since 08:43', 'This plant runs Frappe Factory in the cloud, so this screen shows values from 08:43. The PLC interlocks and the edge box keep running. What you save waits on this tablet and is sent in order when the link returns: 2 waiting.', big=True))
-save('KioskOffline.dc.html', h, 'Kiosk · internet lost', 'Kiosk session', 'Cloud setup with the internet down: values freeze, saves queue on the tablet.')
+h = sub(K, '<span class="dot g"></span>Online</span>', '<span class="dot o"></span>Working locally</span>')
+h = into_body(h, notice('amber', 'wifi-off', 'No internet since 08:43 · working locally', 'OpsKiosk keeps working on the plant network: live values and alarms come from OpsEdge, the siren works, and sign-in uses the PINs it already holds. 2 entries are waiting and go to Frappe Factory in order when the internet returns; ERPNext postings wait until then.', big=True))
+save('KioskOffline.dc.html', h, 'Kiosk · local mode, no internet', 'Kiosk session', 'Internet down: OpsKiosk keeps working on the LAN with OpsEdge; entries queue for Frappe Factory.')
 
 R = load('KioskRejects.dc.html')
 h = sub(R, '<a href="KioskLine.dc.html" class="kb solid">Save rejects</a>', '<span class="kb solid" style="opacity:.6;cursor:progress">Saving… try 2 of 5</span>')
@@ -305,12 +318,6 @@ h = sub(h, '<button type="button" class="btn solid">Submit handover</button></di
 save('HandoverBlocked.dc.html', h, 'Handover · shift blocked', 'Shift handover', 'Without a submitted handover the shift cannot close.')
 
 
-def balanced(h, start, tag='div'):
-    depth = 0
-    for m in re.finditer(r'<(/?)' + tag + r'\b[^>]*>', h[start:]):
-        depth += -1 if m.group(1) else 1
-        if depth == 0: return start + m.end()
-    return len(h)
 
 def cut(h, marker, tag='div'):
     i = h.find(marker)

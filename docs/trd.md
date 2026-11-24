@@ -269,6 +269,18 @@ With none of these, the Resources page shows the source as "Not measured" and a 
 
 Diesel is a `Utility Tank` on a level tag (Koyo 1: `LT-901` on day tank DT-1). Runway is litres ÷ burn rate over the last 24 h of generator running; refuels are logged against an ERPNext Delivery Note or Stock Entry. Power has its own Plant Floor Layout (Utilities · power) built from the power symbols: grid incomer, energy meter, breaker, ATS, generator, distribution board and day tank. Utilities stay out of the Process Flow.
 
+## Where things run
+
+| Part | Runs on | Why |
+| --- | --- | --- |
+| PLC interlocks | PLC | Safety does not depend on any computer |
+| OpsEdge: agent, local Mosquitto, alarm evaluation, siren | Edge box | Reads the PLCs and sounds the plant siren on the LAN at once |
+| TimescaleDB, raw readings for 7 days | Edge box | Full-rate data for kiosk trends, and the buffer when offline |
+| OpsKiosk | Plant (edge box hardware or a plant PC) | Floor stations keep working without the internet |
+| Mosquitto, cloud | Cloud | Telemetry from each box's uplink |
+| TimescaleDB, history | Cloud | 1-second data for recent days and 1-minute averages for years |
+| Frappe Factory and ERPNext | Cloud | Office screens, every plant, reports and stock |
+
 ## OpsEdge client
 
 One Python 3.11 service, `opsedge`, packaged as one image with three parts: **agent** (drivers and local alarms), **uplink** (MQTT client to the cloud), **web** (the local page). It runs next to Mosquitto and TimescaleDB from one docker compose file. The same image runs on a box that also hosts a full Frappe site; there the bridge replaces the uplink.
@@ -280,7 +292,7 @@ One Python 3.11 service, `opsedge`, packaged as one image with three parts: **ag
 | Pairing | `opsedge pair <code>` or the Pairing page. The code (24 h) comes from Plant settings → Connector and returns site URL, broker, client ID, credentials and a client certificate. Unpair wipes them |
 | Config | Devices, tags, scaling, alarm definitions and interlock monitors are edited in Frappe Factory only. Each save makes a numbered `Edge Config` version; the box pulls it (`edge.config(site, since)`), checks it, and swaps it in atomically. Offline it keeps the last good version. The box never edits config |
 | Drivers | Modbus TCP and RTU (`pymodbus`), OPC UA (`asyncua`), MQTT sensors (wireless level, energy meters). Per-device poll rate, timeouts and retries; scaling, deadband and quality (good, stale after 3 missed polls, bad) per tag |
-| Local alarms | Alarm definitions run on the box so alarms fire without the internet. Optional outputs: a stack light or buzzer on a PLC coil or relay module, SMS through a GSM modem. Interlocks stay in the PLC |
+| Local alarms | Alarm definitions run on the box, so an alarm sounds on the floor the moment the value crosses, with no round trip to the cloud. Every plant has a siren and stack light on a PLC coil or relay module, driven by the box: priority 1 = siren + red, 2 = amber, 3 = light only. Acknowledging on any OpsKiosk tablet, or the panel button, silences it. SMS through a GSM modem is optional. Interlocks stay in the PLC |
 | Store and forward | Raw readings in TimescaleDB; events and alarms in an outbox. Holds 7 days, sends in order when the uplink returns |
 | Uplink | See Deployment. Outbound only on 8883; ACL limits the plant to `factory/{site}/#` |
 | Commands | Received on `factory/{site}/cmd/#`, written only if all three command switches allow it, read back and acknowledged |
@@ -304,16 +316,31 @@ All ERP calls go through one adapter, so the rest of the app never knows where E
 
 **Other ERPs.** No adapter. Frappe Factory publishes a versioned set of whitelisted methods under `frappe_factory.api.v1` with an OpenAPI file in the repo, Frappe's own user API keys (a key acts as its Frappe user, with that user's roles and plant permissions; the app does not manage keys) and standard Frappe `Webhook` records with HMAC-SHA256 secrets.
 
-## Kiosk
+## Kiosk · OpsKiosk
 
-The kiosk is a separate route, `/factory/kiosk`, a frappe-ui SPA in full-screen mode with no sidebar, like ERPNext's `/app/point-of-sale`.
+The kiosk is a standalone app, **OpsKiosk**, complementary to Frappe Factory in the way OpsEdge is. It is not a page of Frappe Factory. One OpsKiosk runs at each plant (a small service on the edge box hardware or a plant PC, separate from OpsEdge); tablets open it in a full-screen browser on the plant LAN at `https://kiosk.{site}.local`.
 
-1. A Floor Supervisor signs in with their Frappe user on the tablet and calls `kiosk.open_session(profile, shift_type, run=None)`. It checks the profile lists them, the role, and that the request's device token matches `Kiosk Profile.device_token`, then submits a `Kiosk Session`.
-2. Operators log in on the tablet with the standard Frappe login. After login, `kiosk.resolve_profile()` checks that the Frappe user is enabled, is on `Kiosk Profile User` and holds a role allowed for the profile's view, as ERPNext does with POS Profile users. A user not on the profile is logged out with a message. Every write runs as that session user, so `owner` is the person who did it. Another operator takes over by logging out and logging in.
-3. Each action method checks both the role and the profile's `allowed_actions`, and only for machines in `Kiosk Profile.machines`.
-4. `kiosk.close_session()` needs a logged-in Floor Supervisor, totals the session and links it to the Shift Production Summary.
+**Two connections, always both.**
 
-There is no kiosk PIN: login, password policy, lockout and 2FA are Frappe's own. A session left idle for `Kiosk Profile.idle_logout` (default 10 min) is logged out. `Kiosk Profile.view` (Select: Line, Maintenance, Quality) picks the screen and the allowed actions. Device tokens are random 32-byte values stored hashed, reset from App settings → Kiosks.
+| Side | Talks to | Carries |
+| --- | --- | --- |
+| Local | OpsEdge, on the plant LAN (local MQTT over WebSocket, and OpsEdge's local API) | Live values, machine states, alarms as they are raised; acknowledgements back to OpsEdge so the siren silences at once |
+| Remote | Frappe Factory cloud site, over HTTPS | Roster and PIN verifiers, Kiosk Profiles, work orders for the next 48 h, alarm definitions down; every entry up |
+
+When a remote call takes longer than 5 s or fails, OpsKiosk keeps working on its own: entries go into its local database (SQLite) with a `msg_id`, the user and the original time, and are sent in order when Frappe Factory answers again. Frappe Factory dedupes by `msg_id`. The tablet shows "Working locally" while anything is waiting. ERPNext postings that come from kiosk entries (stock entries, job cards, material requests) are made by Frappe Factory when the entries arrive, so they wait too. Up to 7 days of entries are kept.
+
+**Who can sign in: Frappe user + PIN.** A kiosk is shared, so it needs proof that the person tapping is who they say.
+
+1. The tablet shows only the Frappe users assigned to that Kiosk Profile, as name tiles.
+2. The user taps their name, then enters their own 6-digit PIN. A PIN never signs anyone in on its own: it is checked against the user that was tapped.
+3. Users set their PIN themselves in Frappe Factory (app menu → Kiosk PIN), after proving who they are with their Frappe password. Frappe Factory keeps only an Argon2 hash (`Kiosk PIN` DocType, one per user), and sends the hashes of assigned users to that plant's OpsKiosk with the roster. A user with no PIN cannot sign in on a kiosk.
+4. Five wrong PINs lock that user on every kiosk at the plant for 15 min; the lock is reported to Frappe Factory and a Factory Manager can lift it. Not allowed as a PIN: one digit six times, a straight run (123456, 654321), or the user's last 3 PINs.
+5. Disabling a user, removing them from a Kiosk Profile or resetting their PIN in Frappe Factory reaches OpsKiosk on its next sync (every 60 s while online). Offline, OpsKiosk uses the roster and hashes it last received.
+6. A sign-in ends after `Kiosk Profile.idle_logout` (default 10 min) without a tap.
+
+**How Frappe Factory trusts it.** Each OpsKiosk is paired with a code, like OpsEdge, and uses an ordinary Frappe user for its plant (`opskiosk-{site}`, limited to that plant by User Permission) with that user's own API key, as OpsEdge does. No special role is added. Frappe Factory accepts entries from it only through the `kiosk.*` methods. Every entry it sends names the acting user and the PIN sign-in it came from; Frappe Factory checks that user is enabled, on the Kiosk Profile and holds a role that allows the action, then records them as the owner.
+
+**Sessions and views.** A Floor Supervisor opens a Kiosk Session for the shift (`kiosk.open_session`) and closes it at the end (`kiosk.close_session`), which totals it into the Shift Production Summary. `Kiosk Profile.view` (Line, Maintenance, Quality) picks the screen and its allowed actions, only for the machines in `Kiosk Profile.machines`.
 
 ## Quality hold and QA release
 
@@ -427,7 +454,7 @@ Rules: every service restarts by itself after a power cut. The agent uses the ho
 | --- | --- | --- |
 | On the edge box | opsedge-agent, mosquitto (local), timescaledb (raw readings, 7-day buffer), opsedge-uplink | Everything in the table above, including Frappe and ERPNext |
 | Frappe Factory runs | In the cloud only | On the box, synced to the cloud |
-| Internet down | PLC interlocks, the agent and local alarms keep running; readings buffer up to 7 days and are sent in order. Screens and kiosks need the internet | Everything keeps working; sync catches up |
+| Internet down | PLC interlocks, the agent, the siren and local alarms keep running; OpsKiosk keeps working on the LAN and queues entries; readings and entries buffer up to 7 days and are sent in order. Office screens show data as delayed | Everything keeps working; sync catches up |
 | Use when | Good, steady internet | Poor or costly internet |
 
 **opsedge-uplink** is the edge box's own MQTT client. It subscribes to the local broker and republishes `state`, `alarm`, `status` and 1-second telemetry to the cloud broker set in Connector, under the plant's own client ID and credentials, limited by ACL to `factory/{site}/#`. It connects out on 8883, so the plant needs no open ports. It also subscribes to `factory/{site}/cmd/#` and hands commands to the agent, which still checks the three command switches. Raw readings are batched to the cloud TimescaleDB every minute over the same link. `opsedge pair <code>` fetches broker, client ID and credentials from the site; the code comes from Connector and expires in 24 h.

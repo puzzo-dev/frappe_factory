@@ -35,21 +35,21 @@ def users():
     roles = [('Factory Manager', 2), ('Floor Supervisor', 3), ('Quality Inspector', 2), ('Maintenance Technician', 2), ('Machine Operator', 9)]
     api_note = '<div class="qs" style="line-height:1.5">API keys are Frappe\'s own, on each User record. A key works as its user, with the same roles and plants: a Floor Supervisor\'s key sees their floor, a Factory Manager\'s sees every plant.</div>'
     rc = ''.join(f'<span class="chip" style="height:26px"><span class="k">{r}</span>{n}</span>' for r, n in roles)
-    UC = 'grid-template-columns:minmax(0,1.3fr) minmax(0,1.3fr) 96px 104px 20px'
+    UC = 'grid-template-columns:minmax(0,1.2fr) minmax(0,1.2fr) 96px 170px 20px'
     us = [('TB', 'Tunde B.', 'tunde.b@koyo.ng', 'Factory Manager, System Manager', 'All 6 plants', ('—', 'gray')),
-          ('MA', 'Musa A.', 'musa.a@koyo1.ng', 'Floor Supervisor', 'Koyo 1', ('T-02, T-03', 'gray')),
-          ('BN', 'Bola N.', 'bola.n@koyo1.ng', 'Floor Supervisor', 'Koyo 1', ('T-02, T-03', 'gray')),
-          ('GO', 'Grace O.', 'grace.o@koyo1.ng', 'Quality Inspector', 'Koyo 1', ('T-06, T-02', 'gray')),
-          ('IK', 'Ibrahim K.', 'ibrahim.k@koyo1.ng', 'Maintenance Technician', 'Koyo 1', ('T-05', 'gray')),
-          ('KE', 'Kemi E.', 'kemi.e@koyo1.ng', 'Machine Operator', 'Koyo 1', ('T-02', 'gray')),
-          ('YB', 'Yusuf B.', 'yusuf.b@koyo1.ng', 'Machine Operator', 'Koyo 1', ('T-03', 'gray')),
-          ('AF', 'Amaka F.', 'amaka.f@koyo.ng', 'Floor Supervisor, Quality Inspector', 'Poultry farm', ('Poultry T-01', 'gray'))]
+          ('MA', 'Musa A.', 'musa.a@koyo1.ng', 'Floor Supervisor', 'Koyo 1', ('T-02, T-03 · PIN set', 'gray')),
+          ('BN', 'Bola N.', 'bola.n@koyo1.ng', 'Floor Supervisor', 'Koyo 1', ('T-02, T-03 · PIN set', 'gray')),
+          ('GO', 'Grace O.', 'grace.o@koyo1.ng', 'Quality Inspector', 'Koyo 1', ('T-06, T-02 · PIN set', 'gray')),
+          ('IK', 'Ibrahim K.', 'ibrahim.k@koyo1.ng', 'Maintenance Technician', 'Koyo 1', ('T-05 · PIN set', 'gray')),
+          ('KE', 'Kemi E.', 'kemi.e@koyo1.ng', 'Machine Operator', 'Koyo 1', ('T-02 · PIN set', 'gray')),
+          ('YB', 'Yusuf B.', 'yusuf.b@koyo1.ng', 'Machine Operator', 'Koyo 1', ('T-03 · no PIN yet', 'amber')),
+          ('AF', 'Amaka F.', 'amaka.f@koyo.ng', 'Floor Supervisor, Quality Inspector', 'Poultry farm', ('Poultry T-01 · PIN set', 'gray'))]
     ur = ''.join(f'<div class="lr" style="{UC};margin:0;cursor:default;min-height:48px"><span style="display:flex;align-items:center;gap:8px;min-width:0"><span class="av">{a}</span><span class="c"><div class="t1">{n}</div><div class="m tab">{e}</div></span></span><span class="c qs" style="color:var(--ink-gray-7)">{r}</span><span class="c qs">{p}</span><span>{bd(*b)}</span><span style="color:var(--ink-gray-4);display:flex">{ic("more","i s35")}</span></div>' for a, n, e, r, p, b in us)
     return f'''{title('Users and roles', 'Frappe users with Frappe Factory roles. Roles give permissions; plants and kiosk assignments limit where they apply.', btn("Invite user","plus") )}
 <div style="display:flex;flex-direction:column;gap:20px;padding-top:20px">
 <div style="display:flex;flex-wrap:wrap;gap:6px">{rc}</div>
 <div style="display:flex;gap:8px;align-items:center"><span class="in muted" style="width:240px">{ic("search")}<span class="grow">Search users</span></span><span class="chip"><span class="k">Plant</span>All</span><span class="chip"><span class="k">Role</span>All</span></div>
-<div class="list" style="margin:0"><div class="lh" style="{UC};margin:0"><span>User</span><span>Roles</span><span>Plants</span><span>Kiosks</span><span></span></div>{ur}</div>
+<div class="list" style="margin:0"><div class="lh" style="{UC};margin:0"><span>User</span><span>Roles</span><span>Plants</span><span>Kiosks and PIN</span><span></span></div>{ur}</div>
 {api_note}
 {section('Rules', [
   row('Restart and QA release need different people', 'The Quality Inspector who releases a line cannot also restart it as Floor Supervisor.', SW_ON),
@@ -136,4 +136,28 @@ build('CompanyTemplates.dc.html', 'Process templates', templates())
 build('CompanyWhatsApp.dc.html', 'WhatsApp', whatsapp())
 build('CompanyTB.dc.html', 'ThingsBoard', tb())
 
-# My settings removed: kiosk access is the Kiosk Profile assignment and the user's own Frappe login.
+
+# ---------------- Kiosk PIN (the signed-in user's own dialog, from the app menu)
+pdots = lambda n, f: ''.join(f'<span style="width:12px;height:12px;border-radius:50%;{"background:var(--ink-gray-9)" if i < f else "border:2px solid var(--outline-gray-3)"}"></span>' for i in range(n))
+pin_panel = f'''<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px"><div style="display:flex;flex-direction:column;gap:4px"><h2 style="margin:0;font-size:18px;font-weight:600;color:var(--ink-gray-9)">Kiosk PIN</h2>
+<p class="ps" style="font-size:14px;max-width:560px">Your PIN signs you in on OpsKiosk tablets you are assigned to, after you tap your name. It works only with your Frappe user: a PIN on its own signs no one in.</p></div>{close_btn("dlg")}</div>
+<div style="display:flex;flex-direction:column;gap:24px;padding-top:20px">
+<div class="alert" style="background:var(--surface-green-2);border-color:var(--outline-green-3)"><span style="color:var(--ink-green-7);display:flex">{ic("check")}</span><span style="font-size:14px;color:var(--ink-gray-8)">PIN set on 3 Nov 2026. Last used at Quality lab T-06 on 22 Nov, 07:12.</span></div>
+<section style="display:flex;flex-direction:column;gap:14px"><h3 style="margin:0;font-size:14px;font-weight:600;color:var(--ink-gray-8)">Change your PIN</h3>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+{field('Your Frappe password', inp('••••••••••', 'focus'), req=True, hint='Proves it is you before the PIN changes.')}
+<label class="fl"><span class="lab">New PIN <span class="req">*</span></span><span class="in" style="gap:8px">{pdots(6, 6)}</span><span class="hint">6 digits</span></label>
+<label class="fl"><span class="lab">Confirm new PIN <span class="req">*</span></span><span class="in" style="gap:8px">{pdots(6, 3)}</span></label></div>
+<div class="qs" style="line-height:1.6">Not allowed: one digit six times, a straight run such as 123456 or 654321, or your last 3 PINs. 5 wrong tries lock you on every kiosk at the plant for 15 minutes; a Factory Manager can unlock you. Frappe Factory keeps only a hash of your PIN.</div>
+<div><button type="button" class="btn solid" disabled>Save PIN</button></div></section>
+<section style="display:flex;flex-direction:column;gap:8px"><h3 style="margin:0;font-size:14px;font-weight:600;color:var(--ink-gray-8)">Kiosks you can sign in on</h3>
+<div class="divy" style="font-size:14px">
+<div style="display:flex;justify-content:space-between;padding:10px 0"><span style="color:var(--ink-gray-8)">Quality lab T-06 · Koyo 1</span><span class="qs">Quality view · for deviation approvals</span></div>
+<div style="display:flex;justify-content:space-between;padding:10px 0"><span style="color:var(--ink-gray-8)">Filling hall T-02 · Koyo 1</span><span class="qs">Line view</span></div></div></section>
+</div>'''
+import s_dashboard
+from s_dashboard import head as dh, body as db
+bg = shell('Dashboard.dc.html', dh, db, scope='company')
+dlg = f'''{closer("dlg")}<div class="ff ffov" style="position:absolute;inset:0;display:block;min-height:0;background:transparent"><label for="dlg" class="overlay" aria-label="Close"></label>
+<div class="dialog" role="dialog" aria-label="Kiosk PIN" style="left:50%;top:64px;transform:translateX(-50%);width:760px;max-height:780px;overflow:auto;padding:28px 32px">{pin_panel}</div></div>'''
+write('KioskPin.dc.html', page('Kiosk PIN', f'<div style="position:relative">{bg}{dlg}</div>', {"$preview": {"width": 1440, "height": 900}}))

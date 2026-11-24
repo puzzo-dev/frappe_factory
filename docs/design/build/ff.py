@@ -380,7 +380,7 @@ def app_menu(left=8, top=50):
     prof = ('<div style="display:flex;align-items:center;gap:10px;padding:8px 8px 6px"><span class="av" style="width:28px;height:28px;flex:0 0 28px;font-size:11px">TB</span>'
             '<span style="display:flex;flex-direction:column;min-width:0;line-height:1.2"><span style="font-weight:500;color:var(--ink-gray-9);font-size:14px">Tunde B.</span><span class="qs" style="font-size:12px">tunde.b@koyo.ng</span></span></div>')
     main = (prof + mi(ic('users'), 'Profile', ic('ext', 'i s35')) + mi(ic('bell'), 'Notifications', '<span class="bd gray" style="height:18px;font-size:11px">3</span>') +
-            mi(ic('moon'), 'Theme', '<span style="font-size:12px">Light</span>') + sep +
+            mi(ic('moon'), 'Theme', '<span style="font-size:12px">Light</span>') + mi(ic('lock'), 'Kiosk PIN', href='KioskPin.dc.html') + sep +
             mi(ic('grid'), 'Apps', ic('chev-r', 'i s35'), click='toggleApps') + mi(ic('cpu'), 'Open kiosk', ic('ext', 'i s35'), href='KioskOpen.dc.html') + mi(ic('settings'), 'App settings', href='CompanyGeneral.dc.html') + sep +
             mi(ic('info'), 'Help and docs') + mi(ic('shield'), 'About') + sep + mi(ic('arrow-r'), 'Log out', href='KioskLogin.dc.html'))
     sub = (f'<div style="padding:4px 8px 6px;font-size:12px;color:var(--ink-gray-6)">Switch app</div>' +
